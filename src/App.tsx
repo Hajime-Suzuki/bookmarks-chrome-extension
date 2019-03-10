@@ -1,28 +1,32 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component, useEffect, useState } from 'react'
+import axios from 'axios'
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+interface Data {
+  userId: number
+  id: number
+  title: string
+  completed: boolean
+}
+const App: React.FC = () => {
+  const [data, setData] = useState<Data | null>(null)
+
+  const getData = async () => {
+    const { data } = await axios.get<Data>(
+      'https://jsonplaceholder.typicode.com/todos/123'
+    )
+    setData(data)
   }
+
+  useEffect(() => {
+    getData()
+  }, [])
+
+  return (
+    <div style={{ padding: '1em 3em', border: '1px solid black' }}>
+      My First Extension!
+      <h1>{data && data.title}</h1>
+    </div>
+  )
 }
 
-export default App;
+export default App
