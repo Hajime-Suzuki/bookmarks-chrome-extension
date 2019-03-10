@@ -23,7 +23,7 @@ const App: React.FC = () => {
 
   return (
     <div style={{ padding: '1em 3em', border: '1px solid black' }}>
-      My First Extension!
+      My First Extension
       <h1>{data && data.title}</h1>
     </div>
   )
