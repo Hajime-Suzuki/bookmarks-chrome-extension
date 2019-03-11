@@ -76,6 +76,8 @@ module.exports = {
   popupHtml: resolveApp('public/popup.html'),
   popupJs: resolveModule(resolveApp, 'src/popup/index'),
 
+  backgroundJs: resolveModule(resolveApp, 'src/background/index'),
+
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
   appTsConfig: resolveApp('tsconfig.json'),
