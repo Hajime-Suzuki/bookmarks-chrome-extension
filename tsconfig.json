@@ -16,7 +16,8 @@
     "jsx": "preserve",
     "noImplicitAny": false,
     "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    "types": ["chrome"]
   },
   "include": ["src"]
 }
