@@ -5,3 +5,7 @@ chrome.browserAction.onClicked.addListener(tab => {
     name: 'bg!!!!'
   })
 })
+
+// chrome.bookmarks.onCreated.addListener(() => {
+//   console.log('bookmark!')
+// })

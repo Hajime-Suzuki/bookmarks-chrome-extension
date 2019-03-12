@@ -9,11 +9,13 @@
     }
   ],
   "background": {
-    "scripts": ["static/js/background.js"]
+    "scripts": ["static/js/background.js"],
+    "persistent": false
   },
   "browser_action": {
-    "title": "something",
-    "default_icon": "bookmark.png"
+    "default_title": "bookmarker",
+    "default_icon": "bookmark.png",
+    "default_popup": "popup.html"
   },
   "chrome_url_overrides": {
     "newtab": "index.html"

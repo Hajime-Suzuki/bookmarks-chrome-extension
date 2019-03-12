@@ -359,6 +359,11 @@ module.exports = function(webpackEnv) {
       ]
     },
     plugins: [
+      /**
+       * @Note when running build.js by yarn build, it copies files in public. setting. specifying filename overwrites the html file.n
+       *
+       */
+
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin({
         chunks: ['popup'],
