@@ -57,6 +57,7 @@ module.exports = function(webpackEnv) {
   const env = getClientEnvironment(publicUrl)
 
   return {
+    watch: true,
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     // Stop compilation early in production
     bail: isEnvProduction,

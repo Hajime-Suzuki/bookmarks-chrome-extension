@@ -62,7 +62,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "watch": "node scripts/watch.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -124,6 +125,9 @@
     ]
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.81"
+    "@types/chrome": "^0.0.81",
+    "gulp": "^4.0.0",
+    "gulp-run": "^1.7.1",
+    "webpack-cli": "^3.2.3"
   }
 }
