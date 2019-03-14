@@ -5,14 +5,15 @@ import {
   ListItem,
   ListItemText,
   ListItemAvatar,
-  Avatar
+  Avatar,
+  Button
 } from '@material-ui/core'
 
-const OpenedTabs: FC = () => {
-  const { tabs } = useOpenedTabs()
-  console.log('ashtie')
+const OpenedTabs: FC<{}> = () => {
+  const { tabs, removeTab } = useOpenedTabs()
   return (
     <>
+      <Button onClick={removeTab}>reomve 1</Button>
       {tabs.map(tab => {
         return (
           <List key={tab.id}>

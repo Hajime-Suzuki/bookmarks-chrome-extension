@@ -1,11 +1,21 @@
+import { TAB_EVENT } from '../../background'
+import { Tab } from '../types'
+
+export interface Message {
+  type: keyof typeof TAB_EVENT
+  tabId?: Tab['id']
+  tab?: Tab
+  tabs?: Tab[]
+}
+
 type OnMessageCallback = (
-  message: any,
+  message: Message,
   sender: chrome.runtime.MessageSender,
   sendResponse: (response?: any) => void
 ) => void
 
-const subscribe = (fn: OnMessageCallback) =>
+export const subscribeMessage = (fn: OnMessageCallback) =>
   chrome.runtime.onMessage.addListener(fn)
 
-const unsubscribe = (fn: OnMessageCallback) =>
+export const unsubscribe = (fn: OnMessageCallback) =>
   chrome.runtime.onMessage.removeListener(fn)
