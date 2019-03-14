@@ -16,12 +16,18 @@ const useOpenedTabs = () => {
   const removeTab = () => {
     setTabs(tabs.slice(0, tabs.length - 1))
   }
+
+  const closeTab = (tabId: NonNullable<Tab['id']>) => {
+    chrome.tabs.remove(tabId)
+    console.log(tabId)
+  }
   console.log(':: useOpenedTabs -> tabs', tabs)
   // console.log(':: useOpenedTabs -> currentWindow', currentWindow)
   // console.log('update')
   return {
     tabs,
-    removeTab
+    removeTab,
+    closeTab
   }
 }
 
