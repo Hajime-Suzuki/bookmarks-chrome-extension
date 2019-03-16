@@ -37,3 +37,11 @@ functions:
       - http:
           path: bookmarks
           method: put
+
+  deleteBookmarks:
+    name: '${self:service}-delete-bookmark'
+    handler: src/routes/delete-bookmark.handler
+    events:
+      - http:
+          path: bookmarks
+          method: delete

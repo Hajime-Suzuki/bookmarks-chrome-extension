@@ -8,25 +8,26 @@ import {
 import { validateInput } from '../helpers/validator'
 import { handleLambda, LambdaHandler } from '../middleware/handle-lambda'
 import { BookmarkRepository } from '../repositories/bookmarks'
+import { IBookmark } from '../models/Bookmark'
 
 export class CreateBookmarkInput {
   @IsNotEmpty()
   @IsString()
-  title: string
+  title: IBookmark['title']
 
   @IsNotEmpty()
   @IsUrl()
   @IsString()
-  url: string
+  url: IBookmark['url']
 
   @IsOptional()
   @IsString()
-  img?: string
+  img?: IBookmark['img']
 
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  categories?: string[]
+  categories?: IBookmark['categories']
 }
 
 const createBookmark: LambdaHandler = async ({

@@ -1,34 +1,43 @@
-import { IsArray, IsOptional, IsString, IsUrl } from 'class-validator'
+import {
+  IsArray,
+  IsOptional,
+  IsString,
+  IsUrl,
+  IsUUID,
+  IsNotEmpty
+} from 'class-validator'
 import { validateInput } from '../helpers/validator'
 import { handleLambda } from '../middleware/handle-lambda'
 import { BookmarkRepository } from '../repositories/bookmarks'
+import { IBookmark } from '../models/Bookmark'
 
 export class EditBookmarkInput {
+  @IsNotEmpty()
+  @IsString()
+  _id: IBookmark['_id']
+
   @IsOptional()
   @IsString()
-  title?: string
+  title?: IBookmark['title']
 
   @IsOptional()
   @IsUrl()
   @IsString()
-  url?: string
+  url?: IBookmark['url']
 
   @IsOptional()
   @IsString()
-  img?: string
+  img?: IBookmark['img']
 
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  categories?: string[]
+  categories?: IBookmark['categories']
 }
 
 const updateBookmark = async ({ body }: { body: EditBookmarkInput }) => {
   await validateInput(body, EditBookmarkInput)
-  const bookmarks = await BookmarkRepository.update(
-    '5c8c3f7ffcac0e34ff644890',
-    body
-  )
+  const bookmarks = await BookmarkRepository.update(body._id, body)
   return { bookmarks }
 }
 

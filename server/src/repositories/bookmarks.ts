@@ -1,6 +1,7 @@
 import { Bookmark, IBookmark } from '../models/Bookmark'
 import { CreateBookmarkInput } from '../routes/create-bookmark'
 import { EditBookmarkInput } from '../routes/update-bookmark'
+import * as createError from 'http-errors'
 
 const find = async () => {
   return Bookmark.find({})
@@ -11,11 +12,29 @@ const create = async (input: CreateBookmarkInput) => {
 }
 
 const update = async (_id: IBookmark['_id'], input: EditBookmarkInput) => {
-  return Bookmark.findByIdAndUpdate(_id, input, { new: true })
+  const updated = await Bookmark.findByIdAndUpdate(
+    _id,
+    { ...input, updatedAt: new Date() },
+    { new: true }
+  )
+
+  if (!updated) throw createError(404, `bookmark ${_id} not found`)
+
+  return updated
+}
+
+const remove = async (_id: IBookmark['_id']) => {
+  const bookmark = await Bookmark.findById(_id)
+
+  if (!bookmark) throw createError(404, `bookmark ${_id} not found`)
+
+  await Bookmark.findOneAndDelete(_id)
+  return null
 }
 
 export const BookmarkRepository = {
   find,
   create,
-  update
+  update,
+  remove
 }
