@@ -4,7 +4,7 @@ const CopyPlugin = require('copy-webpack-plugin')
 
 const paths = {
   publicPath: './',
-  output: 'VVVVVVV'
+  output: './build'
 }
 
 const tsPath = {
@@ -15,8 +15,8 @@ const tsPath = {
 }
 
 const htmlPath = {
-  app: 'public/index.html',
-  popup: 'public/popup.html'
+  app: './src/index.html',
+  popup: './src/popup.html'
 }
 
 module.exports = {
@@ -30,7 +30,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js']
   },
   output: {
-    path: path.join(__dirname, paths.output),
+    path: path.resolve(paths.output),
     publicPath: paths.publicPath,
     filename: 'js/[name].js'
   },
@@ -61,6 +61,6 @@ module.exports = {
       template: htmlPath.popup,
       filename: 'popup.html'
     }),
-    new CopyPlugin([{ from: './public/manifest.json', to: './' }])
+    new CopyPlugin(['./src/manifest.json', './src/img/icon.png'])
   ]
 }
