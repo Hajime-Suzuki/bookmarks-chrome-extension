@@ -1,11 +1,9 @@
-import { connectDB } from '../db/connection'
-import { handleJSON } from '../middleware/handle-json'
+import { handleLambda } from '../middleware/handle-lambda'
 import { BookmarkRepository } from '../repositories/bookmarks'
 
 const getBookmarks = async () => {
-  await connectDB()
   const bookmarks = await BookmarkRepository.find()
-  return bookmarks
+  return { bookmarks }
 }
 
-export const handler = handleJSON(getBookmarks)
+export const handler = handleLambda(getBookmarks)

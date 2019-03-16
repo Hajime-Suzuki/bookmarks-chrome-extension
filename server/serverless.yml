@@ -21,6 +21,7 @@ functions:
       - http:
           path: bookmarks
           method: get
+
   createBookmarks:
     name: '${self:service}-create-bookmark'
     handler: src/routes/create-bookmark.handler
@@ -28,3 +29,11 @@ functions:
       - http:
           path: bookmarks
           method: post
+
+  updateBookmarks:
+    name: '${self:service}-update-bookmark'
+    handler: src/routes/update-bookmark.handler
+    events:
+      - http:
+          path: bookmarks
+          method: put
