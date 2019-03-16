@@ -2,6 +2,34 @@
 # yarn lockfile v1
 
 
+"@types/bson@*":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@types/bson/-/bson-4.0.0.tgz#9073772679d749116eb1dfca56f8eaac6d59cc7a"
+  integrity sha512-pq/rqJwJWkbS10crsG5bgnrisL8pML79KlMKQMoQwLUjlPAkrUHMvHJ3oGwE7WHR61Lv/nadMwXVAD2b+fpD8Q==
+  dependencies:
+    "@types/node" "*"
+
+"@types/mongodb@*":
+  version "3.1.22"
+  resolved "https://registry.yarnpkg.com/@types/mongodb/-/mongodb-3.1.22.tgz#66f96c7acbf7135ce6295a8d6c26f1d97388a84b"
+  integrity sha512-hvNR0txBlJJAy1eZOeIDshW4dnQaC694COou4eHHaMdIcteCfoCQATD7sYNlXxNxfTc1iIbHUi7A8CAhQe08uA==
+  dependencies:
+    "@types/bson" "*"
+    "@types/node" "*"
+
+"@types/mongoose@^5.3.22":
+  version "5.3.22"
+  resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.3.22.tgz#cb020926bd742116e4eb62eda5a032fbd8cae8e0"
+  integrity sha512-OVKmjRUH7L3ml1kltLTcKNEE4888Q6tIuepukdSa5p2n40d7BNbhq1vT7HICaCBzk6W+VjEzs3hD+UtrUsxRbQ==
+  dependencies:
+    "@types/mongodb" "*"
+    "@types/node" "*"
+
+"@types/node@*":
+  version "11.11.3"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.11.3.tgz#7c6b0f8eaf16ae530795de2ad1b85d34bf2f5c58"
+  integrity sha512-wp6IOGu1lxsfnrD+5mX6qwSwWuqsdkKKxTN4aQc4wByHAKZJf9/D4KXPQ1POUjEbnCP5LMggB0OEFNY9OTsMqg==
+
 accept@2.x.x:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/accept/-/accept-2.1.4.tgz#887af54ceee5c7f4430461971ec400c61d09acbb"
