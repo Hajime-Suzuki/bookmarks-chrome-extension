@@ -2,13 +2,13 @@ import { TAB_EVENT } from '../../background'
 import { Tab } from '../types'
 
 export interface Message {
-  type: keyof typeof TAB_EVENT
+  type: TAB_EVENT
   tabId?: Tab['id']
   tab?: Tab
   tabs?: Tab[]
 }
 
-type OnMessageCallback = (
+export type OnMessageCallback = (
   message: Message,
   sender: chrome.runtime.MessageSender,
   sendResponse: (response?: any) => void

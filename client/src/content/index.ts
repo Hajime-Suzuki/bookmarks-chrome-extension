@@ -1,1 +1,1 @@
-console.log('test555')
+console.log('content script')

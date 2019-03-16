@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react'
-import { subscribeMessage } from '../helpers/subscribeTabs'
+import {
+  subscribeMessage,
+  unsubscribe,
+  OnMessageCallback
+} from '../helpers/subscribeTabs'
 import { Tab } from '../types'
+import { APP_NAME } from '../../constants'
+import { removeDuplication } from '../helpers/transformation'
 
 const useOpenedTabs = () => {
   const [tabs, setTabs] = useState([] as Tab[])
@@ -15,19 +21,30 @@ const useOpenedTabs = () => {
 
   useEffect(() => {
     const getCurrentTabs = () => {
-      chrome.tabs.query({ active: false, currentWindow: true }, res => {
-        setTabs(res)
+      chrome.tabs.query({ active: false, currentWindow: true }, currentTabs => {
+        setTabs(currentTabs.filter(ct => ct.title !== APP_NAME))
       })
     }
-    getCurrentTabs()
 
-    subscribeMessage(({ type, tabId }) => {
+    const subscribeCallback: OnMessageCallback = ({ type, tab, tabId }) => {
+      if (type === 'loading') {
+        getCurrentTabs()
+      }
       if (type === 'remove') {
         setTabs(state => {
           return state.filter(s => s.id !== tabId!)
         })
+      } else {
+        getCurrentTabs()
       }
-    })
+    }
+
+    getCurrentTabs()
+    subscribeMessage(subscribeCallback)
+
+    return () => {
+      unsubscribe(subscribeCallback)
+    }
   }, [])
 
   return {

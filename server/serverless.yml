@@ -8,6 +8,8 @@ provider:
   runtime: nodejs8.10
   stage: dev
   region: eu-central-1
+  environment:
+    DB_URL: ${file(.secret.yml):DB_URL}
 
 custom:
   serverless-offline:

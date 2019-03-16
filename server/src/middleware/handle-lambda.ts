@@ -14,7 +14,12 @@ export type LambdaHandler = (
 ) => any
 
 const convertCategoriesStringToArray = (categories: string) => {
-  if (typeof categories !== 'string') throw new Error('category must be string')
+  if (typeof categories !== 'string') {
+    throw new Error('category must be string')
+  }
+
+  if (categories === '') return []
+
   return categories
     .split(',')
     .map(c => c.trim())
@@ -30,10 +35,9 @@ const transformEvent = (event: Event) => {
 
   event.body = body
 
-  if (body.categories) {
+  if (body.categories !== undefined) {
     event.body.categories = convertCategoriesStringToArray(body.categories)
   }
-
   return event
 }
 
@@ -43,7 +47,7 @@ export const handleLambda = (fn: LambdaHandler) => async (
   callback: Callback
 ) => {
   await connectDB()
-
+  console.log(JSON.parse(event.body))
   try {
     const res = await fn(transformEvent(event), context, callback)
     return {

@@ -87,3 +87,5 @@ typings/
 *.http
 
 **/.build
+
+.secret.yml
