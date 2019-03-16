@@ -8,8 +8,6 @@ provider:
   runtime: nodejs8.10
   stage: dev
   region: eu-central-1
-  environment:
-    variable1: value1
 
 custom:
   serverless-offline:
@@ -23,3 +21,10 @@ functions:
       - http:
           path: bookmarks
           method: get
+  createBookmarks:
+    name: '${self:service}-create-bookmark'
+    handler: src/routes/create-bookmark.handler
+    events:
+      - http:
+          path: bookmarks
+          method: post
