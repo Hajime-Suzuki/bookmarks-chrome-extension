@@ -52,7 +52,7 @@
     "sass-loader": "7.1.0",
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "1.2.2",
-    "typescript": "3.3.3333",
+    "typescript": "^3.3.3333",
     "url-loader": "1.1.2",
     "webpack": "4.28.3",
     "webpack-dev-server": "3.1.14",
@@ -64,7 +64,7 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "watch": "node scripts/watch.js",
-    "webpack": "webpack"
+    "webpack": "webpack --mode development --watch"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -127,6 +127,8 @@
   },
   "devDependencies": {
     "@types/chrome": "^0.0.81",
+    "awesome-typescript-loader": "^5.2.1",
+    "copy-webpack-plugin": "^5.0.1",
     "gulp": "^4.0.0",
     "gulp-run": "^1.7.1",
     "webpack-cli": "^3.2.3"
