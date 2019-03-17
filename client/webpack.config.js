@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
 const paths = {
   publicPath: './',
@@ -38,7 +39,10 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: 'awesome-typescript-loader'
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true
+        }
       },
       {
         loader: 'file-loader',
@@ -61,6 +65,10 @@ module.exports = {
       template: htmlPath.popup,
       filename: 'popup.html'
     }),
-    new CopyPlugin(['./src/manifest.json', './src/img/icon.png'])
+    new CopyPlugin(['./src/manifest.json', './src/img/icon.png']),
+    new ForkTsCheckerWebpackPlugin({
+      async: true,
+      tslint: true
+    })
   ]
 }

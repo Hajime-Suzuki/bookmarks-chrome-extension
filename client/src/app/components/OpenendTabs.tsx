@@ -1,23 +1,38 @@
-import React, { FC } from 'react'
-import useOpenedTabs from '../hooks/useOpenedTabs'
 import {
+  Avatar,
   List,
   ListItem,
-  ListItemText,
   ListItemAvatar,
-  Avatar,
-  Button
+  ListItemText
 } from '@material-ui/core'
+import React, { FC, useContext } from 'react'
+import useOpenedTabs from '../hooks-contexts/useOpenedTabs'
+import { BookmarksContext } from '../hooks-contexts/useFetchBookmarks'
+import { Tab } from '../types'
 
 const OpenedTabs: FC<{}> = () => {
-  const { tabs, removeTab, closeTab } = useOpenedTabs()
+  const { tabs, closeTab } = useOpenedTabs()
+  const { createBookmark: submit } = useContext(BookmarksContext)
+
+  const createBookmark = async (tab: Tab) => {
+    const { title, url, favIconUrl } = tab
+    if (!title || !url) return console.warn('title and url are required')
+
+    await submit({ title, url, img: favIconUrl, categories: undefined })
+  }
+
   return (
     <>
-      <Button onClick={removeTab}>reomve 1</Button>
       {tabs.map(tab => {
         return (
           <List key={tab.id}>
-            <ListItem button onClick={() => tab.id && closeTab(tab.id)}>
+            <ListItem
+              button
+              onClick={async () => {
+                await createBookmark(tab)
+                return tab.id && closeTab(tab.id)
+              }}
+            >
               <ListItemAvatar>
                 <Avatar src={tab.favIconUrl} />
               </ListItemAvatar>

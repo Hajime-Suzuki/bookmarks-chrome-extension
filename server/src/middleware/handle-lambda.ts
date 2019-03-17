@@ -47,9 +47,10 @@ export const handleLambda = (fn: LambdaHandler) => async (
   callback: Callback
 ) => {
   await connectDB()
-  console.log(JSON.parse(event.body))
+
   try {
     const res = await fn(transformEvent(event), context, callback)
+
     return {
       body: JSON.stringify(res)
     }

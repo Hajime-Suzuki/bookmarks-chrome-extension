@@ -19,9 +19,11 @@
     "awesome-typescript-loader": "^5.2.1",
     "copy-webpack-plugin": "^5.0.1",
     "depcheck": "^0.7.2",
-    "gulp": "^4.0.0",
-    "gulp-run": "^1.7.1",
+    "fork-ts-checker-webpack-plugin": "^1.0.0",
     "html-webpack-plugin": "4.0.0-alpha.2",
+    "ts-loader": "^5.3.3",
+    "tslint": "^5.14.0",
+    "tslint-react": "^3.6.0",
     "typescript": "^3.3.3333",
     "webpack": "4.28.3",
     "webpack-cli": "^3.2.3"
