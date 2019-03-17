@@ -33,6 +33,10 @@ export class EditBookmarkInput {
   @IsArray()
   @IsString({ each: true })
   categories?: IBookmark['categories']
+
+  @IsOptional()
+  @IsString()
+  group: IBookmark['group']
 }
 
 const updateBookmark = async ({ body }: { body: EditBookmarkInput }) => {

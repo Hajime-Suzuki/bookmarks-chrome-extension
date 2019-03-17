@@ -28,6 +28,10 @@ export class CreateBookmarkInput {
   @IsArray()
   @IsString({ each: true })
   categories?: IBookmark['categories']
+
+  @IsOptional()
+  @IsString()
+  group: IBookmark['group']
 }
 
 const createBookmark: LambdaHandler = async ({
