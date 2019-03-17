@@ -6,7 +6,7 @@ const Popup = () => {
   return (
     <div>
       <Button
-        variant='outlined'
+        variant="outlined"
         onClick={() => {
           console.log('popup clicked')
           // chrome.browserAction.setBadgeText({ text: 'ON' })

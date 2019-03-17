@@ -6,9 +6,9 @@ import {
   ListItemText
 } from '@material-ui/core'
 import React, { FC, useContext } from 'react'
-import useOpenedTabs from '../hooks-contexts/useOpenedTabs'
-import { BookmarksContext } from '../hooks-contexts/useFetchBookmarks'
-import { Tab } from '../types'
+import useOpenedTabs from '../../hooks-contexts/useOpenedTabs'
+import { BookmarksContext } from '../../hooks-contexts/useFetchBookmarks'
+import { Tab } from '../../types'
 
 const OpenedTabs: FC<{}> = () => {
   const { tabs, closeTab } = useOpenedTabs()
@@ -22,26 +22,25 @@ const OpenedTabs: FC<{}> = () => {
   }
 
   return (
-    <>
+    <List>
       {tabs.map(tab => {
         return (
-          <List key={tab.id}>
-            <ListItem
-              button
-              onClick={async () => {
-                await createBookmark(tab)
-                return tab.id && closeTab(tab.id)
-              }}
-            >
-              <ListItemAvatar>
-                <Avatar src={tab.favIconUrl} />
-              </ListItemAvatar>
-              <ListItemText>{tab.title}</ListItemText>
-            </ListItem>
-          </List>
+          <ListItem
+            key={tab.id}
+            button
+            onClick={async () => {
+              await createBookmark(tab)
+              return tab.id && closeTab(tab.id)
+            }}
+          >
+            <ListItemAvatar>
+              <Avatar src={tab.favIconUrl} />
+            </ListItemAvatar>
+            <ListItemText>{tab.title}</ListItemText>
+          </ListItem>
         )
       })}
-    </>
+    </List>
   )
 }
 
