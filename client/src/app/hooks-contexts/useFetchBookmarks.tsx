@@ -11,7 +11,7 @@ interface CreateBookmarkInput {
   title: IBookmark['title']
   url: IBookmark['url']
   img?: IBookmark['img']
-  categories: IBookmark['categories']
+  tags: IBookmark['tags']
 }
 
 interface CreateBookmarkResponse {
@@ -27,7 +27,7 @@ export const useBookmarks = () => {
   }
 
   const createBookmark = async (input: CreateBookmarkInput) => {
-    const categories = input.categories ? input.categories.join(',') : ''
+    const categories = input.tags ? input.tags.join(',') : ''
 
     const { data } = await axios.post<CreateBookmarkResponse>(
       API_BOOKMARK_URL,
@@ -36,8 +36,12 @@ export const useBookmarks = () => {
         categories
       }
     )
-
     setBookmarks([data.bookmark, ...bookmarks])
+  }
+
+  const deleteBookmark = async (_id: IBookmark['_id']) => {
+    await axios.delete(`${API_BOOKMARK_URL}`, { data: { _id } })
+    setBookmarks(bookmarks.filter(bm => bm._id !== _id))
   }
 
   useEffect(() => {
@@ -46,18 +50,19 @@ export const useBookmarks = () => {
 
   return {
     bookmarks,
-    createBookmark
+    createBookmark,
+    deleteBookmark
   }
 }
 
 type Context = ReturnType<typeof useBookmarks>
-export const BookmarksContext = createContext({} as Context)
+export const BookmarkContext = createContext({} as Context)
 
 export const BookmarksProvider: FC = props => {
   const bookmarks = useBookmarks()
   return (
-    <BookmarksContext.Provider value={bookmarks}>
+    <BookmarkContext.Provider value={bookmarks}>
       {props.children}
-    </BookmarksContext.Provider>
+    </BookmarkContext.Provider>
   )
 }

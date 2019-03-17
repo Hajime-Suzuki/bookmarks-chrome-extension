@@ -19,7 +19,7 @@ const BookmarkSchema = new Schema<IBookmark>({
   title: { type: String, required: true },
   url: { type: String, required: true },
   img: String,
-  group: { type: String, unique: true },
+  group: { type: String },
   tags: {
     type: [String]
   },

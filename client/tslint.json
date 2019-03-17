@@ -20,7 +20,8 @@
     "max-classes-per-file": false,
     "quotemark": [true, "single", "jsx-double"],
     "semicolon": [true, "never"],
-    "interface-over-type-literal": true
+    "interface-over-type-literal": true,
+    "variable-name": false
   },
   "linterOptions": {
     "exclude": ["node_modules/**/*.ts", "server/"]

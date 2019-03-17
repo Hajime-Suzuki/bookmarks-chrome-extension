@@ -7,18 +7,18 @@ import {
 } from '@material-ui/core'
 import React, { FC, useContext } from 'react'
 import useOpenedTabs from '../../hooks-contexts/useOpenedTabs'
-import { BookmarksContext } from '../../hooks-contexts/useFetchBookmarks'
+import { BookmarkContext } from '../../hooks-contexts/useFetchBookmarks'
 import { Tab } from '../../types'
 
 const OpenedTabs: FC<{}> = () => {
   const { tabs, closeTab } = useOpenedTabs()
-  const { createBookmark: submit } = useContext(BookmarksContext)
+  const { createBookmark: submit } = useContext(BookmarkContext)
 
   const createBookmark = async (tab: Tab) => {
     const { title, url, favIconUrl } = tab
     if (!title || !url) return console.warn('title and url are required')
 
-    await submit({ title, url, img: favIconUrl, categories: undefined })
+    await submit({ title, url, img: favIconUrl, tags: undefined })
   }
 
   return (

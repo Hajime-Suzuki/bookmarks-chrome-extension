@@ -9,10 +9,10 @@ class DeleteBookmarkInput {
   @IsString()
   _id: IBookmark['_id']
 }
-const deleteBookmarks = async ({ body }: { body: DeleteBookmarkInput }) => {
-  await validateInput(body, DeleteBookmarkInput)
-
-  await BookmarkRepository.remove(body._id)
+const deleteBookmarks = async (event: { body: DeleteBookmarkInput }) => {
+  // await validateInput(body, DeleteBookmarkInput)
+  console.log(event)
+  // await BookmarkRepository.remove(body._id)
   return null
 }
 

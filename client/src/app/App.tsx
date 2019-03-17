@@ -12,14 +12,16 @@ const App: React.FC = () => {
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
       <BookmarksProvider>
-        <Grid container>
-          <Grid item lg={9}>
-            <Bookmarks />
+        <div style={{ padding: '2.5%' }}>
+          <Grid container>
+            <Grid item lg={9}>
+              <Bookmarks />
+            </Grid>
+            <Grid item lg={3}>
+              <OpenedTabs />
+            </Grid>
           </Grid>
-          <Grid item lg={3}>
-            <OpenedTabs />
-          </Grid>
-        </Grid>
+        </div>
       </BookmarksProvider>
     </MuiThemeProvider>
   )

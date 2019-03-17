@@ -45,5 +45,5 @@ functions:
     handler: src/routes/delete-bookmark.handler
     events:
       - http:
-          path: bookmarks
+          path: bookmarks/{id}
           method: delete
