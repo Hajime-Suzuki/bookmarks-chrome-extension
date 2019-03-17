@@ -34,13 +34,13 @@ export class EditBookmarkInput {
   @IsString()
   group: IBookmark['group']
 }
-// { body: EditBookmarkInput }
+
 const updateBookmark: LambdaHandler<
   EditBookmarkInput,
-  { _id: IBookmark['_id'] }
+  { id: IBookmark['_id'] }
 > = async ({ body, pathParameters }) => {
   await validateInput(body, EditBookmarkInput)
-  const bookmarks = await BookmarkRepository.update(pathParameters!._id, body)
+  const bookmarks = await BookmarkRepository.update(pathParameters!.id, body)
   return { bookmarks }
 }
 

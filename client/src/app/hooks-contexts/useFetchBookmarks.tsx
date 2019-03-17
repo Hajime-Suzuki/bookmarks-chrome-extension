@@ -40,7 +40,7 @@ export const useBookmarks = () => {
   }
 
   const deleteBookmark = async (_id: IBookmark['_id']) => {
-    await axios.delete(`${API_BOOKMARK_URL}`, { data: { _id } })
+    await axios.delete(`${API_BOOKMARK_URL}/${_id}`)
     setBookmarks(bookmarks.filter(bm => bm._id !== _id))
   }
 

@@ -2,7 +2,7 @@ import { connectDB } from '../db/connection'
 import { IBookmark } from '../models/Bookmark'
 import { Omit } from '../helpers/types'
 
-interface Event<TBody = any, TPathParams = null> {
+interface Event<TBody = Partial<IBookmark>, TPathParams = null> {
   body: TBody
   pathParameters: TPathParams
 }
@@ -56,7 +56,7 @@ const transformEvent = (event: any): ConvertedEvent => {
   }
 }
 
-export const handleLambda = <TBody = any, TPathParams = null>(
+export const handleLambda = <TBody = Partial<IBookmark>, TPathParams = null>(
   fn: LambdaHandler<TBody, TPathParams>
 ) => async (
   event: Event<TBody, TPathParams>,
@@ -64,6 +64,7 @@ export const handleLambda = <TBody = any, TPathParams = null>(
   callback: Callback
 ) => {
   await connectDB()
+  console.log(`event body has been received: ${event.body}`)
 
   try {
     const res = await fn(transformEvent(event) as any, context, callback)
