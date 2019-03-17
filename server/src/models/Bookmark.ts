@@ -4,12 +4,13 @@ import { Document, model, Model, models, Schema } from 'mongoose'
  * @description While a group must be unique, multiple category can be added to a bookmark.
  */
 
-export interface IBookmark extends Document {
+export interface IBookmark {
+  _id: string // ObjectId
   title: string
   url: string
   img?: string
   group?: string
-  categories?: string[]
+  tags?: string[]
   createdAt: Date
   updatedAt?: Date
 }
@@ -19,12 +20,12 @@ const BookmarkSchema = new Schema<IBookmark>({
   url: { type: String, required: true },
   img: String,
   group: { type: String, unique: true },
-  categories: {
+  tags: {
     type: [String]
   },
   createdAt: { type: Date, default: () => Date.now() },
   updatedAt: Date
 })
 
-export const Bookmark: Model<IBookmark> =
-  models.Bookmarks || model<IBookmark>('Bookmarks', BookmarkSchema)
+export const Bookmark: Model<IBookmark & Document> =
+  models.Bookmarks || model<IBookmark & Document>('Bookmarks', BookmarkSchema)

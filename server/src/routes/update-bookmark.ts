@@ -32,7 +32,7 @@ export class EditBookmarkInput {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  categories?: IBookmark['categories']
+  tags?: IBookmark['tags']
 
   @IsOptional()
   @IsString()

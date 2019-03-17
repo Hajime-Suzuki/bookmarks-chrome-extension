@@ -1,5 +1,6 @@
 import { connectDB } from '../db/connection'
 import { IBookmark } from '../models/Bookmark'
+import { Omit } from '../helpers/types'
 
 interface Event {
   body: any
@@ -13,32 +14,44 @@ export type LambdaHandler = (
   callback: Callback
 ) => any
 
-const convertCategoriesStringToArray = (categories: string) => {
-  if (typeof categories !== 'string') {
+const convertCategoriesStringToArray = (tags: string) => {
+  if (typeof tags !== 'string') {
     throw new Error('category must be string')
   }
 
-  if (categories === '') return []
+  if (tags === '') return []
 
-  return categories
+  return tags
     .split(',')
     .map(c => c.trim())
     .filter(Boolean)
 }
 
-const transformEvent = (event: Event) => {
+type ParsedBody = Partial<Omit<IBookmark, 'tags'> & { tags: string }>
+interface ConvertedEvent {
+  [key: string]: any
+  body: Partial<IBookmark>
+}
+
+const transformEvent = (event: Event): ConvertedEvent => {
   const { body: stringBody } = event
 
   if (!stringBody) return event
 
-  const body = JSON.parse(stringBody)
+  const parsedBody: ParsedBody = JSON.parse(stringBody)
 
-  event.body = body
-
-  if (body.categories !== undefined) {
-    event.body.categories = convertCategoriesStringToArray(body.categories)
+  let parsedTags: string[] | undefined
+  if (parsedBody.tags !== undefined) {
+    parsedTags = convertCategoriesStringToArray(parsedBody.tags)
   }
-  return event
+
+  return {
+    ...event,
+    body: {
+      ...parsedBody,
+      tags: parsedTags
+    }
+  }
 }
 
 export const handleLambda = (fn: LambdaHandler) => async (
