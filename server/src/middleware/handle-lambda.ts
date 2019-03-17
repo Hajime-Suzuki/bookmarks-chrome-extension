@@ -2,14 +2,15 @@ import { connectDB } from '../db/connection'
 import { IBookmark } from '../models/Bookmark'
 import { Omit } from '../helpers/types'
 
-interface Event {
-  body: any
+interface Event<TBody = any, TPathParams = null> {
+  body: TBody
+  pathParameters: TPathParams
 }
 type Context = any
 type Callback = (err?: any, data?: any) => void
 
-export type LambdaHandler = (
-  event: Event,
+export type LambdaHandler<TBody = any, TPathParams = null> = (
+  event: Event<TBody, TPathParams>,
   context: Context,
   callback: Callback
 ) => any
@@ -31,9 +32,10 @@ type ParsedBody = Partial<Omit<IBookmark, 'tags'> & { tags: string }>
 interface ConvertedEvent {
   [key: string]: any
   body: Partial<IBookmark>
+  pathParameters: Event['pathParameters']
 }
 
-const transformEvent = (event: Event): ConvertedEvent => {
+const transformEvent = (event: any): ConvertedEvent => {
   const { body: stringBody } = event
 
   if (!stringBody) return event
@@ -54,15 +56,17 @@ const transformEvent = (event: Event): ConvertedEvent => {
   }
 }
 
-export const handleLambda = (fn: LambdaHandler) => async (
-  event: Event,
+export const handleLambda = <TBody = any, TPathParams = null>(
+  fn: LambdaHandler<TBody, TPathParams>
+) => async (
+  event: Event<TBody, TPathParams>,
   context: Context,
   callback: Callback
 ) => {
   await connectDB()
 
   try {
-    const res = await fn(transformEvent(event), context, callback)
+    const res = await fn(transformEvent(event) as any, context, callback)
 
     return {
       body: JSON.stringify(res)

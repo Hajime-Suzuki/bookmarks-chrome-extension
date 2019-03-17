@@ -7,15 +7,11 @@ import {
   IsNotEmpty
 } from 'class-validator'
 import { validateInput } from '../helpers/validator'
-import { handleLambda } from '../middleware/handle-lambda'
+import { handleLambda, LambdaHandler } from '../middleware/handle-lambda'
 import { BookmarkRepository } from '../repositories/bookmarks'
 import { IBookmark } from '../models/Bookmark'
 
 export class EditBookmarkInput {
-  @IsNotEmpty()
-  @IsString()
-  _id: IBookmark['_id']
-
   @IsOptional()
   @IsString()
   title?: IBookmark['title']
@@ -38,10 +34,13 @@ export class EditBookmarkInput {
   @IsString()
   group: IBookmark['group']
 }
-
-const updateBookmark = async ({ body }: { body: EditBookmarkInput }) => {
+// { body: EditBookmarkInput }
+const updateBookmark: LambdaHandler<
+  EditBookmarkInput,
+  { _id: IBookmark['_id'] }
+> = async ({ body, pathParameters }) => {
   await validateInput(body, EditBookmarkInput)
-  const bookmarks = await BookmarkRepository.update(body._id, body)
+  const bookmarks = await BookmarkRepository.update(pathParameters!._id, body)
   return { bookmarks }
 }
 

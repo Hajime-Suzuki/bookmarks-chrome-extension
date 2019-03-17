@@ -34,11 +34,7 @@ export class CreateBookmarkInput {
   group: IBookmark['group']
 }
 
-const createBookmark: LambdaHandler = async ({
-  body
-}: {
-  body: CreateBookmarkInput
-}) => {
+const createBookmark: LambdaHandler<CreateBookmarkInput> = async ({ body }) => {
   await validateInput(body, CreateBookmarkInput)
   const newBookmark = await BookmarkRepository.create(body)
   return { bookmark: newBookmark }
