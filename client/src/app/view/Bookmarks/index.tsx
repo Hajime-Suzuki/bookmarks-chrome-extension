@@ -1,5 +1,5 @@
 import { Grid } from '@material-ui/core'
-import React, { FC, Fragment, useContext } from 'react'
+import React, { FC, useContext } from 'react'
 import { BookmarkContext } from '../../hooks-contexts/useBookmarks'
 import BookmarkCard from './components/BookmarkCard'
 import EditModal from './components/EditModal'

@@ -21,7 +21,6 @@ import { BookmarkContext } from '../../../hooks-contexts/useBookmarks'
 import styled from 'styled-components'
 import { theme } from '../../../styles/theme'
 import { EditModalContext } from '../../../hooks-contexts/useModal'
-import EditModal from './EditModal'
 
 interface Props {
   bookmark: IBookmark
@@ -86,7 +85,7 @@ const cardStyle = {
 
 const BottomSection = ({ bookmark }: Props) => {
   const { deleteBookmark } = useContext(BookmarkContext)
-  const { openModal } = useContext(EditModalContext)
+  const { openModal, selectEditBookmark } = useContext(EditModalContext)
   const { _id, tags } = bookmark
 
   return (
@@ -107,7 +106,10 @@ const BottomSection = ({ bookmark }: Props) => {
         style={{
           marginLeft: 'auto'
         }}
-        onClick={openModal}
+        onClick={() => {
+          selectEditBookmark(_id)
+          openModal()
+        }}
       >
         <Icon fontSize="small" className="fas fa-ellipsis-h" />
       </IconButton>

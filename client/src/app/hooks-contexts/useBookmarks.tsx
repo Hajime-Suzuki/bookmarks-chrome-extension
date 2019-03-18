@@ -18,6 +18,8 @@ interface CreateBookmarkResponse {
   bookmark: IBookmark
 }
 
+type UpdateBookmarkInput = Partial<IBookmark>
+
 export const useBookmarks = () => {
   const [bookmarks, setBookmarks] = useState<IBookmark[]>([])
 
@@ -44,14 +46,23 @@ export const useBookmarks = () => {
     setBookmarks(bookmarks.filter(bm => bm._id !== _id))
   }
 
-  const updateBookmark = async (_id: IBookmark['_id']) => {
-    const {
-      data: { bookmark: updated }
-    } = await axios.put<{ bookmark: IBookmark }>(`${API_BOOKMARK_URL}/${_id}`)
+  const updateBookmark = async (
+    _id: IBookmark['_id'],
+    input: UpdateBookmarkInput
+  ) => {
+    const body = {
+      ...input,
+      tags: input.tags ? input.tags : ''
+    }
+
+    const { data } = await axios.put<{ bookmark: IBookmark }>(
+      `${API_BOOKMARK_URL}/${_id}`,
+      body
+    )
 
     const updatedBookmarkIndex = bookmarks.findIndex(bm => bm._id === _id)
     const copiedBookmarks = [...bookmarks]
-    copiedBookmarks[updatedBookmarkIndex] = updated
+    copiedBookmarks[updatedBookmarkIndex] = data.bookmark
     setBookmarks(copiedBookmarks)
   }
 
