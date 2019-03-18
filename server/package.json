@@ -15,5 +15,8 @@
     "serverless-offline": "^4.9.1",
     "serverless-plugin-typescript": "^1.1.5",
     "typescript": "^3.3.3333"
+  },
+  "scripts": {
+    "dev": "sls offline start"
   }
 }

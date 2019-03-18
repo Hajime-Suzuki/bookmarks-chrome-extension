@@ -28,7 +28,7 @@ const remove = async (_id: IBookmark['_id']) => {
 
   if (!bookmark) throw createError(404, `bookmark ${_id} not found`)
 
-  await Bookmark.findOneAndDelete(_id)
+  await bookmark.remove()
   return null
 }
 

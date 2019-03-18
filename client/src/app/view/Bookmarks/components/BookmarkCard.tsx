@@ -87,7 +87,12 @@ const BottomSection = ({ bookmark }: Props) => {
   const { _id, tags } = bookmark
   return (
     <>
-      <IconButton onClick={() => deleteBookmark(_id)}>
+      <IconButton
+        onClick={() => {
+          console.log(bookmark.title, bookmark._id)
+          deleteBookmark(_id)
+        }}
+      >
         <Icon fontSize="small" className="fas fa-minus-circle" />
       </IconButton>
       <Typography

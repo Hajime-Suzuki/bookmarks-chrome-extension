@@ -5,7 +5,7 @@ import { BookmarkRepository } from '../repositories/bookmarks'
 const deleteBookmarks: LambdaHandler<any, { id: IBookmark['_id'] }> = async ({
   pathParameters
 }) => {
-  pathParameters
+  console.log({ id: pathParameters.id })
   await BookmarkRepository.remove(pathParameters!.id)
   return null
 }
