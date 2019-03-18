@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core'
 import React, { FC, useContext } from 'react'
 import useOpenedTabs from '../../hooks-contexts/useOpenedTabs'
-import { BookmarkContext } from '../../hooks-contexts/useFetchBookmarks'
+import { BookmarkContext } from '../../hooks-contexts/useBookmarks'
 import { Tab } from '../../types'
 
 const OpenedTabs: FC<{}> = () => {

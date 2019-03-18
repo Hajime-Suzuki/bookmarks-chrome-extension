@@ -17,9 +17,11 @@ import {
 } from '@material-ui/core'
 import React, { FC, useContext, createRef, useRef } from 'react'
 import { IBookmark } from '../../../types'
-import { BookmarkContext } from '../../../hooks-contexts/useFetchBookmarks'
+import { BookmarkContext } from '../../../hooks-contexts/useBookmarks'
 import styled from 'styled-components'
 import { theme } from '../../../styles/theme'
+import { EditModalContext } from '../../../hooks-contexts/useModal'
+import EditModal from './EditModal'
 
 interface Props {
   bookmark: IBookmark
@@ -84,15 +86,12 @@ const cardStyle = {
 
 const BottomSection = ({ bookmark }: Props) => {
   const { deleteBookmark } = useContext(BookmarkContext)
+  const { openModal } = useContext(EditModalContext)
   const { _id, tags } = bookmark
+
   return (
     <>
-      <IconButton
-        onClick={() => {
-          console.log(bookmark.title, bookmark._id)
-          deleteBookmark(_id)
-        }}
-      >
+      <IconButton onClick={() => deleteBookmark(_id)}>
         <Icon fontSize="small" className="fas fa-minus-circle" />
       </IconButton>
       <Typography
@@ -108,6 +107,7 @@ const BottomSection = ({ bookmark }: Props) => {
         style={{
           marginLeft: 'auto'
         }}
+        onClick={openModal}
       >
         <Icon fontSize="small" className="fas fa-ellipsis-h" />
       </IconButton>

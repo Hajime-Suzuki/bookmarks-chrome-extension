@@ -1,11 +1,11 @@
 import { Grid } from '@material-ui/core'
 import React, { FC, Fragment, useContext } from 'react'
-import { BookmarkContext } from '../../hooks-contexts/useFetchBookmarks'
+import { BookmarkContext } from '../../hooks-contexts/useBookmarks'
 import BookmarkCard from './components/BookmarkCard'
+import EditModal from './components/EditModal'
 
 const Bookmarks: FC<{}> = () => {
   const { bookmarks } = useContext(BookmarkContext)
-
   return (
     <Grid container spacing={24} justify="flex-start">
       {bookmarks.map(bm => {
@@ -15,6 +15,7 @@ const Bookmarks: FC<{}> = () => {
           </Grid>
         )
       })}
+      <EditModal />
     </Grid>
   )
 }

@@ -40,8 +40,8 @@ const updateBookmark: LambdaHandler<
   { id: IBookmark['_id'] }
 > = async ({ body, pathParameters }) => {
   await validateInput(body, EditBookmarkInput)
-  const bookmarks = await BookmarkRepository.update(pathParameters!.id, body)
-  return { bookmarks }
+  const bookmark = await BookmarkRepository.update(pathParameters!.id, body)
+  return { bookmark }
 }
 
 export const handler = handleLambda(updateBookmark)

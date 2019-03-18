@@ -44,6 +44,17 @@ export const useBookmarks = () => {
     setBookmarks(bookmarks.filter(bm => bm._id !== _id))
   }
 
+  const updateBookmark = async (_id: IBookmark['_id']) => {
+    const {
+      data: { bookmark: updated }
+    } = await axios.put<{ bookmark: IBookmark }>(`${API_BOOKMARK_URL}/${_id}`)
+
+    const updatedBookmarkIndex = bookmarks.findIndex(bm => bm._id === _id)
+    const copiedBookmarks = [...bookmarks]
+    copiedBookmarks[updatedBookmarkIndex] = updated
+    setBookmarks(copiedBookmarks)
+  }
+
   useEffect(() => {
     fetchBookmarks()
   }, [])
@@ -51,7 +62,8 @@ export const useBookmarks = () => {
   return {
     bookmarks,
     createBookmark,
-    deleteBookmark
+    deleteBookmark,
+    updateBookmark
   }
 }
 
