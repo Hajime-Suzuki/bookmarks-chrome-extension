@@ -4,7 +4,7 @@ import { EditBookmarkInput } from '../routes/update-bookmark'
 import * as createError from 'http-errors'
 
 const find = async () => {
-  return Bookmark.find({})
+  return Bookmark.find({}, null, { sort: { updatedAt: -1, createdAt: -1 } })
 }
 
 const create = async (input: CreateBookmarkInput) => {
