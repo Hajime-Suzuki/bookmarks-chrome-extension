@@ -19,7 +19,7 @@ const BookmarkSchema = new Schema<IBookmark>({
   title: { type: String, required: true },
   url: { type: String, required: true },
   img: String,
-  group: { type: String },
+  group: { type: Schema.Types.ObjectId, ref: 'Group' },
   tags: {
     type: [String]
   },
@@ -28,4 +28,4 @@ const BookmarkSchema = new Schema<IBookmark>({
 })
 
 export const Bookmark: Model<IBookmark & Document> =
-  models.Bookmarks || model<IBookmark & Document>('Bookmarks', BookmarkSchema)
+  models.Bookmarks || model<IBookmark & Document>('Bookmark', BookmarkSchema)
