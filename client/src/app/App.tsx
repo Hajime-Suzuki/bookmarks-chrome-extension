@@ -14,16 +14,14 @@ const App: React.FC = () => {
       <CssBaseline />
       <EditModalProvider>
         <BookmarksProvider>
-          <div style={{ padding: '2.5%' }}>
-            <Grid container>
-              <Grid item lg={9}>
-                <Bookmarks />
-              </Grid>
-              <Grid item lg={3}>
-                <OpenedTabs />
-              </Grid>
+          <Grid container>
+            <Grid item lg={9} style={{ padding: theme.spacing.unit * 2 }}>
+              <Bookmarks />
             </Grid>
-          </div>
+            <Grid item lg={3} style={{ padding: '30px 0' }}>
+              <OpenedTabs />
+            </Grid>
+          </Grid>
         </BookmarksProvider>
       </EditModalProvider>
     </MuiThemeProvider>

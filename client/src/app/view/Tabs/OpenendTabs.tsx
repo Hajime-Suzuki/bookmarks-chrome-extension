@@ -9,6 +9,7 @@ import React, { FC, useContext } from 'react'
 import useOpenedTabs from '../../hooks-contexts/useOpenedTabs'
 import { BookmarkContext } from '../../hooks-contexts/useBookmarks'
 import { Tab } from '../../types'
+import { theme } from '../../styles/theme'
 
 const OpenedTabs: FC<{}> = () => {
   const { tabs, closeTab } = useOpenedTabs()
@@ -22,7 +23,7 @@ const OpenedTabs: FC<{}> = () => {
   }
 
   return (
-    <List>
+    <List style={{ padding: `0 ${theme.spacing.unit}` }}>
       {tabs.map(tab => {
         return (
           <ListItem

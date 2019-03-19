@@ -2,6 +2,7 @@ import React, { useState, useEffect, createContext, FC } from 'react'
 import axios from 'axios'
 import { API_BOOKMARK_URL } from '../../constants'
 import { IBookmark } from '../types'
+import { Omit } from '@material-ui/core'
 
 interface FetchBookmarksResponse {
   bookmarks: IBookmark[]
@@ -18,7 +19,7 @@ interface CreateBookmarkResponse {
   bookmark: IBookmark
 }
 
-type UpdateBookmarkInput = Partial<IBookmark>
+type UpdateBookmarkInput = Omit<Partial<IBookmark>, 'tags'> & { tags: string }
 
 export const useBookmarks = () => {
   const [bookmarks, setBookmarks] = useState<IBookmark[]>([])
@@ -50,14 +51,14 @@ export const useBookmarks = () => {
     _id: IBookmark['_id'],
     input: UpdateBookmarkInput
   ) => {
-    const body = {
-      ...input,
-      tags: input.tags ? input.tags : ''
-    }
+    // const body = {
+    //   ...input,
+    //   tags: input.tags
+    // }
 
     const { data } = await axios.put<{ bookmark: IBookmark }>(
       `${API_BOOKMARK_URL}/${_id}`,
-      body
+      input
     )
 
     const updatedBookmarkIndex = bookmarks.findIndex(bm => bm._id === _id)

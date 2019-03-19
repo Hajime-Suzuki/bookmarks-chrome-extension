@@ -100,7 +100,7 @@ const BottomSection = ({ bookmark }: Props) => {
           color: theme.typography.caption.color
         }}
       >
-        {tags && tags.join(' ')}
+        {tags && tags.join(', ')}
       </Typography>
       <IconButton
         style={{

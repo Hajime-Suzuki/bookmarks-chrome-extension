@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core'
 import React, { FC, useContext, useMemo } from 'react'
 import { EditModalContext } from '../../../hooks-contexts/useModal'
-import { Formik, FormikProps, Form, Field } from 'formik'
+import { Formik, FormikProps, Form, Field, FieldArray } from 'formik'
 import { IBookmark } from '../../../types'
 import { BookmarkContext } from '../../../hooks-contexts/useBookmarks'
 
@@ -29,7 +29,11 @@ const EditModal: FC = () => {
       <DialogTitle style={{ textAlign: 'center' }}>Edit Bookmark</DialogTitle>
       <Formik
         initialValues={{
-          title: selectedBookmark ? selectedBookmark.title : ''
+          title: selectedBookmark ? selectedBookmark.title : '',
+          tags:
+            selectedBookmark && selectedBookmark.tags
+              ? selectedBookmark.tags.join(', ')
+              : ''
         }}
         onSubmit={async values => {
           if (selectedBookmark)
@@ -38,7 +42,13 @@ const EditModal: FC = () => {
         }}
       >
         {formikProps => {
-          const { handleSubmit, values, handleChange } = formikProps
+          const {
+            handleSubmit,
+            values,
+            handleChange,
+            dirty,
+            isSubmitting
+          } = formikProps
           return (
             <>
               <DialogContent style={{ minWidth: 300 }}>
@@ -50,6 +60,13 @@ const EditModal: FC = () => {
                     name="title"
                     onChange={handleChange}
                   />
+                  <TextField
+                    fullWidth
+                    label="tags"
+                    value={values.tags}
+                    name="tags"
+                    onChange={handleChange}
+                  />
                 </Form>
               </DialogContent>
               <DialogActions>
@@ -58,6 +75,8 @@ const EditModal: FC = () => {
                   onClick={handleSubmit as any}
                   color="primary"
                   variant="outlined"
+                  type="submit"
+                  disabled={!dirty || isSubmitting}
                 >
                   Save
                 </Button>

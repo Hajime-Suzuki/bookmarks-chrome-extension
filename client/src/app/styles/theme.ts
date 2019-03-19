@@ -11,5 +11,8 @@ export const theme = createMuiTheme({
     secondary: {
       main: '#ff9100'
     }
+  },
+  spacing: {
+    unit: 12
   }
 })
