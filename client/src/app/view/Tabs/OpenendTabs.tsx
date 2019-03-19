@@ -23,7 +23,7 @@ const OpenedTabs: FC<{}> = () => {
   }
 
   return (
-    <List style={{ padding: `0 ${theme.spacing.unit}` }}>
+    <List style={{ padding: 0 }}>
       {tabs.map(tab => {
         return (
           <ListItem
