@@ -18,7 +18,7 @@ custom:
 functions:
   getBookmarks:
     name: '${self:service}-get-bookmarks'
-    handler: src/routes/get-bookmarks.handler
+    handler: src/routes/bookmarks/get-bookmarks.handler
     events:
       - http:
           path: bookmarks
@@ -26,7 +26,7 @@ functions:
 
   createBookmarks:
     name: '${self:service}-create-bookmark'
-    handler: src/routes/create-bookmark.handler
+    handler: src/routes/bookmarks/create-bookmark.handler
     events:
       - http:
           path: bookmarks
@@ -34,7 +34,7 @@ functions:
 
   updateBookmarks:
     name: '${self:service}-update-bookmark'
-    handler: src/routes/update-bookmark.handler
+    handler: src/routes/bookmarks/update-bookmark.handler
     events:
       - http:
           path: bookmarks/{id}
@@ -42,7 +42,7 @@ functions:
 
   deleteBookmarks:
     name: '${self:service}-delete-bookmark'
-    handler: src/routes/delete-bookmark.handler
+    handler: src/routes/bookmarks/delete-bookmark.handler
     events:
       - http:
           path: bookmarks/{id}

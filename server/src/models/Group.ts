@@ -6,7 +6,7 @@ import { Document, model, Model, models, Schema } from 'mongoose'
 
 export interface IGroup {
   _id: string // ObjectId
-  name: string
+  title: string
   items?: string[]
   createdAt: Date
   updatedAt?: Date
@@ -14,7 +14,7 @@ export interface IGroup {
 
 const GroupSchema = new Schema<IGroup>({
   name: { type: String, required: true },
-  items: [{ type: Schema.Types.ObjectId, ref: 'Bookmark' }],
+  title: [{ type: Schema.Types.ObjectId, ref: 'Bookmark' }],
   createdAt: { type: Date, default: () => Date.now() },
   updatedAt: Date
 })

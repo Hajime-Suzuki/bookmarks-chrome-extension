@@ -1,6 +1,6 @@
 import { Bookmark, IBookmark } from '../models/Bookmark'
-import { CreateBookmarkInput } from '../routes/create-bookmark'
-import { EditBookmarkInput } from '../routes/update-bookmark'
+import { CreateBookmarkInput } from '../routes/bookmarks/create-bookmark'
+import { EditBookmarkInput } from '../routes/bookmarks/update-bookmark'
 import * as createError from 'http-errors'
 
 const find = async () => {

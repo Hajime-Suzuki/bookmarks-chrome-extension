@@ -1,6 +1,6 @@
-import { handleLambda, LambdaHandler } from '../middleware/handle-lambda'
-import { IBookmark } from '../models/Bookmark'
-import { BookmarkRepository } from '../repositories/bookmarks'
+import { handleLambda, LambdaHandler } from '../../middleware/handle-lambda'
+import { IBookmark } from '../../models/Bookmark'
+import { BookmarkRepository } from '../../repositories/bookmarks'
 
 const deleteBookmarks: LambdaHandler<any, { id: IBookmark['_id'] }> = async ({
   pathParameters

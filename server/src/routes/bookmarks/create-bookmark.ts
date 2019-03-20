@@ -5,10 +5,10 @@ import {
   IsUrl,
   IsArray
 } from 'class-validator'
-import { validateInput } from '../helpers/validator'
-import { handleLambda, LambdaHandler } from '../middleware/handle-lambda'
-import { BookmarkRepository } from '../repositories/bookmarks'
-import { IBookmark } from '../models/Bookmark'
+import { validateInput } from '../../helpers/validator'
+import { handleLambda, LambdaHandler } from '../../middleware/handle-lambda'
+import { BookmarkRepository } from '../../repositories/bookmarks'
+import { IBookmark } from '../../models/Bookmark'
 
 export class CreateBookmarkInput {
   @IsNotEmpty()
