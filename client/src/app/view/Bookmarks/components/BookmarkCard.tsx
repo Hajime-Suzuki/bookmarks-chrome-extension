@@ -21,6 +21,7 @@ import { BookmarkContext } from '../../../hooks-contexts/useBookmarks'
 import styled from 'styled-components'
 import { theme } from '../../../styles/theme'
 import { EditModalContext } from '../../../hooks-contexts/useModal'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 interface Props {
   bookmark: IBookmark

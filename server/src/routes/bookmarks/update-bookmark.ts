@@ -1,15 +1,8 @@
-import {
-  IsArray,
-  IsOptional,
-  IsString,
-  IsUrl,
-  IsUUID,
-  IsNotEmpty
-} from 'class-validator'
+import { IsArray, IsOptional, IsString, IsUrl } from 'class-validator'
 import { validateInput } from '../../helpers/validator'
 import { handleLambda, LambdaHandler } from '../../middleware/handle-lambda'
-import { BookmarkRepository } from '../../repositories/bookmarks'
 import { IBookmark } from '../../models/Bookmark'
+import { BookmarkRepository } from '../../repositories/bookmarks'
 
 export class EditBookmarkInput {
   @IsOptional()
