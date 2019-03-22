@@ -10,14 +10,13 @@ import { EditModalProvider } from './hooks-contexts/useModal'
 
 import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery'
 import styled from 'styled-components'
-import { DragDropContext } from 'react-beautiful-dnd'
 
 const BookmarkWrapper = styled(Grid)`
   padding: ${theme.spacing.unit * 2}px;
 `
 
 interface Props {
-  readonly desktop: boolean
+  desktop: string
 }
 const TabWrapper = styled(Grid)<Props>`
   padding: ${({ desktop }) =>
@@ -30,20 +29,18 @@ const App: React.FC = () => {
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
-      <DragDropContext onDragEnd={() => console.log('drag end')}>
-        <EditModalProvider>
-          <BookmarksProvider>
-            <Grid container>
-              <BookmarkWrapper item lg={9}>
-                <Bookmarks />
-              </BookmarkWrapper>
-              <TabWrapper item lg={3} desktop={isDesktop}>
-                <OpenedTabs />
-              </TabWrapper>
-            </Grid>
-          </BookmarksProvider>
-        </EditModalProvider>
-      </DragDropContext>
+      <EditModalProvider>
+        <BookmarksProvider>
+          <Grid container>
+            <BookmarkWrapper item lg={9}>
+              <Bookmarks />
+            </BookmarkWrapper>
+            <TabWrapper item lg={3} desktop={`${isDesktop}`}>
+              <OpenedTabs />
+            </TabWrapper>
+          </Grid>
+        </BookmarksProvider>
+      </EditModalProvider>
     </MuiThemeProvider>
   )
 }

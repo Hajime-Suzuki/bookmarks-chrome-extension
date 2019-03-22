@@ -2,26 +2,22 @@ import {
   Avatar,
   Card,
   CardActionArea,
-  CardContent,
-  Grid,
-  Link,
-  Typography,
+  CardActions,
   Icon,
   IconButton,
-  CardMedia as CardHeader,
-  CardActions,
+  Link,
   List,
   ListItem,
+  ListItemAvatar,
   ListItemText,
-  ListItemAvatar
+  Typography
 } from '@material-ui/core'
-import React, { FC, useContext, createRef, useRef } from 'react'
-import { IBookmark } from '../../../types'
-import { BookmarkContext } from '../../../hooks-contexts/useBookmarks'
+import React, { FC, useContext } from 'react'
 import styled from 'styled-components'
-import { theme } from '../../../styles/theme'
+import { BookmarkContext } from '../../../hooks-contexts/useBookmarks'
 import { EditModalContext } from '../../../hooks-contexts/useModal'
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { theme } from '../../../styles/theme'
+import { IBookmark } from '../../../types'
 
 interface Props {
   bookmark: IBookmark
