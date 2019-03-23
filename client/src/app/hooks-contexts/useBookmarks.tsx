@@ -8,18 +8,18 @@ interface FetchBookmarksResponse {
   bookmarks: IBookmark[]
 }
 
-interface CreateBookmarkInput {
+export interface CreateBookmarkInput {
   title: IBookmark['title']
   url: IBookmark['url']
   img?: IBookmark['img']
-  tags: IBookmark['tags']
+  tags?: IBookmark['tags']
 }
 
 interface CreateBookmarkResponse {
   bookmark: IBookmark
 }
 
-type UpdateBookmarkInput = Omit<Partial<IBookmark>, 'tags'> & { tags: string }
+type UpdateBookmarkInput = Omit<Partial<IBookmark>, 'tags'> & { tags?: string }
 
 export const useBookmarks = () => {
   const [bookmarks, setBookmarks] = useState<IBookmark[]>([])

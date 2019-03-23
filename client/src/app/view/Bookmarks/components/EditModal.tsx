@@ -1,22 +1,17 @@
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
   Button,
-  Grid,
-  TextField,
-  DialogActions
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField
 } from '@material-ui/core'
+import { Form, Formik } from 'formik'
 import React, { FC, useContext, useMemo } from 'react'
-import { EditModalContext } from '../../../hooks-contexts/useModal'
-import { Formik, FormikProps, Form, Field, FieldArray } from 'formik'
-import { IBookmark } from '../../../types'
 import { BookmarkContext } from '../../../hooks-contexts/useBookmarks'
+import { EditModalContext } from '../../../hooks-contexts/useModal'
 
-interface FormValues {
-  title: IBookmark['title']
-}
-const EditModal: FC = () => {
+const EditModal: FC<{}> = () => {
   const { isOpen, closeModal, selectedId } = useContext(EditModalContext)
   const { bookmarks, updateBookmark } = useContext(BookmarkContext)
   const selectedBookmark = useMemo(

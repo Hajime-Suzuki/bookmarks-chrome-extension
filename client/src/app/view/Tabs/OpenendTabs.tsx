@@ -10,6 +10,7 @@ import { DragSource, DragSourceConnector, DragSourceMonitor } from 'react-dnd'
 import { BookmarkContext } from '../../hooks-contexts/useBookmarks'
 import { OpenedTabContext } from '../../hooks-contexts/useOpenedTabs'
 import { Tab } from '../../types'
+import { DnDTypes } from '../../../constants'
 
 const OpenedTabs: FC<{}> = () => {
   const { tabs } = useContext(OpenedTabContext)
@@ -25,9 +26,8 @@ const OpenedTabs: FC<{}> = () => {
 interface ListProps {
   tab: chrome.tabs.Tab
 }
-type TabSourceCollectedProps = ReturnType<typeof collect>
 
-const _TabList: FC<ListProps & TabSourceCollectedProps> = ({
+const _TabList: FC<ListProps & ReturnType<typeof collect>> = ({
   tab,
   connectDragSource
 }) => {
@@ -60,14 +60,9 @@ const _TabList: FC<ListProps & TabSourceCollectedProps> = ({
 
 const dragSource = {
   beginDrag: (props: ListProps, monitor: DragSourceMonitor) => {
-    console.log('begin!!!!')
     return {
-      id: props.tab.id,
-      title: props.tab.title
+      tab: props.tab
     }
-  },
-  endDrag: (props: ListProps, monitor: DragSourceMonitor) => {
-    console.log('end!!!!')
   }
 }
 
@@ -75,6 +70,8 @@ const collect = (connect: DragSourceConnector, monitor: DragSourceMonitor) => ({
   connectDragSource: connect.dragSource()
 })
 
-const TabList = DragSource<ListProps>('tabs', dragSource, collect)(_TabList)
+const TabList = DragSource<ListProps>(DnDTypes.tabs, dragSource, collect)(
+  _TabList
+)
 
 export default OpenedTabs

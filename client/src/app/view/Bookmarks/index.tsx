@@ -1,12 +1,14 @@
 import { Grid } from '@material-ui/core'
-import React, { FC, useContext } from 'react'
+import React, { FC, useContext, useEffect } from 'react'
+import { DropTarget, DropTargetConnector, DropTargetMonitor } from 'react-dnd'
+import { DnDTypes } from '../../../constants'
 import { BookmarkContext } from '../../hooks-contexts/useBookmarks'
-import BookmarkCard from './components/BookmarkCard'
+import { OpenedTabContext } from '../../hooks-contexts/useOpenedTabs'
+import { Tab } from '../../types'
+import BookmarkCard from './components/bookmark-card'
 import EditModal from './components/EditModal'
-import { DragSource } from 'react-dnd'
 
-const Bookmarks: FC<{}> = () => {
-  const { bookmarks } = useContext(BookmarkContext)
+const Bookmarks: FC<Pick<BookmarkContext, 'bookmarks'>> = ({ bookmarks }) => {
   return (
     <Grid container spacing={24} justify="flex-start">
       {bookmarks.map(bm => {
@@ -21,4 +23,33 @@ const Bookmarks: FC<{}> = () => {
   )
 }
 
-export default Bookmarks
+const DnDContainer: FC<ReturnType<typeof collect>> = ({
+  connectDropTarget,
+  droppedItem
+}) => {
+  const { bookmarks, createBookmark: submit } = useContext(BookmarkContext)
+  const { closeTab } = useContext(OpenedTabContext)
+
+  const createBookmark = async ({ title, url, favIconUrl, id }: Tab) => {
+    if (!title || !url) return console.warn('title and url are required')
+    await submit({ title, url, img: favIconUrl, tags: undefined })
+    closeTab(id!)
+  }
+
+  useEffect(() => {
+    if (droppedItem) createBookmark(droppedItem)
+  }, [droppedItem])
+
+  return connectDropTarget(
+    <div>
+      <Bookmarks bookmarks={bookmarks} />
+    </div>
+  )
+}
+
+const collect = (connect: DropTargetConnector, monitor: DropTargetMonitor) => ({
+  droppedItem: (monitor.didDrop() && (monitor.getItem().tab as Tab)) || null,
+  connectDropTarget: connect.dropTarget()
+})
+
+export default DropTarget(DnDTypes.tabs, {}, collect)(DnDContainer)

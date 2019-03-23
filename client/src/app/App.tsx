@@ -10,7 +10,12 @@ import { EditModalProvider } from './hooks-contexts/useModal'
 import HTML5Backend from 'react-dnd-html5-backend'
 import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery'
 import styled from 'styled-components'
-import { DragDropContext } from 'react-dnd'
+import {
+  DragDropContext,
+  DropTarget,
+  DropTargetConnector,
+  DropTargetMonitor
+} from 'react-dnd'
 import { OpenedTabProvider } from './hooks-contexts/useOpenedTabs'
 
 const BookmarkWrapper = styled(Grid)`
