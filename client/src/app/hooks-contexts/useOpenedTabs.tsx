@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, createContext, FC } from 'react'
 import { APP_NAME } from '../../constants'
 import {
   OnMessageCallback,
@@ -6,6 +6,8 @@ import {
   unsubscribe
 } from '../helpers/subscribeTabs'
 import { Tab } from '../types'
+import { BookmarkContext, useBookmarks } from './useBookmarks'
+import React from 'react'
 
 const useOpenedTabs = () => {
   const [tabs, setTabs] = useState([] as Tab[])
@@ -54,3 +56,16 @@ const useOpenedTabs = () => {
 }
 
 export default useOpenedTabs
+
+export type OpenedTabContext = ReturnType<typeof useOpenedTabs>
+export const OpenedTabContext = createContext({} as OpenedTabContext)
+
+export const OpenedTabProvider: FC<{}> = props => {
+  const tabs = useOpenedTabs()
+
+  return (
+    <OpenedTabContext.Provider value={tabs}>
+      {props.children}
+    </OpenedTabContext.Provider>
+  )
+}

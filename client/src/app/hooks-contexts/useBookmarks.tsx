@@ -75,8 +75,8 @@ export const useBookmarks = () => {
   }
 }
 
-type Context = ReturnType<typeof useBookmarks>
-export const BookmarkContext = createContext({} as Context)
+export type BookmarkContext = ReturnType<typeof useBookmarks>
+export const BookmarkContext = createContext({} as BookmarkContext)
 
 export const BookmarksProvider: FC = props => {
   const bookmarks = useBookmarks()

@@ -11,6 +11,7 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery'
 import styled from 'styled-components'
 import { DragDropContext } from 'react-dnd'
+import { OpenedTabProvider } from './hooks-contexts/useOpenedTabs'
 
 const BookmarkWrapper = styled(Grid)`
   padding: ${theme.spacing.unit * 2}px;
@@ -32,14 +33,16 @@ const App: React.FC = () => {
       <CssBaseline />
       <EditModalProvider>
         <BookmarksProvider>
-          <Grid container>
-            <BookmarkWrapper item lg={9}>
-              <Bookmarks />
-            </BookmarkWrapper>
-            <TabWrapper item lg={3} desktop={`${isDesktop}`}>
-              <OpenedTabs />
-            </TabWrapper>
-          </Grid>
+          <OpenedTabProvider>
+            <Grid container>
+              <BookmarkWrapper item lg={9}>
+                <Bookmarks />
+              </BookmarkWrapper>
+              <TabWrapper item lg={3} desktop={`${isDesktop}`}>
+                <OpenedTabs />
+              </TabWrapper>
+            </Grid>
+          </OpenedTabProvider>
         </BookmarksProvider>
       </EditModalProvider>
     </MuiThemeProvider>

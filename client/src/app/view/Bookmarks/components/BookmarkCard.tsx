@@ -13,12 +13,7 @@ import {
   Typography
 } from '@material-ui/core'
 import React, { FC, useContext } from 'react'
-import {
-  DragSource,
-  DragSourceConnector,
-  DragSourceMonitor,
-  ConnectDragSource
-} from 'react-dnd'
+import { DragSource, DragSourceConnector, DragSourceMonitor } from 'react-dnd'
 import styled from 'styled-components'
 import { BookmarkContext } from '../../../hooks-contexts/useBookmarks'
 import { EditModalContext } from '../../../hooks-contexts/useModal'
@@ -33,6 +28,7 @@ type CardSourceCollectedProps = ReturnType<typeof collect>
 
 const BookmarkCard: FC<Props & CardSourceCollectedProps> = props => {
   const { bookmark, connectDragSource } = props
+
   return connectDragSource(
     <div style={{ height: '100%' }}>
       <Card style={{ height: '100%' }}>
