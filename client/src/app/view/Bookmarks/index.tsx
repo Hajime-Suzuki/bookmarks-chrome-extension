@@ -7,6 +7,7 @@ import { OpenedTabContext } from '../../hooks-contexts/useOpenedTabs'
 import { Tab } from '../../types'
 import BookmarkCard from './components/bookmark-card'
 import EditModal from './components/EditModal'
+import { theme } from '../../styles/theme'
 
 const Bookmarks: FC<Pick<BookmarkContext, 'bookmarks'>> = ({ bookmarks }) => {
   return (
@@ -23,10 +24,15 @@ const Bookmarks: FC<Pick<BookmarkContext, 'bookmarks'>> = ({ bookmarks }) => {
   )
 }
 
-const DnDContainer: FC<ReturnType<typeof collect>> = ({
-  connectDropTarget,
-  droppedItem
-}) => {
+const DnDContainer: FC<
+  ReturnType<typeof tabDropCollect> & ReturnType<typeof bookmarkDropCollect>
+> = props => {
+  const {
+    tabConnectDropTarget,
+    bookmarkConnectDropSource,
+    droppedItem,
+    isDragging
+  } = props
   const { bookmarks, createBookmark: submit } = useContext(BookmarkContext)
   const { closeTab } = useContext(OpenedTabContext)
 
@@ -40,16 +46,42 @@ const DnDContainer: FC<ReturnType<typeof collect>> = ({
     if (droppedItem) createBookmark(droppedItem)
   }, [droppedItem])
 
-  return connectDropTarget(
-    <div>
-      <Bookmarks bookmarks={bookmarks} />
-    </div>
+  return bookmarkConnectDropSource(
+    tabConnectDropTarget(
+      <div
+        style={{
+          backgroundColor: isDragging ? '#ffefe8' : 'inherit',
+          padding: theme.spacing.unit * 2
+        }}
+      >
+        <Bookmarks bookmarks={bookmarks} />
+      </div>
+    )
   )
 }
 
-const collect = (connect: DropTargetConnector, monitor: DropTargetMonitor) => ({
+const tabDropCollect = (
+  connect: DropTargetConnector,
+  monitor: DropTargetMonitor
+) => ({
+  isDragging: !!monitor.getItem(),
   droppedItem: (monitor.didDrop() && (monitor.getItem().tab as Tab)) || null,
-  connectDropTarget: connect.dropTarget()
+  tabConnectDropTarget: connect.dropTarget()
 })
 
-export default DropTarget(DnDTypes.tabs, {}, collect)(DnDContainer)
+const dropSource = {
+  drop: () => {
+    console.log('bookmark dragged')
+  }
+}
+
+const bookmarkDropCollect = (
+  connect: DropTargetConnector,
+  monitor: DropTargetMonitor
+) => ({
+  bookmarkConnectDropSource: connect.dropTarget()
+})
+
+export default DropTarget(DnDTypes.tabs, {}, tabDropCollect)(
+  DropTarget(DnDTypes.bookmarks, dropSource, bookmarkDropCollect)(DnDContainer)
+)

@@ -19,7 +19,7 @@ import {
 import { OpenedTabProvider } from './hooks-contexts/useOpenedTabs'
 
 const BookmarkWrapper = styled(Grid)`
-  padding: ${theme.spacing.unit * 2}px;
+  /* padding: ${theme.spacing.unit * 2}px; */
 `
 
 interface Props {

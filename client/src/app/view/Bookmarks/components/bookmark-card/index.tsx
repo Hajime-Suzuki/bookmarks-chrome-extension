@@ -1,16 +1,16 @@
 import { Card, CardActionArea, CardActions, Link } from '@material-ui/core'
 import React, { FC } from 'react'
 import { DragSource, DragSourceConnector, DragSourceMonitor } from 'react-dnd'
-import { IBookmark } from '../../../../types'
-import BottomSection from './BottomSection'
-import Content from './BookmarkContent'
 import { DnDTypes } from '../../../../../constants'
+import { IBookmark } from '../../../../types'
+import Content from './BookmarkContent'
+import BottomSection from './BottomSection'
 
 export interface BookmarkCardProps {
   bookmark: IBookmark
 }
 
-type CardSourceCollectedProps = ReturnType<typeof collect>
+type CardSourceCollectedProps = ReturnType<typeof dragCollect>
 
 const BookmarkCard: FC<
   BookmarkCardProps & CardSourceCollectedProps
@@ -41,23 +41,26 @@ const BookmarkCard: FC<
 
 const dragSource = {
   beginDrag: (props: BookmarkCardProps, monitor: DragSourceMonitor) => {
-    // console.log('begin!!!!')
+    console.log('begin!!!!')
     return {
       id: props.bookmark._id,
       title: props.bookmark.title
     }
   },
   endDrag: (props: BookmarkCardProps, monitor: DragSourceMonitor) => {
-    // console.log('end!!!!')
+    console.log('end!!!!')
   }
 }
 
-const collect = (connect: DragSourceConnector, monitor: DragSourceMonitor) => ({
+const dragCollect = (
+  connect: DragSourceConnector,
+  monitor: DragSourceMonitor
+) => ({
   connectDragSource: connect.dragSource()
 })
 
 export default DragSource<BookmarkCardProps>(
   DnDTypes.bookmarks,
   dragSource,
-  collect
+  dragCollect
 )(BookmarkCard)
