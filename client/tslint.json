@@ -13,7 +13,7 @@
     "ban-types": false,
     "array-type": false,
     "no-shadowed-variable": true,
-    "no-console": true,
+    "no-console": false,
     "arrow-parens": [true, "ban-single-arg-parens"],
     "trailing-comma": false,
     "curly": false,

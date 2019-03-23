@@ -3,6 +3,7 @@ import React, { FC, useContext } from 'react'
 import { BookmarkContext } from '../../hooks-contexts/useBookmarks'
 import BookmarkCard from './components/BookmarkCard'
 import EditModal from './components/EditModal'
+import { DragSource } from 'react-dnd'
 
 const Bookmarks: FC<{}> = () => {
   const { bookmarks } = useContext(BookmarkContext)

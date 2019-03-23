@@ -13,6 +13,12 @@ import {
   Typography
 } from '@material-ui/core'
 import React, { FC, useContext } from 'react'
+import {
+  DragSource,
+  DragSourceConnector,
+  DragSourceMonitor,
+  ConnectDragSource
+} from 'react-dnd'
 import styled from 'styled-components'
 import { BookmarkContext } from '../../../hooks-contexts/useBookmarks'
 import { EditModalContext } from '../../../hooks-contexts/useModal'
@@ -23,27 +29,50 @@ interface Props {
   bookmark: IBookmark
 }
 
-const BookmarkCard: FC<Props> = ({ bookmark }) => {
-  const { url } = bookmark
-  return (
-    <Card style={{ height: '100%' }}>
-      <CardActionArea style={{ height: '56%' }}>
-        <Link
-          color="inherit"
-          underline="none"
-          style={{ display: 'block' }}
-          href={url}
-          target="blank"
-        >
-          <Content bookmark={bookmark} />
-        </Link>
-      </CardActionArea>
-      <CardActions disableActionSpacing>
-        <BottomSection bookmark={bookmark} />
-      </CardActions>
-    </Card>
+type CardSourceCollectedProps = ReturnType<typeof collect>
+
+const BookmarkCard: FC<Props & CardSourceCollectedProps> = props => {
+  const { bookmark, connectDragSource } = props
+  return connectDragSource(
+    <div style={{ height: '100%' }}>
+      <Card style={{ height: '100%' }}>
+        <CardActionArea style={{ height: '56%' }}>
+          <Link
+            color="inherit"
+            underline="none"
+            style={{ display: 'block' }}
+            href={bookmark.url}
+            target="blank"
+          >
+            <Content bookmark={bookmark} />
+          </Link>
+        </CardActionArea>
+        <CardActions disableActionSpacing>
+          <BottomSection bookmark={bookmark} />
+        </CardActions>
+      </Card>
+    </div>
   )
 }
+
+const dragSource = {
+  beginDrag: (props: Props, monitor: DragSourceMonitor) => {
+    console.log('begin!!!!')
+    return {
+      id: props.bookmark._id,
+      title: props.bookmark.title
+    }
+  },
+  endDrag: (props: Props, monitor: DragSourceMonitor) => {
+    console.log('end!!!!')
+  }
+}
+
+const collect = (connect: DragSourceConnector, monitor: DragSourceMonitor) => ({
+  connectDragSource: connect.dragSource()
+})
+
+export default DragSource<Props>('bookmark', dragSource, collect)(BookmarkCard)
 
 const TwoLineEllipsis = styled(Typography)`
   && {
@@ -61,7 +90,7 @@ const Content = ({ bookmark }: Props) => {
     <List className="card-content-list">
       <ListItem>
         <ListItemAvatar>
-          <Avatar style={cardStyle} src={img} />
+          <Avatar style={{ width: 30, height: 30 }} src={img} />
         </ListItemAvatar>
         <ListItemText
           primary={
@@ -73,11 +102,6 @@ const Content = ({ bookmark }: Props) => {
       </ListItem>
     </List>
   )
-}
-
-const cardStyle = {
-  width: 30,
-  height: 30
 }
 
 const BottomSection = ({ bookmark }: Props) => {
@@ -113,5 +137,3 @@ const BottomSection = ({ bookmark }: Props) => {
     </>
   )
 }
-
-export default BookmarkCard

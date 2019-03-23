@@ -7,9 +7,10 @@ import { BookmarksProvider } from './hooks-contexts/useBookmarks'
 import Bookmarks from './view/Bookmarks'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { EditModalProvider } from './hooks-contexts/useModal'
-
+import HTML5Backend from 'react-dnd-html5-backend'
 import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery'
 import styled from 'styled-components'
+import { DragDropContext } from 'react-dnd'
 
 const BookmarkWrapper = styled(Grid)`
   padding: ${theme.spacing.unit * 2}px;
@@ -45,4 +46,4 @@ const App: React.FC = () => {
   )
 }
 
-export default App
+export default DragDropContext(HTML5Backend)(App)
