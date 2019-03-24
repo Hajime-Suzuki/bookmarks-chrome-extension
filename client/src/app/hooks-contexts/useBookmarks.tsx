@@ -67,11 +67,21 @@ export const useBookmarks = () => {
     fetchBookmarks()
   }, [])
 
+  const reorderBookmark = (currentIndex: number, targetIndex: number) => {
+    const currentBookmarks = [...bookmarks]
+    const selectedItem = bookmarks[currentIndex]
+
+    currentBookmarks.splice(currentIndex, 1)
+    currentBookmarks.splice(targetIndex, 0, selectedItem)
+    setBookmarks(currentBookmarks)
+  }
+
   return {
     bookmarks,
     createBookmark,
     deleteBookmark,
-    updateBookmark
+    updateBookmark,
+    reorderBookmark
   }
 }
 

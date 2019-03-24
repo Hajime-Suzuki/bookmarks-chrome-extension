@@ -22,7 +22,8 @@ const BookmarkCard: FC<BookmarkCardProps> = props => {
 
   return (
     <Card style={{ height: '100%' }}>
-      <CardActionArea style={{ height: '56%' }}>
+      {/* <CardActionArea style={{ height: '56%' }}> */}
+      <CardActionArea style={{ height: 90 }}>
         <Link
           color="inherit"
           underline="none"

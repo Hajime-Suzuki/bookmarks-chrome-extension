@@ -13,6 +13,7 @@ export interface BeginDragReturnType {
   id: IBookmark['_id']
   title: IBookmark['title'] // dev purpose
   index: number
+  size: ClientRect | DOMRect
 }
 
 const dragSource: DragSourceSpec<BookmarkCardProps, BeginDragReturnType> = {
@@ -20,7 +21,8 @@ const dragSource: DragSourceSpec<BookmarkCardProps, BeginDragReturnType> = {
     return {
       id: props.bookmark._id,
       title: props.bookmark.title, // dev purpose
-      index: props.index
+      index: props.index,
+      size: (findDOMNode(component) as Element).getBoundingClientRect()
     }
   },
   endDrag: (props, monitor, component) => {
