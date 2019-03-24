@@ -6,22 +6,25 @@ import {
   DragSourceSpec
 } from 'react-dnd'
 import { DnDTypes } from '../../constants'
+import { findDOMNode } from 'react-dom'
+import { IBookmark } from '../types'
 
-const dragSource: DragSourceSpec<BookmarkCardProps, any> = {
-  beginDrag: (
-    props: BookmarkCardProps,
-    monitor: DragSourceMonitor,
-    component
-  ) => {
-    console.log(component)
+export interface BeginDragReturnType {
+  id: IBookmark['_id']
+  title: IBookmark['title'] // dev purpose
+  index: number
+}
+
+const dragSource: DragSourceSpec<BookmarkCardProps, BeginDragReturnType> = {
+  beginDrag: (props, monitor, component) => {
     return {
       id: props.bookmark._id,
       title: props.bookmark.title, // dev purpose
       index: props.index
     }
   },
-  endDrag: (props: BookmarkCardProps, monitor: DragSourceMonitor) => {
-    // console.log('end!!!!')
+  endDrag: (props, monitor, component) => {
+    return
   }
 }
 

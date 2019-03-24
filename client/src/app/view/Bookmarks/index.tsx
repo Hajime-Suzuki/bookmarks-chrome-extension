@@ -36,6 +36,8 @@ const Bookmarks: FC<BookmarksProps> = ({ bookmarks }) => {
   )
 }
 
+// TODO: clean. In the wrapper, by specifying context type, this component is necessary. Wrapper component can handle create bookmark inside the endDrag!
+
 const DnDContainer: FC<
   Omit<
     DnDContainerWrapperProps,
@@ -66,13 +68,15 @@ const DnDContainer: FC<
 
 export type DnDContainerWrapperProps = TabDropTargetProps &
   BookmarkDropTargetProps
-class Wrapper extends React.Component<DnDContainerWrapperProps> {
+class BookmarkDnDWrapper extends React.Component<DnDContainerWrapperProps> {
+  static contextType = BookmarkContext
   render() {
     const {
       bookmarkConnectDropSource,
       tabConnectDropTarget,
       ...rest
     } = this.props
+
     return bookmarkConnectDropSource(
       tabConnectDropTarget(
         <div
@@ -87,4 +91,7 @@ class Wrapper extends React.Component<DnDContainerWrapperProps> {
     )
   }
 }
-export default tabDropTarget(bookmarkDropTarget(Wrapper))
+
+// Wrapper.contextType = BookmarkContext
+
+export default tabDropTarget(bookmarkDropTarget(BookmarkDnDWrapper))

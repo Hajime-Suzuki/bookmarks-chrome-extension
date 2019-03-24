@@ -4,13 +4,23 @@ import {
   DropTargetMonitor,
   DropTargetSpec
 } from 'react-dnd'
+import { findDOMNode } from 'react-dom'
 import { DnDTypes } from '../../constants'
+import { BookmarkContext } from '../hooks-contexts/useBookmarks'
 import { DnDContainerWrapperProps } from '../view/Bookmarks'
+import { BeginDragReturnType } from './bookmark-drag-source'
 
 const bookmarkDropSource: DropTargetSpec<DnDContainerWrapperProps> = {
   drop: (props, monitor, component) => {
-    console.log(component)
-    console.log(monitor.getItem())
+    if (!component) return
+    const itemId = (monitor.getItem() as BeginDragReturnType).id
+    const remove = (component.context as BookmarkContext).deleteBookmark
+    remove(itemId)
+
+    // console.log(hoverBoundingRect)
+    // console.log(monitor.getClientOffset())
+    // console.log(hoverBoundingRect)
+    // console.log(monitor.getItem())
   }
 }
 
