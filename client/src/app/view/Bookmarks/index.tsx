@@ -1,4 +1,4 @@
-import { Grid } from '@material-ui/core'
+import { Grid, Omit } from '@material-ui/core'
 import React, { FC, useContext, useEffect } from 'react'
 import {
   bookmarkDropTarget,
@@ -36,14 +36,13 @@ const Bookmarks: FC<BookmarksProps> = ({ bookmarks }) => {
   )
 }
 
-export type DnDContainerProps = TabDropTargetProps & BookmarkDropTargetProps
-const DnDContainer: FC<DnDContainerProps> = props => {
-  const {
-    tabConnectDropTarget,
-    bookmarkConnectDropSource,
-    droppedItem,
-    isDragging
-  } = props
+const DnDContainer: FC<
+  Omit<
+    DnDContainerWrapperProps,
+    'bookmarkConnectDropSource' | 'tabConnectDropTarget'
+  >
+> = props => {
+  const { droppedItem } = props
   const { bookmarks, createBookmark: submit } = useContext(BookmarkContext)
   const { closeTab } = useContext(OpenedTabContext)
 
@@ -57,18 +56,35 @@ const DnDContainer: FC<DnDContainerProps> = props => {
     if (droppedItem) createBookmark(droppedItem)
   }, [droppedItem])
 
-  return bookmarkConnectDropSource(
-    tabConnectDropTarget(
-      <div
-        style={{
-          backgroundColor: isDragging ? '#ffefe8' : 'inherit',
-          padding: theme.spacing.unit * 2
-        }}
-      >
-        <Bookmarks bookmarks={bookmarks} />
-      </div>
-    )
-  )
+  return <Bookmarks bookmarks={bookmarks} />
 }
 
-export default tabDropTarget(bookmarkDropTarget(DnDContainer))
+/**
+ * @description:
+ * Since a component must be a class component to be able to refer this component in DropTargetSpec, this is needed.
+ */
+
+export type DnDContainerWrapperProps = TabDropTargetProps &
+  BookmarkDropTargetProps
+class Wrapper extends React.Component<DnDContainerWrapperProps> {
+  render() {
+    const {
+      bookmarkConnectDropSource,
+      tabConnectDropTarget,
+      ...rest
+    } = this.props
+    return bookmarkConnectDropSource(
+      tabConnectDropTarget(
+        <div
+          style={{
+            backgroundColor: this.props.isDragging ? '#ffefe8' : 'inherit',
+            padding: theme.spacing.unit * 2
+          }}
+        >
+          <DnDContainer {...rest} />{' '}
+        </div>
+      )
+    )
+  }
+}
+export default tabDropTarget(bookmarkDropTarget(Wrapper))

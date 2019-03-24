@@ -1,18 +1,27 @@
 import { BookmarkCardProps } from '../view/Bookmarks/components/bookmark-card'
-import { DragSourceMonitor, DragSourceConnector, DragSource } from 'react-dnd'
+import {
+  DragSourceMonitor,
+  DragSourceConnector,
+  DragSource,
+  DragSourceSpec
+} from 'react-dnd'
 import { DnDTypes } from '../../constants'
 
-const dragSource = {
-  beginDrag: (props: BookmarkCardProps, monitor: DragSourceMonitor) => {
-    console.log('begin!!!!')
-    console.log(props)
+const dragSource: DragSourceSpec<BookmarkCardProps, any> = {
+  beginDrag: (
+    props: BookmarkCardProps,
+    monitor: DragSourceMonitor,
+    component
+  ) => {
+    console.log(component)
     return {
       id: props.bookmark._id,
-      title: props.bookmark.title
+      title: props.bookmark.title, // dev purpose
+      index: props.index
     }
   },
   endDrag: (props: BookmarkCardProps, monitor: DragSourceMonitor) => {
-    console.log('end!!!!')
+    // console.log('end!!!!')
   }
 }
 

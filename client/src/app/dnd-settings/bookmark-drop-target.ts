@@ -5,15 +5,11 @@ import {
   DropTargetSpec
 } from 'react-dnd'
 import { DnDTypes } from '../../constants'
-import { DnDContainerProps } from '../view/Bookmarks'
+import { DnDContainerWrapperProps } from '../view/Bookmarks'
 
-const bookmarkDropSource: DropTargetSpec<DnDContainerProps> = {
-  hover: (props, monitor, component) => {
-    if (!component) return null
-    console.log(component)
-  },
+const bookmarkDropSource: DropTargetSpec<DnDContainerWrapperProps> = {
   drop: (props, monitor, component) => {
-    console.log(monitor.didDrop())
+    console.log(component)
     console.log(monitor.getItem())
   }
 }
@@ -28,7 +24,7 @@ const bookmarkDropCollect = (
 export type BookmarkDropTargetProps = ReturnType<typeof bookmarkDropCollect>
 
 export const bookmarkDropTarget = (
-  component: React.ComponentType<DnDContainerProps>
+  component: React.ComponentType<DnDContainerWrapperProps>
 ) =>
   DropTarget(DnDTypes.bookmarks, bookmarkDropSource, bookmarkDropCollect)(
     component

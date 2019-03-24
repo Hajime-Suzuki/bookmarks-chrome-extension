@@ -17,29 +17,44 @@ export interface BookmarkCardProps {
   index: number
 }
 
-const BookmarkCard: FC<BookmarkDragSourceProps & BookmarkCardProps> = props => {
-  const { bookmark, connectDragSource } = props
+const BookmarkCard: FC<BookmarkCardProps> = props => {
+  const { bookmark } = props
 
-  return connectDragSource(
-    <div style={{ height: '100%' }}>
-      <Card style={{ height: '100%' }}>
-        <CardActionArea style={{ height: '56%' }}>
-          <Link
-            color="inherit"
-            underline="none"
-            style={{ display: 'block' }}
-            href={bookmark.url}
-            target="blank"
-          >
-            <Content bookmark={bookmark} />
-          </Link>
-        </CardActionArea>
-        <CardActions disableActionSpacing>
-          <BottomSection bookmark={bookmark} />
-        </CardActions>
-      </Card>
-    </div>
+  return (
+    <Card style={{ height: '100%' }}>
+      <CardActionArea style={{ height: '56%' }}>
+        <Link
+          color="inherit"
+          underline="none"
+          style={{ display: 'block' }}
+          href={bookmark.url}
+          target="blank"
+        >
+          <Content bookmark={bookmark} />
+        </Link>
+      </CardActionArea>
+      <CardActions disableActionSpacing>
+        <BottomSection bookmark={bookmark} />
+      </CardActions>
+    </Card>
   )
 }
 
-export default bookmarkDragSource(BookmarkCard)
+/**
+ * @description to get component within beginSource etc in React DnD, wrapped component should be class component
+ */
+
+class Wrapper extends React.Component<
+  BookmarkDragSourceProps & BookmarkCardProps
+> {
+  render() {
+    const { connectDragSource, ...rest } = this.props
+    return connectDragSource(
+      <div style={{ height: '100%' }}>
+        <BookmarkCard {...rest} />
+      </div>
+    )
+  }
+}
+
+export default bookmarkDragSource(Wrapper)

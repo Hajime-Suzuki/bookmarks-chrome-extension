@@ -1,7 +1,7 @@
 import { DropTargetConnector, DropTargetMonitor, DropTarget } from 'react-dnd'
 import { Tab } from '../types'
 import { DnDTypes } from '../../constants'
-import { DnDContainerProps } from '../view/Bookmarks'
+import { DnDContainerWrapperProps } from '../view/Bookmarks'
 
 const tabDropCollect = (
   connect: DropTargetConnector,
@@ -15,5 +15,5 @@ const tabDropCollect = (
 export type TabDropTargetProps = ReturnType<typeof tabDropCollect>
 
 export const tabDropTarget = (
-  component: React.ComponentType<DnDContainerProps>
+  component: React.ComponentType<DnDContainerWrapperProps>
 ) => DropTarget(DnDTypes.tabs, {}, tabDropCollect)(component)
