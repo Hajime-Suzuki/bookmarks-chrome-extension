@@ -34,6 +34,7 @@ const dragCollect = (
   connect: DragSourceConnector,
   monitor: DragSourceMonitor
 ) => ({
+  isDragging: monitor.isDragging(),
   connectDragSource: connect.dragSource()
 })
 

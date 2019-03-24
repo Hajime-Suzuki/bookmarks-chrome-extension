@@ -10,44 +10,50 @@ import { BookmarkContext } from '../hooks-contexts/useBookmarks'
 import { DnDContainerWrapperProps } from '../view/Bookmarks'
 import { BeginDragReturnType } from './bookmark-drag-source'
 
+// TODO: make grid size dynamic...
+const GRID_SIZE = 4
+let prevTargetIndex: null | number = null
+
+const getXIndex = (dropAreaWith: number, targetOffsetX: number) => {
+  const XThreshold = dropAreaWith / GRID_SIZE
+  const XIndex = Math.floor(targetOffsetX / XThreshold)
+  return XIndex
+}
+
+const getYIndex = (targetOffsetY: number, cardHeight: number) => {
+  const YIndex = Math.floor(targetOffsetY / cardHeight) - 1
+  return YIndex < 0 ? 0 : YIndex
+}
+
 const bookmarkDropSource: DropTargetSpec<DnDContainerWrapperProps> = {
-  drop: (props, monitor, component) => {
+  hover: (props, monitor, component) => {
+    // check item's index when dragging starts, in the list and position in the drop area. Then get index within the list. If they are the same, do nothing.
+
     if (!component) return
     const droppedItem = monitor.getItem() as BeginDragReturnType
-    const { reorderBookmark } = component.context as BookmarkContext
-    // TODO: improve. take padding (drop area, and drag item) into account.
+
     const { width: dropAreaWith } = (findDOMNode(
       component
     ) as Element).getBoundingClientRect()
 
-    // TODO: make grid size dynamic...
-    const GRID_SIZE = 4
-
     const { x: targetOffsetX, y: targetOffsetY } = monitor.getClientOffset()!
 
-    const XThreshold = dropAreaWith / GRID_SIZE
-    const XIndex = Math.floor(targetOffsetX / XThreshold)
+    const XIndex = getXIndex(dropAreaWith, targetOffsetX)
 
-    const itemHeight = droppedItem.size.height
-    const YIndex =
-      Math.floor(targetOffsetY / itemHeight) - 1 > 0
-        ? Math.floor(targetOffsetY / itemHeight) - 1
-        : 0
+    const YIndex = getYIndex(targetOffsetY, droppedItem.size.height)
 
     const targetIndex = YIndex * GRID_SIZE + XIndex
-    console.log({ x: XIndex, y: YIndex })
-    console.log({ index: targetIndex })
-    reorderBookmark(droppedItem.index, targetIndex)
 
-    // console.log({ index })
-    // const itemId = (monitor.getItem() as BeginDragReturnType).id
-    // const remove = (component.context as BookmarkContext).deleteBookmark
-    // remove(itemId)
+    if (targetIndex === prevTargetIndex) return
 
-    // console.log(hoverBoundingRect)
-    // console.log(monitor.getClientOffset())
-    // console.log(hoverBoundingRect)
-    // console.log(monitor.getItem())
+    prevTargetIndex = targetIndex
+
+    const currentIndex = droppedItem.index
+    const { reorderBookmark } = component.context as BookmarkContext
+    reorderBookmark(currentIndex, targetIndex)
+
+    // mutate dropItem index so that I can continue to sort without dropping the item.
+    droppedItem.index = targetIndex
   }
 }
 

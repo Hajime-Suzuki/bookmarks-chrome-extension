@@ -70,6 +70,7 @@ export type DnDContainerWrapperProps = TabDropTargetProps &
   BookmarkDropTargetProps
 class BookmarkDnDWrapper extends React.Component<DnDContainerWrapperProps> {
   static contextType = BookmarkContext
+
   render() {
     const {
       bookmarkConnectDropSource,
