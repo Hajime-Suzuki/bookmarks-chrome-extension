@@ -20,7 +20,7 @@ const TwoLineEllipsis = styled(Typography)`
   }
 `
 
-const Content = ({ bookmark }: BookmarkCardProps) => {
+const Content = ({ bookmark }: Pick<BookmarkCardProps, 'bookmark'>) => {
   const { img, title } = bookmark
   return (
     <List className="card-content-list">

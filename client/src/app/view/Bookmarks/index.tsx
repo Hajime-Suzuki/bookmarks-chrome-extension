@@ -1,21 +1,33 @@
 import { Grid } from '@material-ui/core'
 import React, { FC, useContext, useEffect } from 'react'
-import { DropTarget, DropTargetConnector, DropTargetMonitor } from 'react-dnd'
-import { DnDTypes } from '../../../constants'
+import {
+  bookmarkDropTarget,
+  BookmarkDropTargetProps
+} from '../../dnd-settings/bookmark-drop-target'
+
+import {
+  tabDropTarget,
+  TabDropTargetProps
+} from '../../dnd-settings/tab-drop-target'
 import { BookmarkContext } from '../../hooks-contexts/useBookmarks'
 import { OpenedTabContext } from '../../hooks-contexts/useOpenedTabs'
+import { theme } from '../../styles/theme'
 import { Tab } from '../../types'
 import BookmarkCard from './components/bookmark-card'
 import EditModal from './components/EditModal'
-import { theme } from '../../styles/theme'
 
-const Bookmarks: FC<Pick<BookmarkContext, 'bookmarks'>> = ({ bookmarks }) => {
+/**
+ * @description: this component is wrapper of the bookmark cards. This is the drop target of bookmarks and tabs.
+ */
+
+type BookmarksProps = Pick<BookmarkContext, 'bookmarks'>
+const Bookmarks: FC<BookmarksProps> = ({ bookmarks }) => {
   return (
     <Grid container spacing={24} justify="flex-start">
-      {bookmarks.map(bm => {
+      {bookmarks.map((bm, i) => {
         return (
           <Grid key={bm._id} item xs={12} sm={6} md={4} lg={3}>
-            <BookmarkCard bookmark={bm} />
+            <BookmarkCard bookmark={bm} index={i} />
           </Grid>
         )
       })}
@@ -24,9 +36,8 @@ const Bookmarks: FC<Pick<BookmarkContext, 'bookmarks'>> = ({ bookmarks }) => {
   )
 }
 
-const DnDContainer: FC<
-  ReturnType<typeof tabDropCollect> & ReturnType<typeof bookmarkDropCollect>
-> = props => {
+export type DnDContainerProps = TabDropTargetProps & BookmarkDropTargetProps
+const DnDContainer: FC<DnDContainerProps> = props => {
   const {
     tabConnectDropTarget,
     bookmarkConnectDropSource,
@@ -60,28 +71,4 @@ const DnDContainer: FC<
   )
 }
 
-const tabDropCollect = (
-  connect: DropTargetConnector,
-  monitor: DropTargetMonitor
-) => ({
-  isDragging: !!monitor.getItem(),
-  droppedItem: (monitor.didDrop() && (monitor.getItem().tab as Tab)) || null,
-  tabConnectDropTarget: connect.dropTarget()
-})
-
-const dropSource = {
-  drop: () => {
-    console.log('bookmark dragged')
-  }
-}
-
-const bookmarkDropCollect = (
-  connect: DropTargetConnector,
-  monitor: DropTargetMonitor
-) => ({
-  bookmarkConnectDropSource: connect.dropTarget()
-})
-
-export default DropTarget(DnDTypes.tabs, {}, tabDropCollect)(
-  DropTarget(DnDTypes.bookmarks, dropSource, bookmarkDropCollect)(DnDContainer)
-)
+export default tabDropTarget(bookmarkDropTarget(DnDContainer))

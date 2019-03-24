@@ -5,7 +5,7 @@ import { EditModalContext } from '../../../../hooks-contexts/useModal'
 import { theme } from '../../../../styles/theme'
 import { BookmarkCardProps } from '.'
 
-const BottomSection = ({ bookmark }: BookmarkCardProps) => {
+const BottomSection = ({ bookmark }: Pick<BookmarkCardProps, 'bookmark'>) => {
   const { deleteBookmark } = useContext(BookmarkContext)
   const { openModal, selectEditBookmark } = useContext(EditModalContext)
   const { _id, tags } = bookmark

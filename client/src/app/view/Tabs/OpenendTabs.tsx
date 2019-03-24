@@ -6,11 +6,13 @@ import {
   ListItemText
 } from '@material-ui/core'
 import React, { FC, useContext } from 'react'
-import { DragSource, DragSourceConnector, DragSourceMonitor } from 'react-dnd'
+import {
+  tabDragSource,
+  TabDragSourceProps
+} from '../../dnd-settings/tab-drag-source'
 import { BookmarkContext } from '../../hooks-contexts/useBookmarks'
 import { OpenedTabContext } from '../../hooks-contexts/useOpenedTabs'
 import { Tab } from '../../types'
-import { DnDTypes } from '../../../constants'
 
 const OpenedTabs: FC<{}> = () => {
   const { tabs } = useContext(OpenedTabContext)
@@ -23,11 +25,11 @@ const OpenedTabs: FC<{}> = () => {
   )
 }
 
-interface ListProps {
+export interface TabListProps {
   tab: chrome.tabs.Tab
 }
 
-const _TabList: FC<ListProps & ReturnType<typeof collect>> = ({
+const _TabList: FC<TabListProps & TabDragSourceProps> = ({
   tab,
   connectDragSource
 }) => {
@@ -58,20 +60,6 @@ const _TabList: FC<ListProps & ReturnType<typeof collect>> = ({
   )
 }
 
-const dragSource = {
-  beginDrag: (props: ListProps, monitor: DragSourceMonitor) => {
-    return {
-      tab: props.tab
-    }
-  }
-}
-
-const collect = (connect: DragSourceConnector, monitor: DragSourceMonitor) => ({
-  connectDragSource: connect.dragSource()
-})
-
-const TabList = DragSource<ListProps>(DnDTypes.tabs, dragSource, collect)(
-  _TabList
-)
+const TabList = tabDragSource(_TabList)
 
 export default OpenedTabs
