@@ -4,14 +4,15 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@types/http-errors": "^1.6.1",
-    "@types/mongoose": "^5.3.22",
     "class-validator": "^0.9.1",
     "http-errors": "^1.7.2",
     "mongoose": "^5.4.19"
   },
   "devDependencies": {
+    "@types/http-errors": "^1.6.1",
+    "@types/mongoose": "^5.3.22",
     "aws-sdk": "^2.422.0",
+    "serverless": "^1.39.1",
     "serverless-offline": "^4.9.1",
     "serverless-plugin-typescript": "^1.1.5",
     "typescript": "^3.3.3333"

@@ -13,8 +13,8 @@ export interface IGroup {
 }
 
 const GroupSchema = new Schema<IGroup>({
-  name: { type: String, required: true },
-  title: [{ type: Schema.Types.ObjectId, ref: 'Bookmark' }],
+  title: { type: String, required: true },
+  items: [{ type: Schema.Types.ObjectId, ref: 'Bookmark' }],
   createdAt: { type: Date, default: () => Date.now() },
   updatedAt: Date
 })

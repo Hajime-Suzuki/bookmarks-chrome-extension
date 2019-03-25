@@ -1,6 +1,6 @@
 import * as createError from 'http-errors'
 import { Group, IGroup } from '../models/Group'
-import { CreateGroupInput } from '../routes/groups/create-groups'
+import { CreateGroupInput } from '../routes/groups/create-group'
 
 const find = async () => {
   return Group.find({}, null, { sort: { updatedAt: -1, createdAt: -1 } })

@@ -47,3 +47,19 @@ functions:
       - http:
           path: bookmarks/{id}
           method: delete
+
+  createGroup:
+    name: '${self:service}-create-group'
+    handler: src/routes/groups/create-group.handler
+    events:
+      - http:
+          path: groups
+          method: post
+
+  deleteGroup:
+    name: '${self:service}-delete-group'
+    handler: src/routes/groups/delete-group.handler
+    events:
+      - http:
+          path: groups/{id}
+          method: delete
