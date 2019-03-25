@@ -9,7 +9,7 @@ export interface IBookmark {
   title: string
   url: string
   img?: string
-  group?: string
+  group: string
   tags?: string[]
   createdAt: Date
   updatedAt?: Date

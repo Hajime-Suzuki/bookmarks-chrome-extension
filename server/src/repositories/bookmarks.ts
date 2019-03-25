@@ -29,7 +29,7 @@ const remove = async (_id: IBookmark['_id']) => {
   if (!bookmark) throw createError(404, `bookmark ${_id} not found`)
 
   await bookmark.remove()
-  return null
+  return bookmark
 }
 
 export const BookmarkRepository = {

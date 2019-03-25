@@ -28,6 +28,7 @@ export class EditBookmarkInput {
   group: IBookmark['group']
 }
 
+// TODO: update bookmarks together with group!
 const updateBookmark: LambdaHandler<
   EditBookmarkInput,
   { id: IBookmark['_id'] }
