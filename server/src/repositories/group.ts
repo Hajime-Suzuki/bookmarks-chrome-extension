@@ -1,9 +1,27 @@
+import { format } from 'date-fns'
 import * as createError from 'http-errors'
 import { Group, IGroup } from '../models/Group'
 import { CreateGroupInput } from '../routes/groups/create-group'
 
 const find = async () => {
   return Group.find({}, null, { sort: { updatedAt: -1, createdAt: -1 } })
+}
+
+const findById = async (id: IGroup['_id']) => {
+  return Group.findById(id)
+}
+
+const findByIdOrCreate = async (id?: IGroup['_id']) => {
+  if (!id) {
+    const newGroup = await GroupRepository.create({
+      title: format(new Date(), 'yyyy MMM dd')
+    })
+    return newGroup
+  } else {
+    const existingGroup = await GroupRepository.findById(id)
+    if (!existingGroup) throw createError(404, 'group not found')
+    return existingGroup
+  }
 }
 
 const create = async (input: CreateGroupInput) => {
@@ -33,6 +51,8 @@ const remove = async (_id: IGroup['_id']) => {
 
 export const GroupRepository = {
   find,
+  findById,
+  findByIdOrCreate,
   create,
   update,
   remove

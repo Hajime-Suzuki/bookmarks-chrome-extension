@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "class-validator": "^0.9.1",
+    "date-fns": "^2.0.0-alpha.21",
     "http-errors": "^1.7.2",
     "mongoose": "^5.4.19"
   },
