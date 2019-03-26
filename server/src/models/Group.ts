@@ -7,14 +7,14 @@ import { Document, model, Model, models, Schema } from 'mongoose'
 export interface IGroup {
   _id: string // ObjectId
   title: string
-  items?: string[]
+  bookmarks?: string[]
   createdAt: Date
   updatedAt?: Date
 }
 
 const GroupSchema = new Schema<IGroup>({
   title: { type: String, required: true },
-  items: [{ type: Schema.Types.ObjectId, ref: 'Bookmark' }],
+  bookmarks: [{ type: Schema.Types.ObjectId, ref: 'Bookmark' }],
   createdAt: { type: Date, default: () => Date.now() },
   updatedAt: Date
 })

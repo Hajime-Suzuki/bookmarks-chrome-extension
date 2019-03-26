@@ -2,27 +2,36 @@ import { connectDB } from '../db/connection'
 import { IBookmark } from '../models/Bookmark'
 import { Omit } from '../helpers/types'
 
-interface Event<TBody = Partial<IBookmark>, TPathParams = null> {
+interface Event<
+  TBody = Partial<IBookmark>,
+  TPathParams = null,
+  TQueryParams = null
+> {
   body: TBody
   pathParameters: TPathParams
+  queryStringParameters: TQueryParams
 }
 type Context = any
 type Callback = (err?: any, data?: any) => void
 
-export type LambdaHandler<TBody = any, TPathParams = null> = (
-  event: Event<TBody, TPathParams>,
+export type LambdaHandler<
+  TBody = any,
+  TPathParams = null,
+  TQueryParams = null
+> = (
+  event: Event<TBody, TPathParams, TQueryParams>,
   context: Context,
   callback: Callback
 ) => any
 
-const convertCategoriesStringToArray = (tags: string) => {
-  if (typeof tags !== 'string') {
+const convertStringToArray = (items: string) => {
+  if (typeof items !== 'string') {
     throw new Error('category must be string')
   }
 
-  if (tags === '') return []
+  if (items === '') return []
 
-  return tags
+  return items
     .split(',')
     .map(c => c.trim())
     .filter(Boolean)
@@ -44,7 +53,7 @@ const transformEvent = (event: any): ConvertedEvent => {
 
   let parsedTags: string[] | undefined
   if (parsedBody.tags !== undefined) {
-    parsedTags = convertCategoriesStringToArray(parsedBody.tags)
+    parsedTags = convertStringToArray(parsedBody.tags)
   }
 
   return {
@@ -56,14 +65,19 @@ const transformEvent = (event: any): ConvertedEvent => {
   }
 }
 
-export const handleLambda = <TBody = Partial<IBookmark>, TPathParams = null>(
-  fn: LambdaHandler<TBody, TPathParams>
+export const handleLambda = <
+  TBody = Partial<IBookmark>,
+  TPathParams = null,
+  TQueryParams = null
+>(
+  fn: LambdaHandler<TBody, TPathParams, TQueryParams>
 ) => async (
-  event: Event<TBody, TPathParams>,
+  event: Event<TBody, TPathParams, TQueryParams>,
   context: Context,
   callback: Callback
 ) => {
   await connectDB()
+
   console.log(`event body has been received: ${event.body}`)
 
   try {

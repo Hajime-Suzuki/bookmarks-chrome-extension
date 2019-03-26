@@ -15,7 +15,8 @@ import { GroupRepository } from '../../repositories/group'
  * @description: When create a new bookmark, it must be belong to a group. Either drop a tab into a group, or collect all tabs currently opened and put them in one group.
  */
 
-export class CreateBookmarkInput {
+export class CreateBookmarkInput
+  implements Pick<IBookmark, 'title' | 'url' | 'img' | 'tags' | 'group'> {
   @IsNotEmpty()
   @IsString()
   title: IBookmark['title']
@@ -52,7 +53,7 @@ const createBookmark: LambdaHandler<CreateBookmarkInput> = async ({ body }) => {
 
   // then update group with the new id.
   const updatedGroup = await GroupRepository.update(group._id, {
-    $push: { items: newBookmark._id }
+    $push: { bookmarks: newBookmark._id }
   })
 
   return { bookmark: newBookmark }

@@ -56,6 +56,14 @@ functions:
           path: groups
           method: post
 
+  updateBookmark:
+    name: '${self:service}-update-group'
+    handler: src/routes/groups/update-group.handler
+    events:
+      - http:
+          path: groups/{id}
+          method: put
+
   deleteGroup:
     name: '${self:service}-delete-group'
     handler: src/routes/groups/delete-group.handler
