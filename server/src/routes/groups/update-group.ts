@@ -13,7 +13,8 @@ import { GroupRepository } from '../../repositories/group'
 
 /**
  * @description
- * - 1. when changing order of bookmarks, replace it with a whole array... (can be improved)
+ * - 1. when changing order of bookmarks or add a new bookmark, replace it with a whole array... (can be improved)
+ * --TODO: at this moment, $position update operator doesn't seems to work. Check if there are other ways to do this so that I don't need to send whole array every time.
  * - 2. when removing bookmark from a group, just use that bookmark's id
  * - 3. any other cases, just use any valid input.
  */
