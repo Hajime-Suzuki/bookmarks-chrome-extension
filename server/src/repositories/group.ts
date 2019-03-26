@@ -2,6 +2,7 @@ import { format } from 'date-fns'
 import * as createError from 'http-errors'
 import { Group, IGroup } from '../models/Group'
 import { CreateGroupInput } from '../routes/groups/create-group'
+import { IBookmark } from '../models/Bookmark'
 
 const find = async () => {
   return Group.find({}, null, { sort: { updatedAt: -1, createdAt: -1 } })
@@ -28,7 +29,18 @@ const create = async (input: CreateGroupInput) => {
   return Group.create(input)
 }
 
-const update = async (_id: IGroup['_id'], input) => {
+interface UpdateInput extends Partial<IBookmark> {
+  $push?: {
+    bookmarks: IBookmark['_id']
+  }
+  $set?: {
+    bookmarks: Array<IBookmark['_id']>
+  }
+  $pull?: {
+    bookmarks: IBookmark['_id']
+  }
+}
+const update = async (_id: IGroup['_id'], input: UpdateInput) => {
   const updated = await Group.findByIdAndUpdate(
     _id,
     { ...input, updatedAt: new Date() },

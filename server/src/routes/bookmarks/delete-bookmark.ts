@@ -13,7 +13,7 @@ const deleteBookmarks: LambdaHandler<any, { id: IBookmark['_id'] }> = async ({
 
   // then remove the bookmark from the group.
   await GroupRepository.update(deletedBookmark.group, {
-    $pull: { items: deletedBookmark._id }
+    $pull: { bookmarks: deletedBookmark._id }
   })
   return null
 }

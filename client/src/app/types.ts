@@ -6,6 +6,7 @@ export interface IBookmark {
   url: string
   img?: string
   tags?: string[]
+  group: string
   createdAt: string
   updatedAt?: string
 }
