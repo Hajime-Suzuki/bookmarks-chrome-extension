@@ -9,8 +9,8 @@ import { GroupRepository } from '../../repositories/group'
  * @description
  * - 1. when changing order of bookmarks, replace it with a whole array... (can be improved)
  * - 2. when adding a bookmark, add it with specific position with $position.
- * - 2. when removing bookmark from a group, just use that bookmark's id
- * - 3. any other cases, just use any valid input.
+ * - 3. when removing bookmark from a group, just use that bookmark's id
+ * - 4. any other cases, just use any valid input.
  */
 
 class Types {

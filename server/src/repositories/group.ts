@@ -3,11 +3,10 @@ import * as createError from 'http-errors'
 import { Group, IGroup } from '../models/Group'
 import { CreateGroupInput } from '../routes/groups/create-group'
 import { IBookmark } from '../models/Bookmark'
+import { TableName } from '../constants'
 
 const findWithBookmarks = async () => {
-  return Group.find({}, null, {
-    sort: { updatedAt: -1, createdAt: -1 }
-  }).populate('Bookmark')
+  return Group.find({}).populate(TableName.bookmarks)
 }
 
 const findById = async (id: IGroup['_id']) => {
