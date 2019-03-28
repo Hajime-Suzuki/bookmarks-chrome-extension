@@ -48,6 +48,14 @@ functions:
           path: bookmarks/{id}
           method: delete
 
+  getGroupsWithBookmarks:
+    name: '${self:service}-get-groups'
+    handler: src/routes/groups/get-groups.handler
+    events:
+      - http:
+          path: groups
+          method: get
+
   createGroup:
     name: '${self:service}-create-group'
     handler: src/routes/groups/create-group.handler

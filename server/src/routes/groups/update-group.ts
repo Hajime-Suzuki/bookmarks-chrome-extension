@@ -1,17 +1,9 @@
-import {
-  IsArray,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  Matches,
-  IsNumber
-} from 'class-validator'
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
 import * as createError from 'http-errors'
 import { validateInput } from '../../helpers/validator'
 import { handleLambda, LambdaHandler } from '../../middleware/handle-lambda'
 import { IBookmark } from '../../models/Bookmark'
 import { GroupRepository } from '../../repositories/group'
-import { Group } from '../../models/Group'
 
 /**
  * @description

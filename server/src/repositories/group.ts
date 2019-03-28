@@ -4,8 +4,10 @@ import { Group, IGroup } from '../models/Group'
 import { CreateGroupInput } from '../routes/groups/create-group'
 import { IBookmark } from '../models/Bookmark'
 
-const find = async () => {
-  return Group.find({}, null, { sort: { updatedAt: -1, createdAt: -1 } })
+const findWithBookmarks = async () => {
+  return Group.find({}, null, {
+    sort: { updatedAt: -1, createdAt: -1 }
+  }).populate('Bookmark')
 }
 
 const findById = async (id: IGroup['_id']) => {
@@ -65,7 +67,7 @@ const remove = async (_id: IGroup['_id']) => {
 }
 
 export const GroupRepository = {
-  find,
+  findWithBookmarks,
   findById,
   findByIdOrCreate,
   create,
