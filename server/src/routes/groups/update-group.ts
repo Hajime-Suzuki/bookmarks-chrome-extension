@@ -3,45 +3,66 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  Matches
+  Matches,
+  IsNumber
 } from 'class-validator'
 import * as createError from 'http-errors'
 import { validateInput } from '../../helpers/validator'
 import { handleLambda, LambdaHandler } from '../../middleware/handle-lambda'
 import { IBookmark } from '../../models/Bookmark'
 import { GroupRepository } from '../../repositories/group'
+import { Group } from '../../models/Group'
 
 /**
  * @description
- * - 1. when changing order of bookmarks or add a new bookmark, replace it with a whole array... (can be improved)
- * --TODO: at this moment, $position update operator doesn't seems to work. Check if there are other ways to do this so that I don't need to send whole array every time.
+ * - 1. when changing order of bookmarks, replace it with a whole array... (can be improved)
+ * - 2. when adding a bookmark, add it with specific position with $position.
  * - 2. when removing bookmark from a group, just use that bookmark's id
  * - 3. any other cases, just use any valid input.
  */
 
 class Types {
   @IsOptional()
-  @Matches(/(remove:bookmark|update:bookmark)/)
   type?: UpdateTypes
 }
+
 export class EditGroupInput extends Types {
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   title: IBookmark['title']
 }
 
 class RemoveBookmarkInput extends Types {
-  @IsString({ each: true })
+  @IsNotEmpty()
+  @IsString()
   bookmark: IBookmark['_id']
 }
 
-class UpdateBookmarksInput extends Types {
-  @IsArray()
-  @IsString({ each: true })
-  bookmarks: Array<IBookmark['_id']>
+class AddBookmarksInput extends Types {
+  @IsNotEmpty()
+  @IsString()
+  bookmark: IBookmark['_id']
+
+  @IsOptional()
+  @IsNumber()
+  position?: number
 }
 
-type UpdateTypes = 'update:bookmark' | 'remove:bookmark' | undefined
+class ReorderBookmarksInput extends Types {
+  @IsNotEmpty()
+  @IsString()
+  bookmark: IBookmark['_id']
+
+  @IsNotEmpty()
+  @IsNumber()
+  position: number
+}
+
+type UpdateTypes =
+  | 'reorder:bookmark'
+  | 'add:bookmark'
+  | 'remove:bookmark'
+  | undefined
 
 interface Params {
   id: IBookmark['_id']
@@ -51,24 +72,53 @@ const updateBookmark: LambdaHandler<
   Types & Record<string, any>,
   Params
 > = async ({ body: { type, ..._body }, pathParameters: { id } }) => {
-  if (type === 'remove:bookmark') {
-    await validateInput(_body, RemoveBookmarkInput)
-    const body: RemoveBookmarkInput = _body as any
-    return await GroupRepository.update(id, {
-      $pull: { bookmarks: body.bookmark }
-    })
-  } else if (type === 'update:bookmark') {
-    await validateInput(_body, UpdateBookmarksInput)
-    const body: UpdateBookmarksInput = _body as any
-    return await GroupRepository.update(id, {
-      $set: { bookmarks: body.bookmarks }
-    })
-  } else if (type === undefined) {
-    await validateInput(_body, EditGroupInput)
-    const body: EditGroupInput = _body as any
-    return await GroupRepository.update(id, body)
-  } else {
-    throw createError(400, 'invalid type')
+  switch (type) {
+    case 'remove:bookmark': {
+      await validateInput(_body, RemoveBookmarkInput)
+      const body: RemoveBookmarkInput = _body as any
+      return await GroupRepository.update(id, {
+        $pull: { bookmarks: body.bookmark }
+      })
+    }
+    case 'add:bookmark': {
+      await validateInput(_body, AddBookmarksInput)
+      const body: AddBookmarksInput = _body as any
+      return await GroupRepository.update(id, {
+        $push: {
+          bookmarks: {
+            $each: [body.bookmark],
+            ...(body.position !== undefined && { $position: body.position })
+          }
+        }
+      })
+    }
+    case 'reorder:bookmark': {
+      await validateInput(_body, AddBookmarksInput)
+      const body: ReorderBookmarksInput = _body as any
+
+      const addParams = {
+        $push: {
+          bookmarks: {
+            $each: [body.bookmark],
+            ...(body.position !== undefined && { $position: body.position })
+          }
+        }
+      }
+      const removeParams = {
+        $pull: { bookmarks: body.bookmark }
+      }
+
+      await GroupRepository.update(id, removeParams)
+      return await GroupRepository.update(id, addParams)
+    }
+    case undefined: {
+      await validateInput(_body, EditGroupInput)
+      const { title }: EditGroupInput = _body as any
+      return await GroupRepository.update(id, { title })
+    }
+    default: {
+      throw createError(400, 'invalid type')
+    }
   }
 }
 

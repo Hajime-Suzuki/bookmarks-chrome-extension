@@ -31,7 +31,10 @@ const create = async (input: CreateGroupInput) => {
 
 interface UpdateInput extends Partial<IBookmark> {
   $push?: {
-    bookmarks: IBookmark['_id']
+    bookmarks: {
+      $each: Array<IBookmark['_id']>
+      $position?: number
+    }
   }
   $set?: {
     bookmarks: Array<IBookmark['_id']>
