@@ -20,7 +20,8 @@
     "noUnusedParameters": false,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "types": ["chrome"]
+    "types": ["chrome"],
+    "incremental": true
   },
   "include": ["src"]
 }

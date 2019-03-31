@@ -10,3 +10,11 @@ export interface IBookmark {
   createdAt: string
   updatedAt?: string
 }
+
+export interface IGroup {
+  _id: string
+  title: string
+  bookmarks: IBookmark[]
+  createdAt: string
+  updatedAt?: string
+}

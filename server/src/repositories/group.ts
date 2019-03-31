@@ -3,6 +3,7 @@ import * as createError from 'http-errors'
 import { Group, IGroup } from '../models/Group'
 import { CreateGroupInput } from '../routes/groups/create-group'
 import { IBookmark } from '../models/Bookmark'
+
 import { TableName } from '../constants'
 
 const findWithBookmarks = async () => {
@@ -13,10 +14,17 @@ const findById = async (id: IGroup['_id']) => {
   return Group.findById(id)
 }
 
-const findByIdOrCreate = async (id?: IGroup['_id']) => {
+interface FindOrCreateArgs {
+  id?: IGroup['_id']
+  data?: Pick<CreateGroupInput, 'title'>
+}
+const findByIdOrCreate = async ({ id, data }: FindOrCreateArgs) => {
   if (!id) {
     const newGroup = await GroupRepository.create({
-      title: format(new Date(), 'yyyy MMM dd')
+      title:
+        data && data.title
+          ? data.title
+          : format(new Date(), 'yyyy MMM dd HH mm ss')
     })
     return newGroup
   } else {
@@ -30,7 +38,7 @@ const create = async (input: CreateGroupInput) => {
   return Group.create(input)
 }
 
-interface UpdateInput extends Partial<IBookmark> {
+interface UpdateInput extends Partial<IGroup> {
   $push?: {
     bookmarks: {
       $each: Array<IBookmark['_id']>

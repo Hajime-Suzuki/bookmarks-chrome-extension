@@ -29,5 +29,5 @@ const BookmarkSchema = new Schema<IBookmark>({
 })
 
 export const Bookmark: Model<IBookmark & Document> =
-  models.Bookmark ||
+  models.bookmarks ||
   model<IBookmark & Document>(TableName.bookmarks, BookmarkSchema)
