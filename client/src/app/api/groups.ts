@@ -23,6 +23,6 @@ const createGroup = async (input: CreateGroupInput) => {
   return { newGroup: group }
 }
 
-export const GroupAPI = {
+export const GroupsAPI = {
   createGroup
 }

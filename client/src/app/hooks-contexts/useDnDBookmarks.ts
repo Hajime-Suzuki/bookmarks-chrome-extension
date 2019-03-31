@@ -1,84 +1,89 @@
-import { useDrag, useDrop } from 'react-dnd/lib/cjs/hooks'
-import { DnDTypes } from '../../constants'
-import { IBookmark } from '../types'
-import { BookmarkWrapperProps } from '../view/Bookmarks'
+/**
+ * @description currently not working well, since begin() doesn't reflect props to be changed.
+ */
 
-const GRID_SIZE = 4
+// import { useDrag, useDrop } from 'react-dnd/lib/cjs/hooks'
+// import { DnDTypes } from '../../constants'
+// import { IBookmark } from '../types'
+// import { BookmarkWrapperProps } from '../view/Bookmarks'
 
-const getXIndex = (dropAreaWith: number, targetOffsetX: number) => {
-  const XThreshold = dropAreaWith / GRID_SIZE
-  const XIndex = Math.floor(targetOffsetX / XThreshold)
-  return XIndex
-}
+// const GRID_SIZE = 4
 
-const getYIndex = (targetOffsetY: number, cardHeight: number) => {
-  const YIndex = Math.floor(targetOffsetY / cardHeight) - 1
-  return YIndex < 0 ? 0 : YIndex
-}
+// const getXIndex = (dropAreaWith: number, targetOffsetX: number) => {
+//   const XThreshold = dropAreaWith / GRID_SIZE
+//   const XIndex = Math.floor(targetOffsetX / XThreshold)
+//   return XIndex
+// }
 
-type Ref = React.RefObject<HTMLDivElement>
-let index: number | undefined
-export const useDnDDropBookmark = (props: BookmarkWrapperProps, ref: Ref) => {
-  const [, drop] = useDrop<ItemType, null, null>({
-    accept: DnDTypes.bookmarks,
-    hover: (item, monitor) => {
-      if (!ref.current || !item.draggedItem) return
+// const getYIndex = (targetOffsetY: number, cardHeight: number) => {
+//   const YIndex = Math.floor(targetOffsetY / cardHeight) - 1
+//   return YIndex < 0 ? 0 : YIndex
+// }
 
-      const { width: dropAreaWith } = ref.current.getClientRects()[0]
-      const { x: targetOffsetX, y: targetOffsetY } = monitor.getClientOffset()!
+// type Ref = React.RefObject<HTMLDivElement>
+// let index: number | undefined
+// export const useDnDDropBookmark = (props: BookmarkWrapperProps, ref: Ref) => {
+//   const [, drop] = useDrop<ItemType, null, null>({
+//     accept: DnDTypes.bookmarks,
+//     hover: (item, monitor) => {
+//       if (!ref.current || !item.draggedItem) return
 
-      const XIndex = getXIndex(dropAreaWith, targetOffsetX)
-      const YIndex = getYIndex(targetOffsetY, item.draggedItem.height)
-      const targetIndex = Math.min(
-        YIndex * GRID_SIZE + XIndex,
-        props.bookmarks.length - 1
-      )
+//       const { width: dropAreaWith } = ref.current.getClientRects()[0]
+//       const { x: targetOffsetX, y: targetOffsetY } = monitor.getClientOffset()!
 
-      if (targetIndex === index) return
-      index = targetIndex
+//       const XIndex = getXIndex(dropAreaWith, targetOffsetX)
+//       const YIndex = getYIndex(targetOffsetY, item.draggedItem.height)
+//       const targetIndex = Math.min(
+//         YIndex * GRID_SIZE + XIndex,
+//         props.bookmarks.length - 1
+//       )
 
-      const currentDraggedItemIndex = item.index
+//       if (targetIndex === index) return
 
-      // reorderBookmark(currentIndex, targetIndex)
-      // item.index = targetIndex
-      console.log(item.index)
-    },
-    drop: (item, monitor) => {
-      return undefined
-    }
-  })
+//       index = targetIndex
 
-  return {
-    drop
-  }
-}
+//       const currentDraggedItemIndex = item.index
 
-interface ItemType {
-  type: DnDTypes
-  id: IBookmark['_id']
-  index: number
-  draggedItem: ClientRect | null
-}
-export const useDnDDragBookmark = (props, ref: Ref) => {
-  const genItem = () => ({
-    type: DnDTypes.bookmarks,
-    id: props.bookmark._id,
-    index: props.index,
-    draggedItem: (ref.current && ref.current.getClientRects()[0]) || null
-  })
+//       // reorderBookmark(currentIndex, targetIndex)
+//       // item.index = targetIndex
+//       console.log(item.index)
+//     },
+//     drop: (item, monitor) => {
+//       return undefined
+//     }
+//   })
 
-  const [dragProps, drag] = useDrag<ItemType, {}, { isDragging: boolean }>({
-    item: genItem(),
-    collect: monitor => {
-      return {
-        isDragging: monitor.isDragging()
-      }
-    },
-    begin: monitor => genItem()
-  })
+//   return {
+//     drop
+//   }
+// }
 
-  return {
-    dragProps,
-    drag
-  }
-}
+// interface ItemType {
+//   type: DnDTypes
+//   id: IBookmark['_id']
+//   index: number
+//   draggedItem: ClientRect | null
+// }
+// export const useDnDDragBookmark = (props, ref: Ref) => {
+//   const genItem = () => ({
+//     type: DnDTypes.bookmarks,
+//     id: props.bookmark._id,
+//     index: props.index,
+//     draggedItem: (ref.current && ref.current.getClientRects()[0]) || null
+//   })
+
+//   const [dragProps, drag] = useDrag<ItemType, {}, { isDragging: boolean }>({
+//     item: genItem(),
+//     collect: monitor => {
+//       return {
+//         isDragging: monitor.isDragging()
+//       }
+//     },
+//     begin: monitor => genItem()
+//   })
+
+//   return {
+//     dragProps,
+//     drag
+//   }
+// }

@@ -6,13 +6,17 @@ import { theme } from '../../../../styles/theme'
 import { BookmarkCardProps } from '.'
 
 const BottomSection = ({ bookmark }: Pick<BookmarkCardProps, 'bookmark'>) => {
-  const { deleteBookmark } = useContext(BookmarkContext)
+  // const { deleteBookmark } = useContext(BookmarkContext)
   const { openModal, selectEditBookmark } = useContext(EditModalContext)
   const { _id, tags } = bookmark
 
   return (
     <>
-      <IconButton onClick={() => deleteBookmark(_id)}>
+      <IconButton
+        onClick={() => {
+          // deleteBookmark(_id)
+        }}
+      >
         <Icon fontSize="small" className="fas fa-minus-circle" />
       </IconButton>
       <Typography

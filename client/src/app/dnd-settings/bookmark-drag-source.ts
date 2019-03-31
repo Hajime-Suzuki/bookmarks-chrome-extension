@@ -17,6 +17,7 @@ export interface BeginDragReturnType {
 
 const dragSource: DragSourceSpec<BookmarkCardProps, BeginDragReturnType> = {
   beginDrag: (props, monitor, component) => {
+    console.log(props.index)
     return {
       id: props.bookmark._id,
       index: props.index,
@@ -24,6 +25,7 @@ const dragSource: DragSourceSpec<BookmarkCardProps, BeginDragReturnType> = {
     }
   },
   endDrag: (props, monitor, component) => {
+    // send order to the server
     return
   }
 }
@@ -38,8 +40,8 @@ const dragCollect = (
 
 export type BookmarkDragSourceProps = ReturnType<typeof dragCollect>
 
-export const bookmarkDragSource = <T>(
-  component: React.ComponentType<T & BookmarkDragSourceProps>
+export const bookmarkDragSource = (
+  component: React.ComponentType<BookmarkDragSourceProps & BookmarkCardProps>
 ) =>
   DragSource<BookmarkCardProps>(DnDTypes.bookmarks, dragSource, dragCollect)(
     component

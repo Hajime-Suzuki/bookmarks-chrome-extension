@@ -24,7 +24,7 @@ const Content = ({ bookmark }: Pick<BookmarkCardProps, 'bookmark'>) => {
   const { img, title } = bookmark
   return (
     <List className="card-content-list">
-      <ListItem>
+      <ListItem button={false}>
         <ListItemAvatar>
           <Avatar style={{ width: 30, height: 30 }} src={img} />
         </ListItemAvatar>

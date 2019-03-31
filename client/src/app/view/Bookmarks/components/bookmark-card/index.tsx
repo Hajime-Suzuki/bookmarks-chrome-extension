@@ -22,7 +22,6 @@ const BookmarkCard: FC<BookmarkCardProps> = props => {
 
   return (
     <Card style={{ height: '100%' }}>
-      {/* <CardActionArea style={{ height: '56%' }}> */}
       <CardActionArea style={{ height: 90 }}>
         <Link
           color="inherit"
@@ -45,8 +44,8 @@ const BookmarkCard: FC<BookmarkCardProps> = props => {
  * @description to get component within beginSource etc in React DnD, wrapped component should be class component
  */
 
-class Wrapper extends React.Component<
-  BookmarkDragSourceProps & BookmarkCardProps & { index: number }
+class BookmarkCardContainer extends React.Component<
+  BookmarkDragSourceProps & BookmarkCardProps
 > {
   render() {
     const { connectDragSource, isDragging, ...rest } = this.props
@@ -59,4 +58,4 @@ class Wrapper extends React.Component<
   }
 }
 
-export default bookmarkDragSource(Wrapper)
+export default bookmarkDragSource(BookmarkCardContainer)

@@ -6,7 +6,6 @@ import {
 } from 'react-dnd'
 import { findDOMNode } from 'react-dom'
 import { DnDTypes } from '../../constants'
-import { BookmarkContext } from '../hooks-contexts/useBookmarks'
 import { DnDContainerWrapperProps } from '../view/Bookmarks'
 import { BeginDragReturnType } from './bookmark-drag-source'
 
@@ -30,30 +29,37 @@ const bookmarkDropSource: DropTargetSpec<DnDContainerWrapperProps> = {
     // check item's index when dragging starts, in the list and position in the drop area. Then get index within the list. If they are the same, do nothing.
 
     if (!component) return
-    const droppedItem = monitor.getItem() as BeginDragReturnType
+    const draggedItem = monitor.getItem() as BeginDragReturnType
+    const dropTargetElement = findDOMNode(component) as Element
 
-    const { width: dropAreaWith } = (findDOMNode(
-      component
-    ) as Element).getBoundingClientRect()
+    const {
+      width: dropAreaWith,
+      top: dropAreaOffsetTop
+    } = dropTargetElement.getBoundingClientRect()
 
     const { x: targetOffsetX, y: targetOffsetY } = monitor.getClientOffset()!
 
     const XIndex = getXIndex(dropAreaWith, targetOffsetX)
+    const YIndex = getYIndex(
+      targetOffsetY - dropAreaOffsetTop + draggedItem.size.height / 2,
+      draggedItem.size.height
+    )
 
-    const YIndex = getYIndex(targetOffsetY, droppedItem.size.height)
-
-    const targetIndex = YIndex * GRID_SIZE + XIndex
+    const targetIndex = Math.min(
+      YIndex * GRID_SIZE + XIndex,
+      props.bookmarks.length - 1
+    )
 
     if (targetIndex === prevTargetIndex) return
 
+    const currentIndex = draggedItem.index
+
+    props.reorderBookmarks(props.groupId, currentIndex, targetIndex)
     prevTargetIndex = targetIndex
-
-    const currentIndex = droppedItem.index
-    const { reorderBookmark } = component.context as BookmarkContext
-    reorderBookmark(currentIndex, targetIndex)
-
-    // mutate dropItem index so that I can continue to sort without dropping the item.
-    droppedItem.index = targetIndex
+    draggedItem.index = targetIndex
+  },
+  drop: () => {
+    console.log('drop')
   }
 }
 
@@ -72,3 +78,14 @@ export const bookmarkDropTarget = (
   DropTarget(DnDTypes.bookmarks, bookmarkDropSource, bookmarkDropCollect)(
     component
   )
+
+// console.table({
+//   index: draggedItem.index,
+//   dropAreaWith,
+//   dropAreaHeight,
+//   dropAreaOffsetTop,
+//   targetOffsetX,
+//   targetOffsetY,
+//   XIndex,
+//   YIndex
+// })

@@ -1,50 +1,54 @@
-import { useDrag, useDrop } from 'react-dnd/lib/cjs/hooks'
-import { DnDTypes } from '../../constants'
-import { Tab } from '../types'
-import useOpenedTabs from './useOpenedTabs'
-import { FC } from 'react'
-import { BookmarkWrapperProps } from '../view/Bookmarks'
-import { TabListProps } from '../view/Tabs/OpenendTabs'
-import { useGroups } from './useGroups'
+/**
+ * @description currently not working well, since begin() doesn't reflect props to be changed.
+ */
 
-interface DropTabProps {
-  type: DnDTypes.tabs
-  isDragging: boolean
-  tab: Tab
-}
+// import { useDrag, useDrop } from 'react-dnd/lib/cjs/hooks'
+// import { DnDTypes } from '../../constants'
+// import { Tab } from '../types'
+// import useOpenedTabs from './useOpenedTabs'
+// import { FC } from 'react'
+// import { BookmarkWrapperProps } from '../view/Bookmarks'
+// import { TabListProps } from '../view/Tabs/OpenendTabs'
+// import { useGroups } from './useGroups'
 
-export const useDnDDropTab = (props: BookmarkWrapperProps) => {
-  const [dropProps, drop] = useDrop<
-    DropTabProps,
-    void,
-    { isDragging: boolean }
-  >({
-    accept: DnDTypes.tabs,
-    collect: monitor => {
-      return {
-        isDragging: !!monitor.getItem()
-      }
-    },
-    drop: item => {
-      // any action here
-    }
-  })
+// interface DropTabProps {
+//   type: DnDTypes.tabs
+//   isDragging: boolean
+//   tab: Tab
+// }
 
-  return {
-    dropProps,
-    drop
-  }
-}
+// export const useDnDDropTab = (props: BookmarkWrapperProps) => {
+//   const [dropProps, drop] = useDrop<
+//     DropTabProps,
+//     void,
+//     { isDragging: boolean }
+//   >({
+//     accept: DnDTypes.tabs,
+//     collect: monitor => {
+//       return {
+//         isDragging: !!monitor.getItem()
+//       }
+//     },
+//     drop: item => {
+//       // any action here
+//     }
+//   })
 
-export const useDnDDragTab = (props: TabListProps) => {
-  const [, drag] = useDrag({
-    item: {
-      type: DnDTypes.tabs,
-      tab: props.tab
-    }
-  })
+//   return {
+//     dropProps,
+//     drop
+//   }
+// }
 
-  return {
-    drag
-  }
-}
+// export const useDnDDragTab = (props: TabListProps) => {
+//   const [, drag] = useDrag({
+//     item: {
+//       type: DnDTypes.tabs,
+//       tab: props.tab
+//     }
+//   })
+
+//   return {
+//     drag
+//   }
+// }

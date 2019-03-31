@@ -21,4 +21,5 @@ const GroupSchema = new Schema<IGroup>({
 })
 
 export const Group: Model<IGroup & Document> =
-  models.groups || model<IGroup & Document>(TableName.groups, GroupSchema)
+  models[TableName.groups] ||
+  model<IGroup & Document>(TableName.groups, GroupSchema)

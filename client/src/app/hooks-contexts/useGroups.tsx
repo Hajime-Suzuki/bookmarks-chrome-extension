@@ -1,10 +1,9 @@
-import React, { useState, useEffect, createContext, FC } from 'react'
 import axios from 'axios'
-import { API_BOOKMARK_URL, API_GROUPS_URL } from '../../constants'
+import update from 'immutability-helper'
+import React, { createContext, FC, useEffect, useState } from 'react'
+import { API_GROUPS_URL } from '../../constants'
+import { GroupsAPI } from '../api/groups'
 import { IBookmark, IGroup, Tab } from '../types'
-import { Omit } from '@material-ui/core'
-import { GroupAPI } from '../api/group'
-
 interface FetchBookmarksResponse {
   groups: IGroup[]
 }
@@ -21,7 +20,6 @@ export const useGroups = () => {
   const fetchGroups = async () => {
     setFetching(true)
     const { data } = await axios.get<FetchBookmarksResponse>(API_GROUPS_URL)
-    console.log(data)
     setFetching(false)
     setGroups(data.groups)
   }
@@ -40,8 +38,31 @@ export const useGroups = () => {
         bookmark: { title: tab.title, url: tab.url, img: tab.favIconUrl }
       })
     }
-    const { newGroup } = await GroupAPI.createGroup(body)
+    const { newGroup } = await GroupsAPI.createGroup(body)
     setGroups([newGroup, ...(groups ? groups : [])])
+  }
+
+  const pushBookmark = (id: IGroup['_id'], bookmark: IBookmark) => {
+    if (!groups) return console.warn('there is no group')
+    const targetIndex = groups.findIndex(g => g._id === id)
+    const updated = update(groups, {
+      [targetIndex]: { bookmarks: { $push: [bookmark] } }
+    })
+    setGroups(updated)
+  }
+
+  const reorderBookmarks = (id: IGroup['_id'], currentIndex, targetIndex) => {
+    if (!groups) return
+    const targetGroupIndex = groups.findIndex(g => g._id === id)
+    const currentItem = groups[targetGroupIndex].bookmarks[currentIndex]
+    const updatedGroups = update(groups, {
+      [targetGroupIndex]: {
+        bookmarks: {
+          $splice: [[currentIndex, 1], [targetIndex, 0, currentItem]]
+        }
+      }
+    })
+    setGroups(updatedGroups)
   }
 
   useEffect(() => {
@@ -51,7 +72,9 @@ export const useGroups = () => {
   return {
     groups,
     fetching,
-    createGroup
+    pushBookmark,
+    createGroup,
+    reorderBookmarks
   }
 }
 
