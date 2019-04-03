@@ -4,6 +4,7 @@ import React, { createContext, FC, useEffect, useState } from 'react'
 import { API_GROUPS_URL } from '../../constants'
 import { GroupsAPI } from '../api/groups'
 import { IBookmark, IGroup, Tab } from '../types'
+import { css } from 'styled-components'
 interface FetchBookmarksResponse {
   groups: IGroup[]
 }
@@ -51,18 +52,50 @@ export const useGroups = () => {
     setGroups(updated)
   }
 
-  const reorderBookmarks = (id: IGroup['_id'], currentIndex, targetIndex) => {
-    if (!groups) return
-    const targetGroupIndex = groups.findIndex(g => g._id === id)
-    const currentItem = groups[targetGroupIndex].bookmarks[currentIndex]
-    const updatedGroups = update(groups, {
-      [targetGroupIndex]: {
-        bookmarks: {
-          $splice: [[currentIndex, 1], [targetIndex, 0, currentItem]]
+  const reorderBookmarks = (
+    type: 'push' | 'pull' | 'reorder',
+    id: IGroup['_id'],
+    currentIndex,
+    targetIndex,
+    bookmark: IBookmark
+  ) => {
+    setGroups(_groups => {
+      if (!_groups) return _groups
+      const targetGroupIndex = _groups.findIndex(g => g._id === id)
+
+      const updatedGroups = (params: any) =>
+        update(_groups, {
+          [targetGroupIndex]: {
+            bookmarks: {
+              $splice: params
+            }
+          }
+        })
+
+      switch (type) {
+        case 'push': {
+          console.log('push', _groups[targetGroupIndex]._id)
+
+          return updatedGroups([[targetIndex, 0, bookmark]])
+        }
+        case 'pull': {
+          console.log('pull', _groups[targetGroupIndex]._id)
+
+          return updatedGroups([[currentIndex, 1]])
+        }
+        case 'reorder': {
+          console.log('reorder', _groups[targetGroupIndex]._id)
+
+          return updatedGroups([[currentIndex, 1], [targetIndex, 0, bookmark]])
+        }
+        default: {
+          console.warn('wrong args combination')
+          return _groups
         }
       }
+
+      // return updated
     })
-    setGroups(updatedGroups)
   }
 
   useEffect(() => {

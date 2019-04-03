@@ -51,7 +51,7 @@ class BookmarkCardContainer extends React.Component<
     const { connectDragSource, isDragging, ...rest } = this.props
 
     return connectDragSource(
-      <div style={{ height: '100%', opacity: isDragging ? 0 : 1 }}>
+      <div style={{ height: '100%', opacity: isDragging ? 0.5 : 1 }}>
         <BookmarkCard {...rest} />
       </div>
     )
