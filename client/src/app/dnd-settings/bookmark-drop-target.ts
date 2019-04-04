@@ -12,6 +12,24 @@ import { BeginDragReturnType } from './bookmark-drag-source'
 // TODO: make grid size dynamic...
 const GRID_SIZE = 4
 
+interface State {
+  currentIndex: number | null
+  currentGroup: string | null
+}
+let state: State
+
+export const resetDragState = () => {
+  state = {
+    currentIndex: null,
+    currentGroup: null
+  }
+}
+
+const updateDragCurrentIndex = (newIndex: number) =>
+  (state.currentIndex = newIndex)
+const updateDragCurrentGroup = (newGroup: string) =>
+  (state.currentGroup = newGroup)
+
 const getXIndex = (dropAreaWith: number, targetOffsetX: number) => {
   const XThreshold = dropAreaWith / GRID_SIZE
   const XIndex = Math.floor(targetOffsetX / XThreshold)
@@ -23,25 +41,8 @@ const getYIndex = (targetOffsetY: number, cardHeight: number) => {
   return YIndex < 0 ? 0 : YIndex
 }
 
-interface State {
-  currentIndex: number | null
-  // groupIndex: number | null
-  currentGroup: string | null
-}
-
-let state: State
-
-export const resetState = () => {
-  state = {
-    currentIndex: null,
-    currentGroup: null
-  }
-}
-resetState()
-
 const getIndex = (props, monitor, component, draggedItem) => {
   const dropTargetElement = findDOMNode(component) as Element
-
   const {
     width: dropAreaWith,
     top: dropAreaOffsetTop
@@ -55,19 +56,37 @@ const getIndex = (props, monitor, component, draggedItem) => {
     draggedItem.size.height
   )
 
-  // const targetIndex = YIndex * GRID_SIZE + XIndex
   const targetIndex = Math.min(
     YIndex * GRID_SIZE + XIndex,
     props.bookmarks.length
   )
   return targetIndex
 }
-const prevTargetIndex: null | number = null
-const draggedItemCurrentGroup: null | string = null
+
+/**
+ *
+ * key items:
+ * hoveredGroup(local var), targetIndex(local var), and state values.
+ * Here store data to local variables as much as possible and don't access directly monitor/props in order to avoid confusion.
+ * Because we need to have 3 types of variables: local var, props/monitor, and state.
+ *
+ * @state
+ *  state is needed to make some comparison within hover(), since API call to update groups happens only when drag has been ended. state has currentGroup and currentIndex, which are updated during dragging.
+ *
+ * @actions
+ *  only when dragged item enters a different group, or it is moved with in the group, do following two actions.
+ *
+ * 1. moved within the group: reorder bookmarks.
+ * remove the item of current index from its the bookmark array, and push the item item to the target position.
+ * @note if targetIndex is grater than bookmarks.length - 1, skip the action, otherwise the card is added to wrong position, which breaks the array.
+ *
+ * 2. when group is changed: pull and push the card
+ * push the bookmark to the target group, and remove it from the original group.
+ *
+ */
+
 const bookmarkDropSource: DropTargetSpec<DnDContainerWrapperProps> = {
   hover: (props, monitor, component) => {
-    // check item's index when dragging starts, in the list and position in the drop area. Then get index within the list. If they are the same, do nothing.
-
     if (!component) return
 
     const draggedItem = monitor.getItem() as BeginDragReturnType
@@ -75,10 +94,10 @@ const bookmarkDropSource: DropTargetSpec<DnDContainerWrapperProps> = {
 
     // initialize when drag start
     if (state.currentIndex === null) {
-      state.currentIndex = draggedItem.index
+      updateDragCurrentIndex(draggedItem.index)
     }
     if (!state.currentGroup) {
-      state.currentGroup = hoveredGroup
+      updateDragCurrentGroup(hoveredGroup)
     }
     // --- initialize
 
@@ -91,22 +110,23 @@ const bookmarkDropSource: DropTargetSpec<DnDContainerWrapperProps> = {
       console.log('movedWithinGroup')
       if (targetIndex > props.bookmarks.length - 1) return
       props.reorderBookmarks({
-        groupId: state.currentGroup,
-        currentIndex: state.currentIndex,
+        groupId: state.currentGroup!,
+        currentIndex: state.currentIndex!,
         targetIndex,
         bookmark: draggedItem.bookmark
       })
-      state.currentIndex = targetIndex
+      updateDragCurrentIndex(targetIndex)
     } else if (groupChanged) {
       console.log('group changed')
-      const previousGroup = state.currentGroup
-      state.currentGroup = hoveredGroup
+      const previousGroup = state.currentGroup!
+      updateDragCurrentGroup(hoveredGroup)
+      const currentGroup = state.currentGroup!
 
-      const previousIndex = state.currentIndex
-      state.currentIndex = targetIndex
+      const previousIndex = state.currentIndex!
+      updateDragCurrentIndex(targetIndex)
 
       props.pushBookmark({
-        groupId: state.currentGroup,
+        groupId: currentGroup,
         targetIndex,
         bookmark: draggedItem.bookmark
       })
