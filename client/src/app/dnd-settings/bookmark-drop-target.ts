@@ -29,12 +29,15 @@ interface State {
   currentGroup: string | null
 }
 
-const resetState: () => State = () => ({
-  currentIndex: null,
-  // groupIndex: null,
-  currentGroup: null
-})
-let state = resetState()
+let state: State
+
+export const resetState = () => {
+  state = {
+    currentIndex: null,
+    currentGroup: null
+  }
+}
+resetState()
 
 const getIndex = (props, monitor, component, draggedItem) => {
   const dropTargetElement = findDOMNode(component) as Element
@@ -52,11 +55,11 @@ const getIndex = (props, monitor, component, draggedItem) => {
     draggedItem.size.height
   )
 
-  const targetIndex = YIndex * GRID_SIZE + XIndex
-  // const targetIndex = Math.min(
-  //   YIndex * GRID_SIZE + XIndex,
-  //   props.bookmarks.length - 1
-  // )
+  // const targetIndex = YIndex * GRID_SIZE + XIndex
+  const targetIndex = Math.min(
+    YIndex * GRID_SIZE + XIndex,
+    props.bookmarks.length
+  )
   return targetIndex
 }
 const prevTargetIndex: null | number = null
@@ -82,69 +85,38 @@ const bookmarkDropSource: DropTargetSpec<DnDContainerWrapperProps> = {
     const targetIndex = getIndex(props, monitor, component, draggedItem)
 
     const groupChanged = state.currentGroup !== hoveredGroup
+    const movedWithinGroup = targetIndex !== state.currentIndex && !groupChanged
 
-    if (targetIndex === state.currentIndex && !groupChanged) {
-      return
-    }
-
-    if (groupChanged) {
+    if (movedWithinGroup) {
+      console.log('movedWithinGroup')
+      if (targetIndex > props.bookmarks.length - 1) return
+      props.reorderBookmarks({
+        groupId: state.currentGroup,
+        currentIndex: state.currentIndex,
+        targetIndex,
+        bookmark: draggedItem.bookmark
+      })
+      state.currentIndex = targetIndex
+    } else if (groupChanged) {
+      console.log('group changed')
       const previousGroup = state.currentGroup
       state.currentGroup = hoveredGroup
 
       const previousIndex = state.currentIndex
-
-      console.log('changed group', groupChanged)
-      console.log(`from: ${previousGroup}, to: ${state.currentGroup}`)
-      console.table(
-        { previousGroup, previousIndex },
-        { currentGroup: state.currentGroup, currentIndex: state.currentIndex }
-      )
-
-      props.reorderBookmarks(
-        'push',
-        state.currentGroup,
-        undefined,
-        state.currentIndex > props.bookmarks.length - 1
-          ? props.bookmarks.length
-          : state.currentIndex,
-        { ...draggedItem.bookmark }
-      )
-
-      props.reorderBookmarks('pull', previousGroup, targetIndex, undefined, {
-        ...draggedItem.bookmark
-      })
-
-      // state.currentGroup
-    } else {
-      // this action happens within the same group
-      if (targetIndex > props.bookmarks.length - 1) {
-        return console.log('!!!!!!!!!!!!!!exceed', {
-          targetIndex,
-          length: props.bookmarks.length
-        })
-      }
-      console.log('reoreder path')
-      props.reorderBookmarks(
-        'reorder',
-        state.currentGroup,
-        state.currentIndex,
-        targetIndex,
-        draggedItem.bookmark
-      )
       state.currentIndex = targetIndex
+
+      props.pushBookmark({
+        groupId: state.currentGroup,
+        targetIndex,
+        bookmark: draggedItem.bookmark
+      })
+      props.pullBookmark({
+        groupId: previousGroup,
+        targetIndex: previousIndex
+      })
     }
-
-    // props.reorderBookmarks(
-    //   props.groupId,
-    //   state.bookmarkIndex,
-    //   targetIndex,
-    //   groupChanged ? draggedItem.bookmark : undefined
-    // )
-
-    console.log('============= end ================')
   },
   drop: () => {
-    state = resetState()
     console.log('drop')
   }
 }
@@ -164,14 +136,3 @@ export const bookmarkDropTarget = (
   DropTarget(DnDTypes.bookmarks, bookmarkDropSource, bookmarkDropCollect)(
     component
   )
-
-// console.table({
-//   index: draggedItem.index,
-//   dropAreaWith,
-//   dropAreaHeight,
-//   dropAreaOffsetTop,
-//   targetOffsetX,
-//   targetOffsetY,
-//   XIndex,
-//   YIndex
-// })

@@ -5,6 +5,7 @@ import { API_GROUPS_URL } from '../../constants'
 import { GroupsAPI } from '../api/groups'
 import { IBookmark, IGroup, Tab } from '../types'
 import { css } from 'styled-components'
+import { Omit } from '@material-ui/core'
 interface FetchBookmarksResponse {
   groups: IGroup[]
 }
@@ -13,6 +14,22 @@ export interface CreateGroupInput {
   groupTitle?: string
   tab?: Tab
 }
+
+interface ReorderBookmarksArgs {
+  groupId: IGroup['_id']
+  currentIndex: number
+  targetIndex: number
+  bookmark: IBookmark
+}
+
+const updatedGroups = (groups: IGroup[], targetIndex: number, params: any) =>
+  update(groups, {
+    [targetIndex]: {
+      bookmarks: {
+        $splice: params
+      }
+    }
+  })
 
 export const useGroups = () => {
   const [groups, setGroups] = useState<IGroup[] | null>(null)
@@ -43,58 +60,35 @@ export const useGroups = () => {
     setGroups([newGroup, ...(groups ? groups : [])])
   }
 
-  const pushBookmark = (id: IGroup['_id'], bookmark: IBookmark) => {
-    if (!groups) return console.warn('there is no group')
-    const targetIndex = groups.findIndex(g => g._id === id)
-    const updated = update(groups, {
-      [targetIndex]: { bookmarks: { $push: [bookmark] } }
+  const pushBookmark = (args: Omit<ReorderBookmarksArgs, 'currentIndex'>) => {
+    setGroups(_groups => {
+      if (!_groups) return _groups
+      const { groupId, targetIndex, bookmark } = args
+      const targetGroupIndex = _groups.findIndex(g => g._id === groupId)
+      const params = [[targetIndex, 0, bookmark]]
+      return updatedGroups(_groups, targetGroupIndex, params)
     })
-    setGroups(updated)
   }
 
-  const reorderBookmarks = (
-    type: 'push' | 'pull' | 'reorder',
-    id: IGroup['_id'],
-    currentIndex,
-    targetIndex,
-    bookmark: IBookmark
+  const pullBookmark = (
+    args: Omit<ReorderBookmarksArgs, 'currentIndex' | 'bookmark'>
   ) => {
     setGroups(_groups => {
       if (!_groups) return _groups
-      const targetGroupIndex = _groups.findIndex(g => g._id === id)
+      const { groupId, targetIndex } = args
+      const targetGroupIndex = _groups.findIndex(g => g._id === groupId)
+      const params = [[targetIndex, 1]]
+      return updatedGroups(_groups, targetGroupIndex, params)
+    })
+  }
 
-      const updatedGroups = (params: any) =>
-        update(_groups, {
-          [targetGroupIndex]: {
-            bookmarks: {
-              $splice: params
-            }
-          }
-        })
-
-      switch (type) {
-        case 'push': {
-          console.log('push', _groups[targetGroupIndex]._id)
-
-          return updatedGroups([[targetIndex, 0, bookmark]])
-        }
-        case 'pull': {
-          console.log('pull', _groups[targetGroupIndex]._id)
-
-          return updatedGroups([[currentIndex, 1]])
-        }
-        case 'reorder': {
-          console.log('reorder', _groups[targetGroupIndex]._id)
-
-          return updatedGroups([[currentIndex, 1], [targetIndex, 0, bookmark]])
-        }
-        default: {
-          console.warn('wrong args combination')
-          return _groups
-        }
-      }
-
-      // return updated
+  const reorderBookmarks = (args: ReorderBookmarksArgs) => {
+    setGroups(_groups => {
+      if (!_groups) return _groups
+      const { groupId, currentIndex, targetIndex, bookmark } = args
+      const targetGroupIndex = _groups.findIndex(g => g._id === groupId)
+      const params = [[currentIndex, 1], [targetIndex, 0, bookmark]]
+      return updatedGroups(_groups, targetGroupIndex, params)
     })
   }
 
@@ -105,8 +99,9 @@ export const useGroups = () => {
   return {
     groups,
     fetching,
-    pushBookmark,
     createGroup,
+    pushBookmark,
+    pullBookmark,
     reorderBookmarks
   }
 }

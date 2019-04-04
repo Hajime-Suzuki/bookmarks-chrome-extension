@@ -29,7 +29,12 @@ const tabDropSpec: DropTargetSpec<DnDContainerWrapperProps> = {
         url,
         img: favIconUrl
       })
-      props.pushBookmark(targetGroup, res)
+      const lastPosition = props.bookmarks.length
+      props.pushBookmark({
+        groupId: targetGroup,
+        targetIndex: lastPosition,
+        bookmark: res
+      })
     })()
   }
 }

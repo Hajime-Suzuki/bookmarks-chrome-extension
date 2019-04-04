@@ -8,6 +8,7 @@ import {
 import { DnDTypes } from '../../constants'
 import { findDOMNode } from 'react-dom'
 import { IBookmark } from '../types'
+import { resetState } from './bookmark-drop-target'
 
 export interface BeginDragReturnType {
   id: IBookmark['_id']
@@ -18,7 +19,6 @@ export interface BeginDragReturnType {
 
 const dragSource: DragSourceSpec<BookmarkCardProps, BeginDragReturnType> = {
   beginDrag: (props, monitor, component) => {
-    console.log(props.index)
     return {
       id: props.bookmark._id,
       bookmark: props.bookmark,
@@ -27,7 +27,8 @@ const dragSource: DragSourceSpec<BookmarkCardProps, BeginDragReturnType> = {
     }
   },
   endDrag: (props, monitor, component) => {
-    // send order to the server
+    console.log('endDrag')
+    resetState()
     return
   }
 }
