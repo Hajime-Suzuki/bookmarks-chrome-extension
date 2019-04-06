@@ -1,11 +1,10 @@
+import { Omit } from '@material-ui/core'
 import axios from 'axios'
 import update from 'immutability-helper'
 import React, { createContext, FC, useEffect, useState } from 'react'
 import { API_GROUPS_URL } from '../../constants'
 import { GroupsAPI } from '../api/groups'
 import { IBookmark, IGroup, Tab } from '../types'
-import { css } from 'styled-components'
-import { Omit } from '@material-ui/core'
 interface FetchBookmarksResponse {
   groups: IGroup[]
 }
@@ -65,7 +64,7 @@ export const useGroups = () => {
       if (!_groups) return _groups
       const { groupId, targetIndex, bookmark } = args
       const targetGroupIndex = _groups.findIndex(g => g._id === groupId)
-      const params = [[targetIndex, 0, bookmark]]
+      const params = [[targetIndex, 0, { ...bookmark, group: groupId }]]
       return updatedGroups(_groups, targetGroupIndex, params)
     })
   }

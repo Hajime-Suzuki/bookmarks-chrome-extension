@@ -13,10 +13,6 @@ import { theme } from '../../styles/theme'
 import { IBookmark, IGroup } from '../../types'
 import BookmarkCard from './components/bookmark-card'
 import EditModal from './components/EditModal'
-import {
-  useBookmarks,
-  BookmarkContext
-} from '../../hooks-contexts/useBookmarks'
 
 interface BookmarksProps {
   bookmarks: IBookmark[]
@@ -97,7 +93,6 @@ const Groups = () => {
                 groupId={g._id}
                 {...groupContext}
               />
-              {/* <Bookmarks bookmarks={group.bookmarks} /> */}
             </div>
           )
         })}

@@ -10,6 +10,28 @@ import { DnDContainerWrapperProps } from '../view/Bookmarks'
 import { BeginDragReturnType } from './bookmark-drag-source'
 import { dndBookmarkState as state } from './bookmark-state'
 
+/**
+ *
+ * key items:
+ * hoveredGroup(local var), targetIndex(local var), and state values.
+ * Here store data to local variables as much as possible and don't access directly monitor/props in order to avoid confusion.
+ * Because we need to have 3 types of variables: local var, props/monitor, and state.
+ *
+ * @state
+ *  state is needed to make some comparison within hover(), since API call to update groups happens only when drag has been ended. state has currentGroup and currentIndex, which are updated during dragging.
+ *
+ * @actions
+ *  only when dragged item enters a different group, or it is moved with in the group, do following two actions.
+ *
+ * 1. moved within the group: reorder bookmarks.
+ * remove the item of current index from its the bookmark array, and push the item item to the target position.
+ * @note if targetIndex is grater than bookmarks.length - 1, skip the action, otherwise the card is added to wrong position, which breaks the array.
+ *
+ * 2. when group is changed: pull and push the card
+ * push the bookmark to the target group, and remove it from the original group.
+ *
+ */
+
 // TODO: make grid size dynamic...
 const GRID_SIZE = 4
 
@@ -45,28 +67,6 @@ const getIndex = (props, monitor, component, draggedItem) => {
   )
   return targetIndex
 }
-
-/**
- *
- * key items:
- * hoveredGroup(local var), targetIndex(local var), and state values.
- * Here store data to local variables as much as possible and don't access directly monitor/props in order to avoid confusion.
- * Because we need to have 3 types of variables: local var, props/monitor, and state.
- *
- * @state
- *  state is needed to make some comparison within hover(), since API call to update groups happens only when drag has been ended. state has currentGroup and currentIndex, which are updated during dragging.
- *
- * @actions
- *  only when dragged item enters a different group, or it is moved with in the group, do following two actions.
- *
- * 1. moved within the group: reorder bookmarks.
- * remove the item of current index from its the bookmark array, and push the item item to the target position.
- * @note if targetIndex is grater than bookmarks.length - 1, skip the action, otherwise the card is added to wrong position, which breaks the array.
- *
- * 2. when group is changed: pull and push the card
- * push the bookmark to the target group, and remove it from the original group.
- *
- */
 
 const bookmarkDropSource: DropTargetSpec<DnDContainerWrapperProps> = {
   hover: (props, monitor, component) => {
@@ -126,7 +126,7 @@ const bookmarkDropSource: DropTargetSpec<DnDContainerWrapperProps> = {
 
 const bookmarkDropCollect = (
   connect: DropTargetConnector,
-  monitor: DropTargetMonitor
+  _: DropTargetMonitor
 ) => ({
   bookmarkConnectDropSource: connect.dropTarget()
 })

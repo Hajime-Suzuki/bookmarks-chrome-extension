@@ -25,4 +25,8 @@ const create = async (groupId: IGroup['_id'], input: CreateBookmarkInput) => {
   return data.bookmark
 }
 
-export const bookmarksAPI = { create }
+const remove = async (bookmarkId: IBookmark['_id']) => {
+  await axios.delete(`${API_BOOKMARK_URL}/${bookmarkId}`)
+}
+
+export const bookmarksAPI = { create, remove }

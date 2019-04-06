@@ -28,6 +28,7 @@ const dragSource: DragSourceSpec<BookmarkCardProps, BeginDragReturnType> = {
       size: (findDOMNode(component) as Element).getBoundingClientRect()
     }
   },
+  canDrag: () => !state.updating,
   endDrag: async (_, monitor) => {
     const draggedItem = monitor.getItem() as BeginDragReturnType
     const { currentGroup, currentIndex } = state
@@ -39,9 +40,9 @@ const dragSource: DragSourceSpec<BookmarkCardProps, BeginDragReturnType> = {
     const isReorderCrossGroup = currentGroup !== draggedItem.bookmark.group
 
     if (isReorderWithinGroup || isReorderCrossGroup) {
-      if (!currentGroup || currentIndex === null)
-        return console.log({ currentGroup, currentIndex })
+      if (!currentGroup || currentIndex === null) return
       console.log('reorder')
+      state.setUpdating(true)
       await GroupsAPI.reorderBookmarks({
         bookmarkId: draggedItem.bookmark._id,
         position: currentIndex,

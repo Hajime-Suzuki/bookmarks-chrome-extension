@@ -1,20 +1,23 @@
 import { Icon, IconButton, Typography } from '@material-ui/core'
-import React, { useContext } from 'react'
-import { BookmarkContext } from '../../../../hooks-contexts/useBookmarks'
+import React, { useContext, FC } from 'react'
+import { BookmarkCardProps } from '.'
+import { GroupContext } from '../../../../hooks-contexts/useGroups'
 import { EditModalContext } from '../../../../hooks-contexts/useModal'
 import { theme } from '../../../../styles/theme'
-import { BookmarkCardProps } from '.'
+import { GroupsAPI } from '../../../../api/groups'
+import { bookmarksAPI } from '../../../../api/bookmarks'
 
-const BottomSection = ({ bookmark }: Pick<BookmarkCardProps, 'bookmark'>) => {
-  // const { deleteBookmark } = useContext(BookmarkContext)
+const BottomSection: FC<BookmarkCardProps> = ({ bookmark, index }) => {
+  const { pullBookmark } = useContext(GroupContext)
   const { openModal, selectEditBookmark } = useContext(EditModalContext)
   const { _id, tags } = bookmark
 
   return (
     <>
       <IconButton
-        onClick={() => {
-          // deleteBookmark(_id)
+        onClick={async () => {
+          await bookmarksAPI.remove(bookmark._id)
+          pullBookmark({ groupId: bookmark.group, targetIndex: index })
         }}
       >
         <Icon fontSize="small" className="fas fa-minus-circle" />

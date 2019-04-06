@@ -10,13 +10,8 @@ import {
   tabDragSource,
   TabDragSourceProps
 } from '../../dnd-settings/tab-drag-source'
-import {
-  BookmarkContext,
-  useBookmarks
-} from '../../hooks-contexts/useBookmarks'
+import { GroupContext } from '../../hooks-contexts/useGroups'
 import { OpenedTabContext } from '../../hooks-contexts/useOpenedTabs'
-import { Tab } from '../../types'
-import { GroupContext, useGroups } from '../../hooks-contexts/useGroups'
 
 const OpenedTabs: FC<{}> = () => {
   const { tabs } = useContext(OpenedTabContext)

@@ -19,7 +19,7 @@ export interface BookmarkCardProps {
 }
 
 const BookmarkCard: FC<BookmarkCardProps> = props => {
-  const { bookmark } = props
+  const { bookmark, index } = props
 
   return (
     <Card style={{ height: '100%' }}>
@@ -35,7 +35,7 @@ const BookmarkCard: FC<BookmarkCardProps> = props => {
         </Link>
       </CardActionArea>
       <CardActions disableActionSpacing>
-        <BottomSection bookmark={bookmark} />
+        <BottomSection {...props} />
       </CardActions>
     </Card>
   )
@@ -48,8 +48,6 @@ const BookmarkCard: FC<BookmarkCardProps> = props => {
 class BookmarkCardContainer extends React.Component<
   BookmarkDragSourceProps & BookmarkCardProps
 > {
-  static contextType = GroupContext
-
   render() {
     const { connectDragSource, isDragging, ...rest } = this.props
 
