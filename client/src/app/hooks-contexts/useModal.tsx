@@ -1,16 +1,21 @@
-import React, { useState, createContext, FC } from 'react'
-import { IBookmark, IGroup } from '../types'
+import React, { createContext, FC, useState } from 'react'
+import { IBookmark } from '../types'
 
+type BookmarkWithIndex = IBookmark & { index: number | null }
 const useModal = () => {
   const [isOpen, setOpen] = useState(false)
-  const [selectedBookmark, setBookmark] = useState<IBookmark | null>(null)
+  const [selectedBookmark, setBookmark] = useState<BookmarkWithIndex | null>(
+    null
+  )
+
   const openModal = () => setOpen(true)
 
   const closeModal = () => {
     setOpen(false)
     setBookmark(null)
   }
-  const selectEditBookmark = (arg: IBookmark) => setBookmark(arg)
+  const selectEditBookmark = (arg: IBookmark, index: number) =>
+    setBookmark({ ...arg, index })
 
   return {
     isOpen,

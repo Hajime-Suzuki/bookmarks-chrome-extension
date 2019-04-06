@@ -15,7 +15,7 @@ const BottomSection: FC<BookmarkCardProps> = ({ bookmark, index }) => {
     <>
       <IconButton
         onClick={async () => {
-          await bookmarksAPI.remove(bookmark._id)
+          await bookmarksAPI.remove(_id)
           pullBookmark({ groupId: bookmark.group, targetIndex: index })
         }}
       >
@@ -35,7 +35,7 @@ const BottomSection: FC<BookmarkCardProps> = ({ bookmark, index }) => {
           marginLeft: 'auto'
         }}
         onClick={() => {
-          selectEditBookmark(bookmark)
+          selectEditBookmark(bookmark, index)
           openModal()
         }}
       >

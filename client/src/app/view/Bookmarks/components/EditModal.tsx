@@ -30,8 +30,12 @@ const EditModal: FC<BookmarksProps> = ({ groupId }) => {
               : ''
         }}
         onSubmit={async values => {
-          if (selectedBookmark)
-            await updateBookmark(selectedBookmark._id, values)
+          if (selectedBookmark && selectedBookmark.index !== null)
+            await updateBookmark(
+              selectedBookmark._id,
+              selectedBookmark.index,
+              values
+            )
           closeModal()
         }}
       >

@@ -63,6 +63,7 @@ export const useGroups = () => {
 
   const updateBookmark = async (
     _id: IBookmark['_id'],
+    bookmarkIndex: number,
     input: UpdateBookmarkInput
   ) => {
     const { bookmark: updatedBookmark } = await bookmarksAPI.update(_id, input)
@@ -72,10 +73,7 @@ export const useGroups = () => {
       const targetGroupIndex = _groups.findIndex(
         g => g._id === updatedBookmark.group
       )
-      const bookmarkIndex = _groups[targetGroupIndex].bookmarks.findIndex(
-        bm => bm._id === _id
-      )
-      if (targetGroupIndex === -1 || bookmarkIndex === -1) {
+      if (targetGroupIndex === -1) {
         console.warn('bookmarks or group not found')
       }
       const updateParams = {
