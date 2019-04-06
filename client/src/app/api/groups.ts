@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { IBookmark, IGroup } from '../types'
 import { API_GROUPS_URL } from '../../constants'
+import { Omit } from '@material-ui/core'
 
 export interface CreateGroupInput {
   title?: string
@@ -10,12 +11,6 @@ export interface CreateGroupInput {
     img?: IBookmark['img']
     tags?: IBookmark['tags']
   }
-}
-
-interface ReorderBookmarkInput {
-  type: 'reorder:bookmark' | 'add:bookmark' | 'remove:bookmark'
-  bookmark: IBookmark['_id']
-  position: number
 }
 
 interface GroupResponse {
@@ -29,21 +24,15 @@ const createGroup = async (input: CreateGroupInput) => {
   return { newGroup: group }
 }
 
-export type ReorderBookmarksAPIArgs = Pick<
-  ReorderBookmarkInput,
-  'bookmark' | 'position'
-> & { groupId: IGroup['_id'] }
-const reorderBookmarks = async ({
-  bookmark,
-  position,
-  groupId
-}: ReorderBookmarksAPIArgs) => {
-  const params: ReorderBookmarkInput = {
-    type: 'reorder:bookmark',
-    bookmark,
-    position
-  }
-  await axios.put<GroupResponse>(`${API_GROUPS_URL}/${groupId}`, params)
+interface ReorderBookmarkInput {
+  bookmarkId: IBookmark['_id']
+  position: number
+  from: IGroup['_id']
+  to: IGroup['_id']
+}
+
+const reorderBookmarks = async (args: ReorderBookmarkInput) => {
+  await axios.put<GroupResponse>(`${API_GROUPS_URL}/reorder-bookmarks`, args)
 }
 
 export const GroupsAPI = {

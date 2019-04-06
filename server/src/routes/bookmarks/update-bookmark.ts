@@ -5,16 +5,7 @@ import { IBookmark } from '../../models/Bookmark'
 import { BookmarkRepository } from '../../repositories/bookmarks'
 
 /**
- * @description: Updating scenario.
- * - 1. change name.
- *   nothing special
- * - 2. change tags.
- *   nothing special for now.
- * - 3. change group. (requires both bookmark and group services)
- *      1. remove group from bookmark.
- *      2. remove the bookmark from the old group.
- *      3. add the bookmark to the new group.
- *         (2 and 3 are done by a different API call)
+ * @description: reorder is done by separate endpoint
  */
 
 export class EditBookmarkInput {

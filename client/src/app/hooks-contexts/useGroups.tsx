@@ -2,7 +2,7 @@ import axios from 'axios'
 import update from 'immutability-helper'
 import React, { createContext, FC, useEffect, useState } from 'react'
 import { API_GROUPS_URL } from '../../constants'
-import { GroupsAPI, ReorderBookmarksAPIArgs } from '../api/groups'
+import { GroupsAPI } from '../api/groups'
 import { IBookmark, IGroup, Tab } from '../types'
 import { css } from 'styled-components'
 import { Omit } from '@material-ui/core'
@@ -92,11 +92,6 @@ export const useGroups = () => {
     })
   }
 
-  const reorderBookmarksAPICall = async (args: ReorderBookmarksAPIArgs) => {
-    await GroupsAPI.reorderBookmarks(args)
-    console.log('done')
-  }
-
   useEffect(() => {
     fetchGroups()
   }, [])
@@ -107,8 +102,7 @@ export const useGroups = () => {
     createGroup,
     pushBookmark,
     pullBookmark,
-    reorderBookmarks,
-    reorderBookmarksAPICall
+    reorderBookmarks
   }
 }
 

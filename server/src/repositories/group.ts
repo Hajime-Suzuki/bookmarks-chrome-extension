@@ -65,11 +65,11 @@ const update = async (_id: IGroup['_id'], input: UpdateInput) => {
 }
 
 const remove = async (_id: IGroup['_id']) => {
-  const bookmark = await Group.findById(_id)
+  const group = await Group.findById(_id)
 
-  if (!bookmark) throw createError(404, `group ${_id} not found`)
+  if (!group) throw createError(404, `group ${_id} not found`)
 
-  await bookmark.remove()
+  await group.remove()
   return null
 }
 

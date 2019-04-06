@@ -1,18 +1,18 @@
-import { BookmarkCardProps } from '../view/Bookmarks/components/bookmark-card'
 import {
-  DragSourceMonitor,
-  DragSourceConnector,
   DragSource,
+  DragSourceConnector,
+  DragSourceMonitor,
   DragSourceSpec
 } from 'react-dnd'
-import { DnDTypes } from '../../constants'
 import { findDOMNode } from 'react-dom'
+import { DnDTypes } from '../../constants'
+import { GroupsAPI } from '../api/groups'
 import { IBookmark } from '../types'
-import { resetDragState, dragState } from './bookmark-drop-target'
-import { GroupContext } from '../hooks-contexts/useGroups'
+import { BookmarkCardProps } from '../view/Bookmarks/components/bookmark-card'
+import { dndBookmarkState as state } from './bookmark-state'
 
 export interface BeginDragReturnType {
-  id: IBookmark['_id']
+  // id: IBookmark['_id']
   bookmark: IBookmark
   index: number
   size: ClientRect | DOMRect
@@ -20,29 +20,38 @@ export interface BeginDragReturnType {
 
 const dragSource: DragSourceSpec<BookmarkCardProps, BeginDragReturnType> = {
   beginDrag: (props, _, component) => {
-    resetDragState()
+    state.reset()
     return {
-      id: props.bookmark._id,
+      // id: props.bookmark._id,
       bookmark: props.bookmark,
       index: props.index,
       size: (findDOMNode(component) as Element).getBoundingClientRect()
     }
   },
-  endDrag: async (props, monitor, component) => {
-    // if (!component) {
-    //   return console.log('no component')
-    // } else {
-    //   console.log(component)
-    // }
+  endDrag: async (_, monitor) => {
     const draggedItem = monitor.getItem() as BeginDragReturnType
-    const { reorderBookmarksAPICall } = component.context as GroupContext
-    const { currentIndex } = dragState
-    await reorderBookmarksAPICall({
-      bookmark: draggedItem.id,
-      position: currentIndex as number,
-      groupId: '5ca7cb542c45a00987cc6961'
-    })
-    resetDragState()
+    const { currentGroup, currentIndex } = state
+
+    const isReorderWithinGroup =
+      currentGroup === draggedItem.bookmark.group &&
+      draggedItem.index !== currentIndex
+
+    const isReorderCrossGroup = currentGroup !== draggedItem.bookmark.group
+
+    if (isReorderWithinGroup || isReorderCrossGroup) {
+      if (!currentGroup || !currentIndex) return
+      console.log('reorder')
+      await GroupsAPI.reorderBookmarks({
+        bookmarkId: draggedItem.bookmark._id,
+        position: currentIndex,
+        from: isReorderWithinGroup ? currentGroup : draggedItem.bookmark.group,
+        to: currentGroup
+      })
+    } else {
+      console.log('else')
+    }
+
+    state.reset()
     return
   }
 }

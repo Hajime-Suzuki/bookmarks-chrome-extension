@@ -64,12 +64,20 @@ functions:
           path: groups
           method: post
 
-  updateBookmark:
+  updateGroup:
     name: '${self:service}-update-group'
     handler: src/routes/groups/update-group.handler
     events:
       - http:
           path: groups/{id}
+          method: put
+
+  reorderBookmarks:
+    name: '${self:service}-reorder-bookmarks'
+    handler: src/routes/groups/reorder-bookmarks.handler
+    events:
+      - http:
+          path: groups/reorder-bookmarks
           method: put
 
   deleteGroup:
