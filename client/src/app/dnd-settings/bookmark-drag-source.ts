@@ -39,7 +39,8 @@ const dragSource: DragSourceSpec<BookmarkCardProps, BeginDragReturnType> = {
     const isReorderCrossGroup = currentGroup !== draggedItem.bookmark.group
 
     if (isReorderWithinGroup || isReorderCrossGroup) {
-      if (!currentGroup || !currentIndex) return
+      if (!currentGroup || currentIndex === null)
+        return console.log({ currentGroup, currentIndex })
       console.log('reorder')
       await GroupsAPI.reorderBookmarks({
         bookmarkId: draggedItem.bookmark._id,
