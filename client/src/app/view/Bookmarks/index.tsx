@@ -14,10 +14,11 @@ import { IBookmark, IGroup } from '../../types'
 import BookmarkCard from './components/bookmark-card'
 import EditModal from './components/EditModal'
 
-interface BookmarksProps {
+export interface BookmarksProps {
   bookmarks: IBookmark[]
+  groupId: IGroup['_id']
 }
-const Bookmarks: FC<BookmarksProps> = ({ bookmarks }) => {
+const Bookmarks: FC<BookmarksProps> = ({ bookmarks, groupId }) => {
   return (
     <Grid container spacing={24} justify="flex-start">
       {bookmarks.map((bm, i) => {
@@ -27,7 +28,7 @@ const Bookmarks: FC<BookmarksProps> = ({ bookmarks }) => {
           </Grid>
         )
       })}
-      <EditModal />
+      <EditModal groupId={groupId} bookmarks={bookmarks} />
     </Grid>
   )
 }
@@ -40,7 +41,7 @@ const Bookmarks: FC<BookmarksProps> = ({ bookmarks }) => {
 export type DnDContainerWrapperProps = TabDropTargetProps &
   BookmarkDropTargetProps &
   GroupContext &
-  BookmarksProps & { groupId: IGroup['_id'] }
+  BookmarksProps
 
 const BookmarkDnDWrapper = tabDropTarget(
   bookmarkDropTarget(
@@ -49,7 +50,7 @@ const BookmarkDnDWrapper = tabDropTarget(
         const {
           bookmarkConnectDropSource,
           tabConnectDropTarget,
-          bookmarks
+          ...restProps
         } = this.props
 
         return bookmarkConnectDropSource(
@@ -61,7 +62,7 @@ const BookmarkDnDWrapper = tabDropTarget(
                 padding: theme.spacing.unit * 2
               }}
             >
-              <Bookmarks bookmarks={bookmarks} />
+              <Bookmarks {...restProps} />
             </div>
           )
         )

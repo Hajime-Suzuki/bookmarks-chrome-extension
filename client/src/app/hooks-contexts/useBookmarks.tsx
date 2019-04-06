@@ -3,31 +3,18 @@ import axios from 'axios'
 import { API_BOOKMARK_URL } from '../../constants'
 import { IBookmark, IGroup } from '../types'
 import { Omit } from '@material-ui/core'
-
-interface FetchBookmarksResponse {
-  bookmarks: IBookmark[]
-}
-
-export interface CreateBookmarkInput {
-  title: IBookmark['title']
-  url: IBookmark['url']
-  img?: IBookmark['img']
-  tags?: IBookmark['tags']
-}
+import { CreateBookmarkInput } from '../api/bookmarks'
 
 interface CreateBookmarkResponse {
   bookmark: IBookmark
 }
 
-type UpdateBookmarkInput = Omit<Partial<IBookmark>, 'tags'> & { tags?: string }
+export type UpdateBookmarkInput = Omit<Partial<IBookmark>, 'tags'> & {
+  tags?: string
+}
 
 export const useBookmarks = () => {
   // const [bookmarks, setBookmarks] = useState<IBookmark[]>([])
-
-  // const fetchBookmarks = async () => {
-  //   const { data } = await axios.get<FetchBookmarksResponse>(API_BOOKMARK_URL)
-  //   setBookmarks(data.bookmarks)
-  // }
 
   const createBookmark = async (
     groupId: IGroup['_id'],
@@ -72,7 +59,6 @@ export const useBookmarks = () => {
   // }, [])
 
   return {
-    // bookmarks,
     createBookmark
     // deleteBookmark,
     // updateBookmark,

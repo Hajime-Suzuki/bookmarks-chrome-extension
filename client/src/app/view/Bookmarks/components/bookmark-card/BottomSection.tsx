@@ -1,11 +1,10 @@
 import { Icon, IconButton, Typography } from '@material-ui/core'
-import React, { useContext, FC } from 'react'
+import React, { FC, useContext } from 'react'
 import { BookmarkCardProps } from '.'
+import { bookmarksAPI } from '../../../../api/bookmarks'
 import { GroupContext } from '../../../../hooks-contexts/useGroups'
 import { EditModalContext } from '../../../../hooks-contexts/useModal'
 import { theme } from '../../../../styles/theme'
-import { GroupsAPI } from '../../../../api/groups'
-import { bookmarksAPI } from '../../../../api/bookmarks'
 
 const BottomSection: FC<BookmarkCardProps> = ({ bookmark, index }) => {
   const { pullBookmark } = useContext(GroupContext)
@@ -36,7 +35,7 @@ const BottomSection: FC<BookmarkCardProps> = ({ bookmark, index }) => {
           marginLeft: 'auto'
         }}
         onClick={() => {
-          selectEditBookmark(_id)
+          selectEditBookmark(bookmark)
           openModal()
         }}
       >

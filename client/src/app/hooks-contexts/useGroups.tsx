@@ -5,6 +5,8 @@ import React, { createContext, FC, useEffect, useState } from 'react'
 import { API_GROUPS_URL } from '../../constants'
 import { GroupsAPI } from '../api/groups'
 import { IBookmark, IGroup, Tab } from '../types'
+import { UpdateBookmarkInput } from './useBookmarks'
+import { bookmarksAPI } from '../api/bookmarks'
 interface FetchBookmarksResponse {
   groups: IGroup[]
 }
@@ -59,6 +61,32 @@ export const useGroups = () => {
     setGroups([newGroup, ...(groups ? groups : [])])
   }
 
+  const updateBookmark = async (
+    _id: IBookmark['_id'],
+    input: UpdateBookmarkInput
+  ) => {
+    const { bookmark: updatedBookmark } = await bookmarksAPI.update(_id, input)
+
+    setGroups(_groups => {
+      if (!_groups) return _groups
+      const targetGroupIndex = _groups.findIndex(
+        g => g._id === updatedBookmark.group
+      )
+      const bookmarkIndex = _groups[targetGroupIndex].bookmarks.findIndex(
+        bm => bm._id === _id
+      )
+      if (targetGroupIndex === -1 || bookmarkIndex === -1) {
+        console.warn('bookmarks or group not found')
+      }
+      const updateParams = {
+        [targetGroupIndex]: {
+          bookmarks: { [bookmarkIndex]: { $set: updatedBookmark } }
+        }
+      }
+      return update(_groups, updateParams)
+    })
+  }
+
   const pushBookmark = (args: Omit<ReorderBookmarksArgs, 'currentIndex'>) => {
     setGroups(_groups => {
       if (!_groups) return _groups
@@ -101,6 +129,7 @@ export const useGroups = () => {
     createGroup,
     pushBookmark,
     pullBookmark,
+    updateBookmark,
     reorderBookmarks
   }
 }
