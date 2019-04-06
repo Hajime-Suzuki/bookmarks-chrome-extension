@@ -8,7 +8,8 @@ import {
 import { DnDTypes } from '../../constants'
 import { findDOMNode } from 'react-dom'
 import { IBookmark } from '../types'
-import { resetDragState } from './bookmark-drop-target'
+import { resetDragState, dragState } from './bookmark-drop-target'
+import { GroupContext } from '../hooks-contexts/useGroups'
 
 export interface BeginDragReturnType {
   id: IBookmark['_id']
@@ -27,7 +28,20 @@ const dragSource: DragSourceSpec<BookmarkCardProps, BeginDragReturnType> = {
       size: (findDOMNode(component) as Element).getBoundingClientRect()
     }
   },
-  endDrag: () => {
+  endDrag: async (props, monitor, component) => {
+    // if (!component) {
+    //   return console.log('no component')
+    // } else {
+    //   console.log(component)
+    // }
+    const draggedItem = monitor.getItem() as BeginDragReturnType
+    const { reorderBookmarksAPICall } = component.context as GroupContext
+    const { currentIndex } = dragState
+    await reorderBookmarksAPICall({
+      bookmark: draggedItem.id,
+      position: currentIndex as number,
+      groupId: '5ca7cb542c45a00987cc6961'
+    })
     resetDragState()
     return
   }

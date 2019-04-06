@@ -7,6 +7,7 @@ import {
 import { IBookmark } from '../../../../types'
 import Content from './BookmarkContent'
 import BottomSection from './BottomSection'
+import { GroupContext } from '../../../../hooks-contexts/useGroups'
 
 /**
  * @description: This is parent component of a card. This is also the drag source.
@@ -47,6 +48,8 @@ const BookmarkCard: FC<BookmarkCardProps> = props => {
 class BookmarkCardContainer extends React.Component<
   BookmarkDragSourceProps & BookmarkCardProps
 > {
+  static contextType = GroupContext
+
   render() {
     const { connectDragSource, isDragging, ...rest } = this.props
 
