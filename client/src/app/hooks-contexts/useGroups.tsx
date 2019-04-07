@@ -23,6 +23,13 @@ interface ReorderBookmarksArgs {
   bookmark: IBookmark
 }
 
+interface UpdateBookmarkArgs {
+  id: IBookmark['_id']
+  groupIndex: number
+  bookmarkIndex: number
+  input: UpdateBookmarkInput
+}
+
 const updatedGroups = (groups: IGroup[], targetIndex: number, params: any) =>
   update(groups, {
     [targetIndex]: {
@@ -34,6 +41,7 @@ const updatedGroups = (groups: IGroup[], targetIndex: number, params: any) =>
 
 export const useGroups = () => {
   const [groups, setGroups] = useState<IGroup[] | null>(null)
+  const bookmarks = _useBookmarks(groups, setGroups)
   const [fetching, setFetching] = useState(false)
 
   const fetchGroups = async () => {
@@ -71,29 +79,37 @@ export const useGroups = () => {
     setGroups(updated)
   }
 
-  const updateBookmark = async (
-    _id: IBookmark['_id'],
-    bookmarkIndex: number,
-    input: UpdateBookmarkInput
-  ) => {
+  const updateBookmark = async (args: UpdateBookmarkArgs) => {
+    const { id, input, groupIndex, bookmarkIndex } = args
     if (!groups) return
-    const { bookmark: updatedBookmark } = await bookmarksAPI.update(_id, input)
-    const targetGroupIndex = groups.findIndex(
-      g => g._id === updatedBookmark.group
-    )
-
-    if (targetGroupIndex === -1) {
-      console.warn('bookmarks or group not found')
-    }
-    const updateParams = {
-      [targetGroupIndex]: {
+    const { bookmark: updatedBookmark } = await bookmarksAPI.update(id, input)
+    const updated = update(groups, {
+      [groupIndex]: {
         bookmarks: { [bookmarkIndex]: { $merge: updatedBookmark } }
       }
-    }
-    const updated = update(groups, updateParams)
+    })
     setGroups(updated)
   }
 
+  useEffect(() => {
+    fetchGroups()
+  }, [])
+
+  return {
+    groups,
+    fetching,
+    createGroup,
+    updateBookmark,
+    updateGroup,
+    ...bookmarks
+  }
+}
+
+const _useBookmarks = (
+  groups: IGroup[] | null,
+  setGroups: React.Dispatch<React.SetStateAction<IGroup[] | null>>
+) => {
+  // TODO: ues group index and merge these functions.
   const pushBookmark = (args: Omit<ReorderBookmarksArgs, 'currentIndex'>) => {
     setGroups(_groups => {
       if (!_groups) return _groups
@@ -124,18 +140,9 @@ export const useGroups = () => {
     setGroups(updatedGroups(groups, targetGroupIndex, params))
   }
 
-  useEffect(() => {
-    fetchGroups()
-  }, [])
-
   return {
-    groups,
-    fetching,
-    createGroup,
     pushBookmark,
     pullBookmark,
-    updateBookmark,
-    updateGroup,
     reorderBookmarks
   }
 }

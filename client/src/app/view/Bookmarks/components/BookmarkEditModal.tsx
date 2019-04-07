@@ -4,7 +4,7 @@ import { GroupContext } from '../../../hooks-contexts/useGroups'
 import { EditBookmarkModalContext } from '../../../hooks-contexts/useModal'
 import FormModal from './FormModal'
 
-const EditModal: FC<BookmarksProps> = ({ groupId }) => {
+const BookmarkEditModal: FC<BookmarksProps> = ({ groupId, groupIndex }) => {
   const { isOpen, closeModal, selectedItem: selectedBookmark } = useContext(
     EditBookmarkModalContext
   )
@@ -15,7 +15,12 @@ const EditModal: FC<BookmarksProps> = ({ groupId }) => {
 
   const submit = async (values: typeof initialValues) => {
     if (selectedBookmark && selectedBookmark.index !== null)
-      await updateBookmark(selectedBookmark._id, selectedBookmark.index, values)
+      await updateBookmark({
+        id: selectedBookmark._id,
+        groupIndex,
+        bookmarkIndex: selectedBookmark.index,
+        input: values
+      })
     closeModal()
   }
 
@@ -38,4 +43,4 @@ const EditModal: FC<BookmarksProps> = ({ groupId }) => {
   )
 }
 
-export default EditModal
+export default BookmarkEditModal

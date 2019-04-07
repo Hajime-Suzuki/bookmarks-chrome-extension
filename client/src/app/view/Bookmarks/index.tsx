@@ -16,14 +16,15 @@ import {
 import { theme } from '../../styles/theme'
 import { IBookmark, IGroup } from '../../types'
 import BookmarkCard from './components/bookmark-card'
-import EditModal from './components/BookmarkEditModal'
+import BookmarkEditModal from './components/BookmarkEditModal'
 import Group from './components/group/Group'
 
 export interface BookmarksProps {
   bookmarks: IBookmark[]
   groupId: IGroup['_id']
+  groupIndex: number
 }
-const Bookmarks: FC<BookmarksProps> = ({ bookmarks, groupId }) => {
+const Bookmarks: FC<BookmarksProps> = ({ bookmarks, groupId, groupIndex }) => {
   return (
     <Grid container spacing={24} justify="flex-start">
       {bookmarks.map((bm, i) => {
@@ -33,7 +34,11 @@ const Bookmarks: FC<BookmarksProps> = ({ bookmarks, groupId }) => {
           </Grid>
         )
       })}
-      <EditModal groupId={groupId} bookmarks={bookmarks} />
+      <BookmarkEditModal
+        groupId={groupId}
+        bookmarks={bookmarks}
+        groupIndex={groupIndex}
+      />
     </Grid>
   )
 }
@@ -48,7 +53,9 @@ export type DnDContainerWrapperProps = TabDropTargetProps &
   GroupContext &
   BookmarksProps
 
-const BookmarkDnDWrapper = tabDropTarget(
+const BookmarkDnDWrapper: (
+  args: BookmarksProps & GroupContext
+) => JSX.Element | null = tabDropTarget(
   bookmarkDropTarget(
     class extends React.Component<DnDContainerWrapperProps> {
       render() {
@@ -97,6 +104,7 @@ const Groups = () => {
                     key={group._id}
                     bookmarks={group.bookmarks}
                     groupId={group._id}
+                    groupIndex={i}
                     {...groupContext}
                   />
                 </Group>

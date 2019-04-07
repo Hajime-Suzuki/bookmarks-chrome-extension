@@ -1,14 +1,9 @@
 import React, { FC, useContext } from 'react'
-import { BookmarksProps } from '..'
-import { GroupContext } from '../../../hooks-contexts/useGroups'
-import {
-  EditBookmarkModalContext,
-  EditGroupModalContext
-} from '../../../hooks-contexts/useModal'
-import FormModal from './FormModal'
-import { IBookmark, IGroup } from '../../../types'
 import { UpdateGroupInput } from '../../../api/groups'
-import { GroupProps } from './group/Group'
+import { GroupContext } from '../../../hooks-contexts/useGroups'
+import { EditGroupModalContext } from '../../../hooks-contexts/useModal'
+import { IGroup } from '../../../types'
+import FormModal from './FormModal'
 
 interface Props {
   groupId: IGroup['_id']
@@ -32,7 +27,6 @@ const GroupEditModal: FC<Props> = ({ groupId, index }) => {
     title: selectedGroup ? selectedGroup.title : ''
   }
 
-  console.log('render modal')
   return (
     <FormModal
       isOpen={isOpen && isModalSelected}
