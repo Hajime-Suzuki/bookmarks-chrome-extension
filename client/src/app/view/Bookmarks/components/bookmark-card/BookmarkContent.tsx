@@ -5,7 +5,8 @@ import {
   ListItem,
   ListItemAvatar,
   Avatar,
-  ListItemText
+  ListItemText,
+  Tooltip
 } from '@material-ui/core'
 import { BookmarkCardProps } from '.'
 import React from 'react'
@@ -20,23 +21,27 @@ const TwoLineEllipsis = styled(Typography)`
   }
 `
 
+const StyledTooltip = styled(Tooltip)`` // TODO: set font size
+
 const Content = ({ bookmark }: Pick<BookmarkCardProps, 'bookmark'>) => {
   const { img, title } = bookmark
   return (
-    <List className="card-content-list">
-      <ListItem button={false}>
-        <ListItemAvatar>
-          <Avatar style={{ width: 30, height: 30 }} src={img} />
-        </ListItemAvatar>
-        <ListItemText
-          primary={
-            <TwoLineEllipsis variant="subheading" gutterBottom>
-              {title}
-            </TwoLineEllipsis>
-          }
-        />
-      </ListItem>
-    </List>
+    <StyledTooltip title={title} enterDelay={400} className="aishetn">
+      <List className="card-content-list">
+        <ListItem button={false}>
+          <ListItemAvatar>
+            <Avatar style={{ width: 30, height: 30 }} src={img} />
+          </ListItemAvatar>
+          <ListItemText
+            primary={
+              <TwoLineEllipsis variant="subheading" gutterBottom>
+                {title}
+              </TwoLineEllipsis>
+            }
+          />
+        </ListItem>
+      </List>
+    </StyledTooltip>
   )
 }
 

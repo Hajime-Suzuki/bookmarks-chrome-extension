@@ -1,11 +1,10 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
-import * as createError from 'http-errors'
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
 import { validateInput } from '../../helpers/validator'
 import { handleLambda, LambdaHandler } from '../../middleware/handle-lambda'
-import { IBookmark, Bookmark } from '../../models/Bookmark'
-import { GroupRepository } from '../../repositories/group'
-import { BookmarkRepository } from '../../repositories/bookmarks'
+import { IBookmark } from '../../models/Bookmark'
 import { IGroup } from '../../models/Group'
+import { BookmarkRepository } from '../../repositories/bookmarks'
+import { GroupRepository } from '../../repositories/group'
 
 /**
  * @description

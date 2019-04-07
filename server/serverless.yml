@@ -49,7 +49,7 @@ functions:
           method: delete
 
   getGroupsWithBookmarks:
-    name: '${self:service}-get-groups'
+    name: '${self:service}-get-groups-with-bookmarks'
     handler: src/routes/groups/get-groups.handler
     events:
       - http:
