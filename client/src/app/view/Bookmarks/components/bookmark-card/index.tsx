@@ -19,7 +19,7 @@ export interface BookmarkCardProps {
 }
 
 const BookmarkCard: FC<BookmarkCardProps> = props => {
-  const { bookmark, index } = props
+  const { bookmark } = props
 
   return (
     <Card style={{ height: '100%' }}>

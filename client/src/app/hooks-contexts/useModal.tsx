@@ -1,38 +1,60 @@
-import React, { createContext, FC, useState } from 'react'
-import { IBookmark } from '../types'
+import React, { createContext, FC, useState, useContext } from 'react'
+import { IBookmark, IGroup } from '../types'
+import { Omit } from '@material-ui/core'
 
 type BookmarkWithIndex = IBookmark & { index: number | null }
-const useModal = () => {
-  const [isOpen, setOpen] = useState(false)
-  const [selectedBookmark, setBookmark] = useState<BookmarkWithIndex | null>(
-    null
-  )
+type GroupWithIndex = IGroup & { index: number | null }
 
-  const openModal = () => setOpen(true)
+export interface EditModal<T> {
+  isOpen: boolean
+  selectedItem: T & { index: number | null } | null
+  openModal: (arg: Omit<T, 'index'>, index: number) => void
+  closeModal: () => void
+}
+
+const useModal = <T extends IBookmark | IGroup>() => {
+  type TState = T extends IBookmark ? BookmarkWithIndex : GroupWithIndex
+  const [isOpen, setOpen] = useState(false)
+  const [selectedItem, select] = useState<TState | null>(null)
+
+  const openModal = (arg: Omit<TState, 'index'>, index: number) => {
+    select(({ ...arg, index } as unknown) as TState)
+    setOpen(true)
+  }
 
   const closeModal = () => {
     setOpen(false)
-    setBookmark(null)
+    select(null)
   }
-  const selectEditBookmark = (arg: IBookmark, index: number) =>
-    setBookmark({ ...arg, index })
 
   return {
     isOpen,
     openModal,
     closeModal,
-    selectedBookmark,
-    selectEditBookmark
-  }
+    selectedItem
+  } as EditModal<TState>
 }
 
-export const EditModalContext = createContext({} as ReturnType<typeof useModal>)
+export const EditBookmarkModalContext = createContext({} as EditModal<
+  IBookmark
+>)
 
-export const EditModalProvider: FC<{}> = ({ children }) => {
-  const value = useModal()
+export const EditBookmarkModalProvider: FC<{}> = ({ children }) => {
+  const value = useModal<IBookmark>()
   return (
-    <EditModalContext.Provider value={value}>
+    <EditBookmarkModalContext.Provider value={value}>
       {children}
-    </EditModalContext.Provider>
+    </EditBookmarkModalContext.Provider>
+  )
+}
+
+export const EditGroupModalContext = createContext({} as EditModal<IGroup>)
+
+export const EditGroupModalContextProvider: FC<{}> = ({ children }) => {
+  const value = useModal<IGroup>()
+  return (
+    <EditGroupModalContext.Provider value={value}>
+      {children}
+    </EditGroupModalContext.Provider>
   )
 }

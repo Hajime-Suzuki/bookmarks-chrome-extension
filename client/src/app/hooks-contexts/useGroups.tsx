@@ -61,28 +61,37 @@ export const useGroups = () => {
     setGroups([newGroup, ...(groups ? groups : [])])
   }
 
+  const updateGroup = async (index: number, input: any) => {
+    if (!groups) return
+    await GroupsAPI.updateGroup(groups[index]._id, input)
+
+    const updated = update(groups, {
+      [index]: { $merge: input }
+    })
+    setGroups(updated)
+  }
+
   const updateBookmark = async (
     _id: IBookmark['_id'],
     bookmarkIndex: number,
     input: UpdateBookmarkInput
   ) => {
+    if (!groups) return
     const { bookmark: updatedBookmark } = await bookmarksAPI.update(_id, input)
+    const targetGroupIndex = groups.findIndex(
+      g => g._id === updatedBookmark.group
+    )
 
-    setGroups(_groups => {
-      if (!_groups) return _groups
-      const targetGroupIndex = _groups.findIndex(
-        g => g._id === updatedBookmark.group
-      )
-      if (targetGroupIndex === -1) {
-        console.warn('bookmarks or group not found')
+    if (targetGroupIndex === -1) {
+      console.warn('bookmarks or group not found')
+    }
+    const updateParams = {
+      [targetGroupIndex]: {
+        bookmarks: { [bookmarkIndex]: { $merge: updatedBookmark } }
       }
-      const updateParams = {
-        [targetGroupIndex]: {
-          bookmarks: { [bookmarkIndex]: { $set: updatedBookmark } }
-        }
-      }
-      return update(_groups, updateParams)
-    })
+    }
+    const updated = update(groups, updateParams)
+    setGroups(updated)
   }
 
   const pushBookmark = (args: Omit<ReorderBookmarksArgs, 'currentIndex'>) => {
@@ -108,13 +117,11 @@ export const useGroups = () => {
   }
 
   const reorderBookmarks = (args: ReorderBookmarksArgs) => {
-    setGroups(_groups => {
-      if (!_groups) return _groups
-      const { groupId, currentIndex, targetIndex, bookmark } = args
-      const targetGroupIndex = _groups.findIndex(g => g._id === groupId)
-      const params = [[currentIndex, 1], [targetIndex, 0, bookmark]]
-      return updatedGroups(_groups, targetGroupIndex, params)
-    })
+    if (!groups) return
+    const { groupId, currentIndex, targetIndex, bookmark } = args
+    const targetGroupIndex = groups.findIndex(g => g._id === groupId)
+    const params = [[currentIndex, 1], [targetIndex, 0, bookmark]]
+    setGroups(updatedGroups(groups, targetGroupIndex, params))
   }
 
   useEffect(() => {
@@ -128,6 +135,7 @@ export const useGroups = () => {
     pushBookmark,
     pullBookmark,
     updateBookmark,
+    updateGroup,
     reorderBookmarks
   }
 }

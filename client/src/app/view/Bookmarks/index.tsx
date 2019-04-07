@@ -9,10 +9,15 @@ import {
   TabDropTargetProps
 } from '../../dnd-settings/tab-drop-target'
 import { GroupContext } from '../../hooks-contexts/useGroups'
+import {
+  EditBookmarkModalProvider,
+  EditGroupModalContextProvider
+} from '../../hooks-contexts/useModal'
 import { theme } from '../../styles/theme'
 import { IBookmark, IGroup } from '../../types'
 import BookmarkCard from './components/bookmark-card'
-import EditModal from './components/EditModal'
+import EditModal from './components/BookmarkEditModal'
+import Group from './components/group/Group'
 
 export interface BookmarksProps {
   bookmarks: IBookmark[]
@@ -76,28 +81,30 @@ const Groups = () => {
   const { groups } = groupContext
   if (!groups) return <div>Loading...</div>
   return (
-    <>
-      {groups &&
-        groups.map(g => {
-          return (
-            <div
-              key={g._id}
-              style={{
-                margin: '1em'
-              }}
-            >
-              <div>{g.title}</div>
-              <div>{g._id}</div>
-              <BookmarkDnDWrapper
-                key={g._id}
-                bookmarks={g.bookmarks}
-                groupId={g._id}
-                {...groupContext}
-              />
-            </div>
-          )
-        })}
-    </>
+    <EditGroupModalContextProvider>
+      <EditBookmarkModalProvider>
+        {groups &&
+          groups.map((group, i) => {
+            return (
+              <div
+                key={group._id}
+                style={{
+                  margin: '1em'
+                }}
+              >
+                <Group group={group} index={i}>
+                  <BookmarkDnDWrapper
+                    key={group._id}
+                    bookmarks={group.bookmarks}
+                    groupId={group._id}
+                    {...groupContext}
+                  />
+                </Group>
+              </div>
+            )
+          })}
+      </EditBookmarkModalProvider>
+    </EditGroupModalContextProvider>
   )
 }
 

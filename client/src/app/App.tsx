@@ -34,21 +34,18 @@ const App: React.FC = () => {
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
       <GroupsProvider>
-        <EditModalProvider>
-          <BookmarksProvider>
-            <OpenedTabProvider>
-              <Grid container>
-                <BookmarkWrapper item lg={9}>
-                  {/* <Groups /> */}
-                  <Bookmarks />
-                </BookmarkWrapper>
-                <TabWrapper item lg={3} desktop={`${isDesktop}`}>
-                  <OpenedTabs />
-                </TabWrapper>
-              </Grid>
-            </OpenedTabProvider>
-          </BookmarksProvider>
-        </EditModalProvider>
+        <BookmarksProvider>
+          <OpenedTabProvider>
+            <Grid container>
+              <BookmarkWrapper item lg={9}>
+                <Bookmarks />
+              </BookmarkWrapper>
+              <TabWrapper item lg={3} desktop={`${isDesktop}`}>
+                <OpenedTabs />
+              </TabWrapper>
+            </Grid>
+          </OpenedTabProvider>
+        </BookmarksProvider>
       </GroupsProvider>
     </MuiThemeProvider>
   )

@@ -35,7 +35,18 @@ const reorderBookmarks = async (args: ReorderBookmarkInput) => {
   await axios.put<GroupResponse>(`${API_GROUPS_URL}/reorder-bookmarks`, args)
 }
 
+export interface UpdateGroupInput {
+  title: IGroup['title']
+}
+
+const updateGroup = async (id: IGroup['_id'], args: UpdateGroupInput) => {
+  return await axios
+    .put<GroupResponse>(`${API_GROUPS_URL}/${id}`, args)
+    .then(({ data }) => data)
+}
+
 export const GroupsAPI = {
   createGroup,
+  updateGroup,
   reorderBookmarks
 }

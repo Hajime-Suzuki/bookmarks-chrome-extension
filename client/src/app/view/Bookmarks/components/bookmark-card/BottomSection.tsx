@@ -3,12 +3,12 @@ import React, { FC, useContext } from 'react'
 import { BookmarkCardProps } from '.'
 import { bookmarksAPI } from '../../../../api/bookmarks'
 import { GroupContext } from '../../../../hooks-contexts/useGroups'
-import { EditModalContext } from '../../../../hooks-contexts/useModal'
+import { EditBookmarkModalContext } from '../../../../hooks-contexts/useModal'
 import { theme } from '../../../../styles/theme'
 
 const BottomSection: FC<BookmarkCardProps> = ({ bookmark, index }) => {
   const { pullBookmark } = useContext(GroupContext)
-  const { openModal, selectEditBookmark } = useContext(EditModalContext)
+  const { openModal } = useContext(EditBookmarkModalContext)
   const { _id, tags } = bookmark
 
   return (
@@ -35,8 +35,7 @@ const BottomSection: FC<BookmarkCardProps> = ({ bookmark, index }) => {
           marginLeft: 'auto'
         }}
         onClick={() => {
-          selectEditBookmark(bookmark, index)
-          openModal()
+          openModal(bookmark, index)
         }}
       >
         <Icon fontSize="small" className="fas fa-ellipsis-h" />
