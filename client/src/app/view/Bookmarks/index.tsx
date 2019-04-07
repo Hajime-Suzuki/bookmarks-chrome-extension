@@ -18,6 +18,7 @@ import { IBookmark, IGroup } from '../../types'
 import BookmarkCard from './components/bookmark-card'
 import BookmarkEditModal from './components/BookmarkEditModal'
 import Group from './components/group/Group'
+import { OpenedTabContext } from '../../hooks-contexts/useOpenedTabs'
 
 export interface BookmarksProps {
   bookmarks: IBookmark[]
@@ -50,11 +51,14 @@ const Bookmarks: FC<BookmarksProps> = ({ bookmarks, groupId, groupIndex }) => {
 
 export type DnDContainerWrapperProps = TabDropTargetProps &
   BookmarkDropTargetProps &
-  GroupContext &
+  OwnProps
+
+type OwnProps = GroupContext &
+  Pick<OpenedTabContext, 'closeTab'> &
   BookmarksProps
 
 const BookmarkDnDWrapper: (
-  args: BookmarksProps & GroupContext
+  args: OwnProps
 ) => JSX.Element | null = tabDropTarget(
   bookmarkDropTarget(
     class extends React.Component<DnDContainerWrapperProps> {
@@ -85,6 +89,7 @@ const BookmarkDnDWrapper: (
 
 const Groups = () => {
   const groupContext = useContext(GroupContext)
+  const { closeTab } = useContext(OpenedTabContext)
   const { groups } = groupContext
   if (!groups) return <div>Loading...</div>
   return (
@@ -105,6 +110,7 @@ const Groups = () => {
                     bookmarks={group.bookmarks}
                     groupId={group._id}
                     groupIndex={i}
+                    closeTab={closeTab}
                     {...groupContext}
                   />
                 </Group>

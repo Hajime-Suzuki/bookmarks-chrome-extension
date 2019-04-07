@@ -7,7 +7,9 @@ import { IBookmark } from '../models/Bookmark'
 import { TableName } from '../constants'
 
 const findWithBookmarks = async () => {
-  return Group.find({}).populate(TableName.bookmarks)
+  return Group.find({})
+    .populate(TableName.bookmarks)
+    .sort({ createdAt: -1 })
 }
 
 const findById = async (id: IGroup['_id']) => {

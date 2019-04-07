@@ -19,9 +19,6 @@ const tabDropSpec: DropTargetSpec<DnDContainerWrapperProps> = {
 
     const targetGroup = props.groupId
 
-      // console.log(targetGroup)
-      // console.log(item.tab)
-
       // tslint:disable-next-line:align
     ; (async () => {
       const res = await bookmarksAPI.create(targetGroup, {
@@ -35,6 +32,7 @@ const tabDropSpec: DropTargetSpec<DnDContainerWrapperProps> = {
         targetIndex: lastPosition,
         bookmark: res
       })
+      props.closeTab(item.tab.id!)
     })()
   }
 }
