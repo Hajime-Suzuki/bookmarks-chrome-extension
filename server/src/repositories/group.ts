@@ -2,13 +2,13 @@ import { format } from 'date-fns'
 import * as createError from 'http-errors'
 import { Group, IGroup } from '../models/Group'
 import { CreateGroupInput } from '../routes/groups/create-group'
-import { IBookmark } from '../models/Bookmark'
+import { IBookmark, Bookmark } from '../models/Bookmark'
 
 import { TableName } from '../constants'
 
 const findWithBookmarks = async () => {
   return Group.find({})
-    .populate(TableName.bookmarks)
+    .populate({ path: TableName.bookmarks, model: Bookmark })
     .sort({ createdAt: -1 })
 }
 

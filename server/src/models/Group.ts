@@ -20,6 +20,9 @@ const GroupSchema = new Schema<IGroup>({
   updatedAt: Date
 })
 
+// For serverless apploach, watchout populate function.
+// ref: https://stackoverflow.com/questions/33072212/mongoose-error-schema-hasnt-been-registered-for-model-when-populate
+
 export const Group: Model<IGroup & Document> =
   models[TableName.groups] ||
   model<IGroup & Document>(TableName.groups, GroupSchema)
