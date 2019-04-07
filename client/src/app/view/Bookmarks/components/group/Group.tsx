@@ -1,4 +1,4 @@
-import React, { FC, useState, useContext } from 'react'
+import React, { FC, useState, useContext, useMemo } from 'react'
 import { IGroup } from '../../../../types'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
@@ -20,16 +20,16 @@ const Group: FC<GroupProps> = props => {
   const { children } = props
   return (
     <>
-      <GroupTitle {...props} />
+      <GroupTitle {...props} style={{ marginBottom: 10 }} />
       <div>{children}</div>
       <GroupEditModal groupId={props.group._id} index={props.index} />
     </>
   )
 }
 
-const GroupTitle: FC<GroupProps> = ({ group, index }) => {
+const GroupTitle: FC<GroupProps> = ({ group, index, style }) => {
   const [showEditButton, setShowButton] = useState(false)
-  const [confirmModalOpen, setOpenConfirm] = useState(false)
+  const [isConfirmModalOpen, setOpenConfirm] = useState(false)
   const { openModal: openEditModal } = useContext(EditGroupModalContext)
   const { deleteGroup } = useContext(GroupContext)
 
@@ -37,7 +37,7 @@ const GroupTitle: FC<GroupProps> = ({ group, index }) => {
   const closeConfirmModal = () => setOpenConfirm(false)
 
   return (
-    <>
+    <div style={style}>
       <Typography
         onMouseEnter={() => setShowButton(true)}
         onMouseLeave={() => setShowButton(false)}
@@ -59,7 +59,7 @@ const GroupTitle: FC<GroupProps> = ({ group, index }) => {
           <Icon className="fas fa-trash-alt" fontSize="small" />
         </StyledIconButton>
       </Typography>
-      <Dialog open={confirmModalOpen} onClose={closeConfirmModal}>
+      <Dialog open={isConfirmModalOpen} onClose={closeConfirmModal}>
         <DialogContent>
           <Typography color="error" variant="title">
             Delete this bookmark?
@@ -74,7 +74,7 @@ const GroupTitle: FC<GroupProps> = ({ group, index }) => {
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </div>
   )
 }
 

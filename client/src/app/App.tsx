@@ -7,24 +7,20 @@ import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import styled from 'styled-components'
 import { BookmarksProvider } from './hooks-contexts/useBookmarks'
-import { EditModalProvider } from './hooks-contexts/useModal'
 import { OpenedTabProvider } from './hooks-contexts/useOpenedTabs'
 import { theme } from './styles/theme'
 import Bookmarks from './view/Bookmarks'
 import OpenedTabs from './view/Tabs/OpenendTabs'
 import { GroupsProvider } from './hooks-contexts/useGroups'
-import Groups from './view/groups'
 
-const BookmarkWrapper = styled(Grid)`
-  /* padding: ${theme.spacing.unit * 2}px; */
-`
+const BookmarkWrapper = styled(Grid)``
 
 interface Props {
   desktop: string
 }
 const TabWrapper = styled(Grid)<Props>`
   padding: ${({ desktop }) =>
-    desktop ? `${theme.spacing.unit * 2}px 0` : `${theme.spacing.unit * 2}px`};
+    desktop ? '0px' : `${theme.spacing.unit * 2}px`};
 `
 
 const App: React.FC = () => {

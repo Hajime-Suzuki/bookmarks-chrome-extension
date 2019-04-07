@@ -69,9 +69,9 @@ const BookmarkDnDWrapper: (
           tabConnectDropTarget(
             <div
               style={{
-                margin: '1em',
                 backgroundColor: this.props.isDragging ? '#ffefe8' : 'inherit',
-                padding: theme.spacing.unit * 2
+                padding: `0 ${theme.spacing.unit}px ${theme.spacing.unit}px`,
+                minHeight: '50px'
               }}
             >
               <Bookmarks {...restProps} />

@@ -11,13 +11,23 @@ import {
   TabDragSourceProps
 } from '../../dnd-settings/tab-drag-source'
 import { GroupContext } from '../../hooks-contexts/useGroups'
-import { OpenedTabContext } from '../../hooks-contexts/useOpenedTabs'
+import useOpenedTabs, {
+  OpenedTabContext
+} from '../../hooks-contexts/useOpenedTabs'
 
 const OpenedTabs: FC<{}> = () => {
   const { tabs } = useContext(OpenedTabContext)
 
   return (
-    <List style={{ padding: 0 }}>
+    <List
+      style={{
+        position: 'fixed',
+        boxShadow: '2px 0px 5px  grey',
+        height: '100vh',
+        overflow: 'scroll',
+        boxSizing: 'border-box'
+      }}
+    >
       {tabs.map(tab => {
         return <TabList key={tab.id} tab={tab} />
       })}
@@ -34,6 +44,7 @@ export interface TabListProps {
 const TabList = tabDragSource(
   ({ tab, connectDragSource }: TabListProps & TabDragSourceProps) => {
     const { createGroup } = useContext(GroupContext)
+    const { closeTab } = useContext(OpenedTabContext)
     return connectDragSource(
       <div>
         <ListItem
@@ -41,8 +52,7 @@ const TabList = tabDragSource(
           button
           onClick={async () => {
             createGroup({ tab })
-            // await createBookmark(tab)
-            // return tab.id && closeTab(tab.id)
+            return tab.id && closeTab(tab.id)
           }}
         >
           <ListItemAvatar>

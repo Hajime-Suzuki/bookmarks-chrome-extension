@@ -22,6 +22,5 @@ const collect = (connect: DragSourceConnector, monitor: DragSourceMonitor) => ({
 
 export type TabDragSourceProps = ReturnType<typeof collect>
 
-export const tabDragSource = <T>(
-  component: React.ComponentType<T & TabDragSourceProps>
-) => DragSource(DnDTypes.tabs, dragSource, collect)(component)
+export const tabDragSource = <T>(component: any) =>
+  DragSource(DnDTypes.tabs, dragSource, collect)(component)
