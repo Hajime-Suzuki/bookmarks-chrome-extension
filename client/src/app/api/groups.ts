@@ -45,8 +45,13 @@ const updateGroup = async (id: IGroup['_id'], args: UpdateGroupInput) => {
     .then(({ data }) => data)
 }
 
+const deleteGroup = async (id: IGroup['_id']) => {
+  await axios.delete(`${API_GROUPS_URL}/${id}`)
+}
+
 export const GroupsAPI = {
   createGroup,
   updateGroup,
+  deleteGroup,
   reorderBookmarks
 }

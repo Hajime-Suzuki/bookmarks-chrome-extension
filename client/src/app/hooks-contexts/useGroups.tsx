@@ -79,15 +79,10 @@ export const useGroups = () => {
     setGroups(updated)
   }
 
-  const updateBookmark = async (args: UpdateBookmarkArgs) => {
-    const { id, input, groupIndex, bookmarkIndex } = args
+  const deleteGroup = async (index: number) => {
     if (!groups) return
-    const { bookmark: updatedBookmark } = await bookmarksAPI.update(id, input)
-    const updated = update(groups, {
-      [groupIndex]: {
-        bookmarks: { [bookmarkIndex]: { $merge: updatedBookmark } }
-      }
-    })
+    await GroupsAPI.deleteGroup(groups[index]._id)
+    const updated = update(groups, { $splice: [[index, 1]] })
     setGroups(updated)
   }
 
@@ -99,8 +94,8 @@ export const useGroups = () => {
     groups,
     fetching,
     createGroup,
-    updateBookmark,
     updateGroup,
+    deleteGroup,
     ...bookmarks
   }
 }
@@ -140,10 +135,23 @@ const _useBookmarks = (
     setGroups(updatedGroups(groups, targetGroupIndex, params))
   }
 
+  const updateBookmark = async (args: UpdateBookmarkArgs) => {
+    const { id, input, groupIndex, bookmarkIndex } = args
+    if (!groups) return
+    const { bookmark: updatedBookmark } = await bookmarksAPI.update(id, input)
+    const updated = update(groups, {
+      [groupIndex]: {
+        bookmarks: { [bookmarkIndex]: { $merge: updatedBookmark } }
+      }
+    })
+    setGroups(updated)
+  }
+
   return {
     pushBookmark,
     pullBookmark,
-    reorderBookmarks
+    reorderBookmarks,
+    updateBookmark
   }
 }
 
