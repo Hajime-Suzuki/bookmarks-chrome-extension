@@ -25,7 +25,6 @@ const TabWrapper = styled(Grid)<Props>`
 
 const App: React.FC = () => {
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
-
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
