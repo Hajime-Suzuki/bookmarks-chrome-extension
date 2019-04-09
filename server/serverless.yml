@@ -54,7 +54,7 @@ functions:
     events:
       - http:
           path: groups
-          method: get c
+          method: get
 
   createGroup:
     name: '${self:service}-create-group'

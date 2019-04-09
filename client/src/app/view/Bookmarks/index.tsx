@@ -13,12 +13,12 @@ import {
   EditBookmarkModalProvider,
   EditGroupModalContextProvider
 } from '../../hooks-contexts/useModal'
+import { OpenedTabContext } from '../../hooks-contexts/useOpenedTabs'
 import { theme } from '../../styles/theme'
 import { IBookmark, IGroup } from '../../types'
 import BookmarkCard from './components/bookmark-card'
 import BookmarkEditModal from './components/BookmarkEditModal'
 import Group from './components/group/Group'
-import { OpenedTabContext } from '../../hooks-contexts/useOpenedTabs'
 
 export interface BookmarksProps {
   bookmarks: IBookmark[]

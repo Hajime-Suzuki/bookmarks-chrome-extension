@@ -26,6 +26,9 @@
     "titleBar.activeBackground": "#dbc7d8",
     "titleBar.inactiveBackground": "#dbc7d899",
     "titleBar.activeForeground": "#15202b",
-    "titleBar.inactiveForeground": "#15202b99"
+    "titleBar.inactiveForeground": "#15202b99",
+    "statusBar.background": "#dbc7d8",
+    "statusBarItem.hoverBackground": "#c7a8c2",
+    "statusBar.foreground": "#15202b"
   }
 }
