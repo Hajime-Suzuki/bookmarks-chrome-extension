@@ -12,7 +12,7 @@ import { OpenedTabProvider } from './hooks-contexts/useOpenedTabs'
 import { UserContext, UserContextProvider } from './hooks-contexts/useUser'
 import { theme } from './styles/theme'
 import Bookmarks from './view/Bookmarks'
-import Login from './view/Login'
+import LoginOrSignUp from './view/Login'
 import OpenedTabs from './view/Tabs/OpenendTabs'
 
 const BookmarkWrapper = styled(Grid)``
@@ -41,25 +41,27 @@ const ContextProviders: FC<{}> = ({ children }) => {
 const App: React.FC = () => {
   const { fetching, user } = useContext(UserContext)
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
-  console.log(fetching, user)
 
-  if (fetching) return <div>Loading...</div>
-  if (!user) return <Login />
+  // if (fetching) return <div>Loading...</div>
+
   return (
     <ContextProviders>
-      {user && (
-        <Grid container>
-          <>
-            <BookmarkWrapper item lg={9}>
-              <Bookmarks />
-            </BookmarkWrapper>
-            <TabWrapper item lg={3} desktop={`${isDesktop}`}>
-              <OpenedTabs />
-            </TabWrapper>
-          </>
-        </Grid>
-      )}
-      {!user && <Login />}
+      <div>
+        {!fetching && user && (
+          <Grid container>
+            <>
+              <BookmarkWrapper item lg={9}>
+                <Bookmarks />
+              </BookmarkWrapper>
+              <TabWrapper item lg={3} desktop={`${isDesktop}`}>
+                <OpenedTabs />
+              </TabWrapper>
+            </>
+          </Grid>
+        )}
+        {!user && !fetching && <LoginOrSignUp />}
+        {fetching && <div>Loading</div>}
+      </div>
     </ContextProviders>
   )
 }

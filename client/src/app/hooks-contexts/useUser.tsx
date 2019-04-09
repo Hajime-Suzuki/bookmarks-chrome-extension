@@ -13,7 +13,6 @@ const useUser = () => {
     setError(null)
     try {
       const u = await Auth.currentAuthenticatedUser()
-      console.log(u)
       setUser(u)
     } catch (e) {
       setError(e.message)
@@ -21,7 +20,6 @@ const useUser = () => {
     setFetching(false)
   }
   useEffect(() => {
-    console.log('asht')
     getUser()
   }, [])
 

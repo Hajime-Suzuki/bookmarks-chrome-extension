@@ -3,7 +3,7 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import Amplify, { Auth } from 'aws-amplify'
 import { Form, Formik } from 'formik'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { UserContext } from '../../hooks-contexts/useUser'
 
@@ -18,30 +18,44 @@ const config = {
 
 Amplify.configure(config)
 
-const Login = () => {
+const LoginOrSignUp = () => {
+  const [isSignUp, setSignUp] = useState(true)
+  const [signUpError, setSignUpError] = useState<string | null>(null)
   const { setUser } = useContext(UserContext)
   const initialValues = {
     email: '',
     password: ''
   }
 
+  const toggleSignUp = () => setSignUp(!isSignUp)
+
+  const handleSubmit = async (values: typeof initialValues) => {
+    if (isSignUp) {
+      setSignUpError(null)
+      try {
+        const user = await Auth.signUp({
+          username: values.email,
+          password: values.password
+        })
+      } catch (e) {
+        setSignUpError(e.message)
+      }
+    }
+    const res = await Auth.signIn({
+      username: values.email,
+      password: values.password
+    })
+    setUser(res)
+  }
+
   return (
     <div>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={async (values: typeof initialValues) => {
-          const res = await Auth.signIn({
-            username: values.email,
-            password: values.password
-          })
-          setUser(res)
-        }}
-      >
+      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {({ values, handleChange }) => {
           return (
             <Form>
               <Typography variant="title" align="center">
-                Login
+                {isSignUp ? 'Sign up' : 'Sign in'}
               </Typography>
               <Grid
                 container
@@ -66,10 +80,23 @@ const Login = () => {
                     onChange={handleChange}
                   />
                 </Grid>
+                {signUpError && (
+                  <Grid item>
+                    <Typography>{signUpError}</Typography>
+                  </Grid>
+                )}
                 <Grid item>
                   <Button variant="outlined" type="submit">
                     Submit
                   </Button>
+                </Grid>
+                <Grid item>
+                  <Typography
+                    style={{ cursor: 'pointer' }}
+                    onClick={toggleSignUp}
+                  >
+                    {isSignUp ? 'or sign in' : 'or sign up'}
+                  </Typography>
                 </Grid>
               </Grid>
             </Form>
@@ -80,4 +107,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default LoginOrSignUp
