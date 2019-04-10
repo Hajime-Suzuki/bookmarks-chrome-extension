@@ -42,8 +42,6 @@ const App: React.FC = () => {
   const { fetching, user } = useContext(UserContext)
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'))
 
-  // if (fetching) return <div>Loading...</div>
-
   return (
     <ContextProviders>
       <div>

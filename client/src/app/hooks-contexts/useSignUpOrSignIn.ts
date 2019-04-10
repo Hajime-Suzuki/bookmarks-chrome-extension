@@ -45,13 +45,12 @@ export const useSignUpOrSignIn = () => {
   }
 
   const _handleSubmit = async (values: SignUpOrLoginArgs) => {
-    console.log('TCL: _handleSubmit -> values', values)
     if (isSignUp) await signUp(values)
     const res = await login(values)
-    setUser(res)
+    await setUser(res)
+    return
   }
 
   const { fn: handleSubmit, ...state } = useHttp(_handleSubmit)
-
   return { ...state, isSignUp, toggleSignUp, handleSubmit }
 }

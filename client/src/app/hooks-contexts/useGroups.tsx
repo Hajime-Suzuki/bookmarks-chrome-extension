@@ -95,8 +95,8 @@ export const useGroups = () => {
   }
 
   useEffect(() => {
-    fetchGroups()
-  }, [])
+    if (user) fetchGroups()
+  }, [user])
 
   return {
     groups,

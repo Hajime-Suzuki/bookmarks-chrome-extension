@@ -2,23 +2,15 @@ import React, { createContext } from 'react'
 import { useState, useEffect, FC } from 'react'
 import { CognitoUser } from '@aws-amplify/auth'
 import { Auth } from 'aws-amplify'
+import { useHttp } from './useHttp'
 
 const useUser = () => {
-  const [fetching, setFetching] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   const [user, setUser] = useState<CognitoUser | null>(null)
+  const { fn: getUser, fetching, error } = useHttp(async () => {
+    const currentUser: CognitoUser = await Auth.currentAuthenticatedUser()
+    return setUser(currentUser)
+  })
 
-  const getUser = async () => {
-    setFetching(true)
-    setError(null)
-    try {
-      const u = await Auth.currentAuthenticatedUser()
-      setUser(u)
-    } catch (e) {
-      setError(e.message)
-    }
-    setFetching(false)
-  }
   useEffect(() => {
     getUser()
   }, [])
@@ -26,8 +18,8 @@ const useUser = () => {
   return {
     fetching,
     user,
-    error,
-    setUser
+    setUser,
+    error
   }
 }
 

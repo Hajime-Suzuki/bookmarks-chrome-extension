@@ -12,21 +12,25 @@ interface State<TResult> {
   result: TResult | null
 }
 
+type UnPromise<T> = T extends Promise<infer U> ? U : T
+
 export const useHttp = <TFunc extends (...args: any[]) => any>(
   action: TFunc
 ) => {
   type TArgs = Parameters<TFunc>
-  type TResult = ReturnType<TFunc>
+  type TResult = UnPromise<ReturnType<TFunc>>
+
   const [state, setState] = useState<State<TResult>>(initialState)
 
   const fn = async (...args: TArgs) => {
     setState({ fetching: true, error: null, result: null })
     try {
-      const result = await action(...args)
+      const result: TResult = await action(...args)
       setState({ fetching: false, error: null, result })
-      return
+      return result
     } catch (e) {
       setState({ fetching: false, error: e.message, result: null })
+      return
     }
   }
 
@@ -35,22 +39,3 @@ export const useHttp = <TFunc extends (...args: any[]) => any>(
     fn
   }
 }
-// export const useHttp = <TResult>(action: (...args: any[]) => TResult) => {
-//   const [state, setState] = useState<State<TResult>>(initialState)
-
-//   const fn = async (args: Parameters<typeof action>) => {
-//     setState({ fetching: true, error: null, result: null })
-//     try {
-//       const result = await action(...args)
-//       setState({ fetching: false, error: null, result })
-//       return
-//     } catch (e) {
-//       setState({ fetching: false, error: e.message, result: null })
-//     }
-//   }
-
-//   return {
-//     ...state,
-//     fn
-//   }
-// }

@@ -12,7 +12,6 @@ const LoginOrSignUp = () => {
     email: '',
     password: ''
   }
-  console.log({ error })
   return (
     <div>
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
