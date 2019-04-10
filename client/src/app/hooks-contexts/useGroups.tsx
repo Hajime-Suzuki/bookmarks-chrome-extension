@@ -1,12 +1,19 @@
 import { Omit } from '@material-ui/core'
 import axios from 'axios'
 import update from 'immutability-helper'
-import React, { createContext, FC, useEffect, useState } from 'react'
+import React, {
+  createContext,
+  FC,
+  useEffect,
+  useState,
+  useContext
+} from 'react'
 import { API_GROUPS_URL } from '../../constants'
 import { GroupsAPI } from '../api/groups'
 import { IBookmark, IGroup, Tab } from '../types'
 import { UpdateBookmarkInput } from './useBookmarks'
 import { bookmarksAPI } from '../api/bookmarks'
+import { UserContext } from './useUser'
 interface FetchBookmarksResponse {
   groups: IGroup[]
 }
@@ -42,6 +49,7 @@ const updatedGroups = (groups: IGroup[], targetIndex: number, params: any) =>
 export const useGroups = () => {
   const [groups, setGroups] = useState<IGroup[] | null>(null)
   const bookmarks = _useBookmarks(groups, setGroups)
+  const { user } = useContext(UserContext)
   const [fetching, setFetching] = useState(false)
 
   const fetchGroups = async () => {
