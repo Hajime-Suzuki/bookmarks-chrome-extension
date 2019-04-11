@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator'
+import { IsOptional, IsString, IsNotEmpty } from 'class-validator'
 import * as createError from 'http-errors'
 import { validateInput } from '../../helpers/validator'
 import { handleLambda, LambdaHandler } from '../../middleware/handle-lambda'
@@ -14,13 +14,20 @@ export class CreateGroupInput {
 
   @IsOptional()
   bookmark?: CreateBookmarkInput
+
+  @IsNotEmpty()
+  @IsString()
+  user: string
 }
 
 const createGroup: LambdaHandler<CreateGroupInput> = async ({ body }) => {
+  console.log('=== create-group ===')
+  // TODO: change this one only to make groups.
   await validateInput(body, CreateGroupInput)
   if (!body.title && !body.bookmark) {
     createError(400, 'either title or bookmark is required')
   }
+
   const newGroup = await GroupRepository.findByIdOrCreate({ data: body })
 
   if (body.bookmark) {

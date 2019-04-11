@@ -18,27 +18,29 @@ const findById = async (id: IGroup['_id']) => {
 
 interface FindOrCreateArgs {
   id?: IGroup['_id']
-  data?: Pick<CreateGroupInput, 'title'>
+  data?: Pick<CreateGroupInput, 'title' | 'user'>
 }
 const findByIdOrCreate = async ({ id, data }: FindOrCreateArgs) => {
-  if (!id) {
+  // when id specified, find. Otherwise create.
+  if (!id && data) {
     const newGroup = await GroupRepository.create({
-      title:
-        data && data.title
-          ? data.title
-          : format(new Date(), 'yyyy MMM dd HH mm ss')
+      title: data.title || format(new Date(), 'yyyy MMM dd HH mm ss'),
+      user: data.user
     })
     return newGroup
-  } else {
+  } else if (id && !data) {
     const existingGroup = await GroupRepository.findById(id)
     if (!existingGroup) throw createError(404, 'group not found')
     return existingGroup
+  } else {
+    throw createError(
+      400,
+      'findByIdOrCreate (group): bad id and body combination.'
+    )
   }
 }
 
-const create = async (input: CreateGroupInput) => {
-  return Group.create(input)
-}
+const create = async (input: CreateGroupInput) => Group.create(input)
 
 interface UpdateInput extends Partial<IGroup> {
   $push?: {

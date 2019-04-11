@@ -11,10 +11,12 @@ export interface IGroup {
   bookmarks?: string[]
   createdAt: Date
   updatedAt?: Date
+  user: string
 }
 
 const GroupSchema = new Schema<IGroup>({
   title: { type: String, required: true },
+  user: { type: String, required: true },
   bookmarks: [{ type: Schema.Types.ObjectId, ref: TableName.bookmarks }],
   createdAt: { type: Date, default: () => Date.now() },
   updatedAt: Date
