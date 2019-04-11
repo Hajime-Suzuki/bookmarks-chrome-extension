@@ -14,11 +14,6 @@ const config = {
 
 Amplify.configure(config)
 
-interface State {
-  fetching: boolean
-  error: string | null
-}
-
 interface SignUpOrLoginArgs {
   email: string
   password: string

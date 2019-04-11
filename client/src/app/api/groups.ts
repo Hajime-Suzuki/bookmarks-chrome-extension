@@ -5,6 +5,7 @@ import { Omit } from '@material-ui/core'
 
 export interface CreateGroupInput {
   title?: string
+  user: string
   bookmark?: {
     title: IBookmark['title']
     url: IBookmark['url']

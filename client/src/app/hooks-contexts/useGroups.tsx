@@ -14,6 +14,8 @@ import { IBookmark, IGroup, Tab } from '../types'
 import { UpdateBookmarkInput } from './useBookmarks'
 import { bookmarksAPI } from '../api/bookmarks'
 import { UserContext } from './useUser'
+import { Auth } from 'aws-amplify'
+import { useHttp } from './useHttp'
 interface FetchBookmarksResponse {
   groups: IGroup[]
 }
@@ -50,16 +52,18 @@ export const useGroups = () => {
   const [groups, setGroups] = useState<IGroup[] | null>(null)
   const bookmarks = _useBookmarks(groups, setGroups)
   const { user } = useContext(UserContext)
-  const [fetching, setFetching] = useState(false)
-
-  const fetchGroups = async () => {
-    setFetching(true)
+  // const [fetching, setFetching] = useState(false)
+  const { fn: fetchGroups, fetching, error } = useHttp(async () => {
     const { data } = await axios.get<FetchBookmarksResponse>(API_GROUPS_URL)
-    setFetching(false)
+
     setGroups(data.groups)
-  }
+  })
+
+  console.log({ groups })
 
   const createGroup = async ({ groupTitle, tab }: CreateGroupInput) => {
+    if (!user) return
+
     if (!groupTitle && !tab) {
       return console.warn('either group title or tab is required')
     }
@@ -68,9 +72,11 @@ export const useGroups = () => {
     }
 
     const body = {
+      user: user.getSignInUserSession()!.getAccessToken().payload
+        .username as string,
       ...(groupTitle && { title: groupTitle }),
       ...(tab && {
-        bookmark: { title: tab.title, url: tab.url, img: tab.favIconUrl }
+        bookmark: { title: tab.title!, url: tab.url!, img: tab.favIconUrl }
       })
     }
     const { newGroup } = await GroupsAPI.createGroup(body)
@@ -101,6 +107,7 @@ export const useGroups = () => {
   return {
     groups,
     fetching,
+    error,
     createGroup,
     updateGroup,
     deleteGroup,

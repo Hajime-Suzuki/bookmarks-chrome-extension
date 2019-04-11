@@ -3,6 +3,7 @@ import { useState, useEffect, FC } from 'react'
 import { CognitoUser } from '@aws-amplify/auth'
 import { Auth } from 'aws-amplify'
 import { useHttp } from './useHttp'
+import axios from 'axios'
 
 const useUser = () => {
   const [user, setUser] = useState<CognitoUser | null>(null)
@@ -10,6 +11,8 @@ const useUser = () => {
     const currentUser: CognitoUser = await Auth.currentAuthenticatedUser()
     return setUser(currentUser)
   })
+
+  console.log({ user })
 
   useEffect(() => {
     getUser()
