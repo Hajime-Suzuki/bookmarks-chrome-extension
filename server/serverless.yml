@@ -10,6 +10,7 @@ provider:
   region: eu-central-1
   environment:
     DB_URL: ${file(.secret.yml):DB_URL}
+    AWS_COGNITO_USER_POOL_ID: ${file(.secret.yml):AWS_COGNITO_USER_POOL_ID}
 
 custom:
   serverless-offline:

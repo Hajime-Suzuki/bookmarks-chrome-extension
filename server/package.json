@@ -4,9 +4,13 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@types/jsonwebtoken": "^8.3.2",
+    "axios": "^0.18.0",
     "class-validator": "^0.9.1",
     "date-fns": "^2.0.0-alpha.21",
     "http-errors": "^1.7.2",
+    "jsonwebtoken": "^8.5.1",
+    "jwk-to-pem": "^2.0.1",
     "mongoose": "^5.4.19"
   },
   "devDependencies": {

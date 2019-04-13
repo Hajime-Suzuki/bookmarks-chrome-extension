@@ -1,6 +1,7 @@
 import { connectDB } from '../db/connection'
 import { IBookmark } from '../models/Bookmark'
 import { Omit } from '../helpers/types'
+import { authChecker } from './auth-checker'
 
 interface Event<
   TBody = Partial<IBookmark>,
@@ -10,6 +11,9 @@ interface Event<
   body: TBody
   pathParameters: TPathParams
   queryStringParameters: TQueryParams
+  headers: {
+    authentication: string
+  }
 }
 type Context = any
 type Callback = (err?: any, data?: any) => void
@@ -41,6 +45,7 @@ type ParsedBody = Partial<Omit<IBookmark, 'tags'> & { tags: string }>
 interface ConvertedEvent {
   [key: string]: any
   body: Partial<IBookmark>
+  userId: string
   pathParameters: Event['pathParameters']
 }
 
@@ -80,8 +85,18 @@ export const handleLambda = <
 
   console.log(`event body has been received: ${event.body}`)
 
+  const transformedEvent = await transformEvent(event)
+
+  const userId = event.headers.authentication
+    ? await authChecker(event.headers.authentication)
+    : null
+
   try {
-    const res = await fn(transformEvent(event) as any, context, callback)
+    const res = await fn(
+      { ...transformedEvent, userId } as any,
+      context,
+      callback
+    )
 
     return {
       body: JSON.stringify(res)
