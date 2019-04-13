@@ -113,7 +113,6 @@ const _useBookmarks = (
   setGroups: React.Dispatch<React.SetStateAction<IGroup[] | null>>
 ) => {
   const { user } = useContext(UserContext)
-  // TODO: ues group index and merge these functions.
 
   const createBookmark = async (
     targetGroup: string,
@@ -122,6 +121,7 @@ const _useBookmarks = (
     return bookmarksAPI.create(targetGroup, input, user)
   }
 
+  ///// TODO: ues group index and merge these functions.
   const pushBookmark = (args: Omit<ReorderBookmarksArgs, 'currentIndex'>) => {
     setGroups(_groups => {
       if (!_groups) return _groups
@@ -151,6 +151,7 @@ const _useBookmarks = (
     const params = [[currentIndex, 1], [targetIndex, 0, bookmark]]
     setGroups(updatedGroups(groups, targetGroupIndex, params))
   }
+  /////
 
   const updateBookmark = async (args: UpdateBookmarkArgs) => {
     const { id, input, groupIndex, bookmarkIndex } = args

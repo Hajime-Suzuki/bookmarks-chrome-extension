@@ -7,6 +7,7 @@ import {
 import { IBookmark } from '../../../../types'
 import Content from './BookmarkContent'
 import BottomSection from './BottomSection'
+import { CognitoUser } from '@aws-amplify/auth'
 
 /**
  * @description: This is parent component of a card. This is also the drag source.
@@ -45,7 +46,7 @@ const BookmarkCard: FC<BookmarkCardProps> = props => {
  */
 
 class BookmarkCardContainer extends React.Component<
-  BookmarkDragSourceProps & BookmarkCardProps
+  BookmarkDragSourceProps & BookmarkCardProps & { user: CognitoUser | null }
 > {
   render() {
     const { connectDragSource, isDragging, ...rest } = this.props

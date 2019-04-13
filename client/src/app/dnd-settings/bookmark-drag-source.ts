@@ -10,6 +10,11 @@ import { GroupsAPI } from '../api/groups'
 import { IBookmark } from '../types'
 import { BookmarkCardProps } from '../view/Bookmarks/components/bookmark-card'
 import { dndBookmarkState as state } from './bookmark-state'
+import { CognitoUser } from '@aws-amplify/auth'
+
+interface OwnProps {
+  user: CognitoUser | null
+}
 
 export interface BeginDragReturnType {
   // id: IBookmark['_id']
@@ -18,7 +23,10 @@ export interface BeginDragReturnType {
   size: ClientRect | DOMRect
 }
 
-const dragSource: DragSourceSpec<BookmarkCardProps, BeginDragReturnType> = {
+const dragSource: DragSourceSpec<
+  BookmarkCardProps & OwnProps,
+  BeginDragReturnType
+> = {
   beginDrag: (props, _, component) => {
     state.reset()
     return {
@@ -29,7 +37,7 @@ const dragSource: DragSourceSpec<BookmarkCardProps, BeginDragReturnType> = {
     }
   },
   canDrag: () => !state.updating,
-  endDrag: async (_, monitor) => {
+  endDrag: async (props, monitor) => {
     const draggedItem = monitor.getItem() as BeginDragReturnType
     const { currentGroup, currentIndex } = state
 
@@ -43,12 +51,17 @@ const dragSource: DragSourceSpec<BookmarkCardProps, BeginDragReturnType> = {
       if (!currentGroup || currentIndex === null) return
       console.log('reorder')
       state.setUpdating(true)
-      await GroupsAPI.reorderBookmarks({
-        bookmarkId: draggedItem.bookmark._id,
-        position: currentIndex,
-        from: isReorderWithinGroup ? currentGroup : draggedItem.bookmark.group,
-        to: currentGroup
-      })
+      await GroupsAPI.reorderBookmarks(
+        {
+          bookmarkId: draggedItem.bookmark._id,
+          position: currentIndex,
+          from: isReorderWithinGroup
+            ? currentGroup
+            : draggedItem.bookmark.group,
+          to: currentGroup
+        },
+        props.user
+      )
     } else {
       console.log('else')
     }
@@ -69,8 +82,12 @@ const dragCollect = (
 export type BookmarkDragSourceProps = ReturnType<typeof dragCollect>
 
 export const bookmarkDragSource = (
-  component: React.ComponentType<BookmarkDragSourceProps & BookmarkCardProps>
+  component: React.ComponentType<
+    BookmarkDragSourceProps & BookmarkCardProps & OwnProps
+  >
 ) =>
-  DragSource<BookmarkCardProps>(DnDTypes.bookmarks, dragSource, dragCollect)(
-    component
-  )
+  DragSource<BookmarkCardProps & OwnProps>(
+    DnDTypes.bookmarks,
+    dragSource,
+    dragCollect
+  )(component)

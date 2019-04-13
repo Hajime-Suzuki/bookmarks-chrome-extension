@@ -1,5 +1,5 @@
 import { Grid } from '@material-ui/core'
-import React, { FC, useContext } from 'react'
+import React, { FC, useContext, useCallback, useMemo } from 'react'
 import {
   bookmarkDropTarget,
   BookmarkDropTargetProps
@@ -19,6 +19,20 @@ import { IBookmark, IGroup } from '../../types'
 import BookmarkCard from './components/bookmark-card'
 import BookmarkEditModal from './components/BookmarkEditModal'
 import Group from './components/group/Group'
+import { UserContext } from '../../hooks-contexts/useUser'
+import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery'
+
+const useGridSize = () => {
+  const isSmUp = useMediaQuery(theme.breakpoints.up('sm'))
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'))
+  const isLgUp = useMediaQuery(theme.breakpoints.up('lg'))
+
+  let GRID_SIZE = 1
+  if (isSmUp) GRID_SIZE = 2
+  if (isMdUp) GRID_SIZE = 3
+  if (isLgUp) GRID_SIZE = 4
+  return GRID_SIZE
+}
 
 export interface BookmarksProps {
   bookmarks: IBookmark[]
@@ -26,12 +40,13 @@ export interface BookmarksProps {
   groupIndex: number
 }
 const Bookmarks: FC<BookmarksProps> = ({ bookmarks, groupId, groupIndex }) => {
+  const { user } = useContext(UserContext)
   return (
     <Grid container spacing={24} justify="flex-start">
       {bookmarks.map((bm, i) => {
         return (
           <Grid key={bm._id} item xs={12} sm={6} md={4} lg={3}>
-            <BookmarkCard bookmark={bm} index={i} />
+            <BookmarkCard bookmark={bm} index={i} user={user} />
           </Grid>
         )
       })}
@@ -58,7 +73,7 @@ type OwnProps = GroupContext &
   BookmarksProps
 
 const BookmarkDnDWrapper: (
-  args: OwnProps
+  args: OwnProps & { gridSize: ReturnType<typeof useGridSize> }
 ) => JSX.Element | null = tabDropTarget(
   bookmarkDropTarget(
     class extends React.Component<DnDContainerWrapperProps> {
@@ -90,6 +105,7 @@ const BookmarkDnDWrapper: (
 const Groups = () => {
   const groupContext = useContext(GroupContext)
   const { closeTab } = useContext(OpenedTabContext)
+  const GRID_SIZE = useGridSize()
   const { groups } = groupContext
   if (!groups) return <div>Loading...</div>
   return (
@@ -111,6 +127,7 @@ const Groups = () => {
                     groupId={group._id}
                     groupIndex={i}
                     closeTab={closeTab}
+                    gridSize={GRID_SIZE}
                     {...groupContext}
                   />
                 </Group>

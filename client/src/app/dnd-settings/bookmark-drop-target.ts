@@ -32,13 +32,14 @@ import { dndBookmarkState as state } from './bookmark-state'
  *
  */
 
-// TODO: make grid size dynamic...
-const GRID_SIZE = 4
-
-const getXIndex = (dropAreaWith: number, targetOffsetX: number) => {
-  const XThreshold = dropAreaWith / GRID_SIZE
+const getXIndex = (
+  dropAreaWith: number,
+  targetOffsetX: number,
+  gridSize: number
+) => {
+  const XThreshold = dropAreaWith / gridSize
   const XIndex = Math.floor(targetOffsetX / XThreshold)
-  return XIndex <= GRID_SIZE - 1 ? XIndex : GRID_SIZE - 1
+  return XIndex <= gridSize - 1 ? XIndex : gridSize - 1
 }
 
 const getYIndex = (targetOffsetY: number, cardHeight: number) => {
@@ -46,7 +47,12 @@ const getYIndex = (targetOffsetY: number, cardHeight: number) => {
   return Math.max(0, YIndex)
 }
 
-const getIndex = (props, monitor, component, draggedItem) => {
+const getIndex = (
+  props: DnDContainerWrapperProps & GridSize,
+  monitor,
+  component,
+  draggedItem
+) => {
   const dropTargetElement = findDOMNode(component) as Element
   const {
     width: dropAreaWith,
@@ -55,20 +61,22 @@ const getIndex = (props, monitor, component, draggedItem) => {
 
   const { x: targetOffsetX, y: targetOffsetY } = monitor.getClientOffset()!
 
-  const XIndex = getXIndex(dropAreaWith, targetOffsetX)
+  const XIndex = getXIndex(dropAreaWith, targetOffsetX, props.gridSize)
   const YIndex = getYIndex(
     targetOffsetY - dropAreaOffsetTop + draggedItem.size.height / 2,
     draggedItem.size.height
   )
 
   const targetIndex = Math.min(
-    YIndex * GRID_SIZE + XIndex,
+    YIndex * props.gridSize + XIndex,
     props.bookmarks.length
   )
   return targetIndex
 }
 
-const bookmarkDropSource: DropTargetSpec<DnDContainerWrapperProps> = {
+const bookmarkDropSource: DropTargetSpec<
+  DnDContainerWrapperProps & GridSize
+> = {
   hover: (props, monitor, component) => {
     if (!component) return
 
@@ -131,10 +139,15 @@ const bookmarkDropCollect = (
   bookmarkConnectDropSource: connect.dropTarget()
 })
 
-export type BookmarkDropTargetProps = ReturnType<typeof bookmarkDropCollect>
+interface GridSize {
+  gridSize: number
+}
+
+export type BookmarkDropTargetProps = ReturnType<typeof bookmarkDropCollect> &
+  GridSize
 
 export const bookmarkDropTarget = (
-  component: React.ComponentType<DnDContainerWrapperProps>
+  component: React.ComponentType<DnDContainerWrapperProps & GridSize>
 ) =>
   DropTarget(DnDTypes.bookmarks, bookmarkDropSource, bookmarkDropCollect)(
     component

@@ -25,6 +25,7 @@ const OpenedTabs: FC<{}> = () => {
         boxShadow: '2px 0px 5px  grey',
         height: '100vh',
         overflow: 'scroll',
+        width: '100%',
         boxSizing: 'border-box'
       }}
     >
