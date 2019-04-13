@@ -21,7 +21,7 @@ const tabDropSpec: DropTargetSpec<DnDContainerWrapperProps> = {
 
       // tslint:disable-next-line:align
     ; (async () => {
-      const res = await bookmarksAPI.create(targetGroup, {
+      const res = await props.createBookmark(targetGroup, {
         title,
         url,
         img: favIconUrl

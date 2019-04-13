@@ -1,24 +1,20 @@
 import { Omit } from '@material-ui/core'
-import axios from 'axios'
 import update from 'immutability-helper'
 import React, {
   createContext,
   FC,
+  useContext,
   useEffect,
-  useState,
-  useContext
+  useState
 } from 'react'
-import { API_GROUPS_URL } from '../../constants'
+import { bookmarksAPI, CreateBookmarkInput } from '../api/bookmarks'
 import { GroupsAPI } from '../api/groups'
 import { IBookmark, IGroup, Tab } from '../types'
 import { UpdateBookmarkInput } from './useBookmarks'
-import { bookmarksAPI } from '../api/bookmarks'
-import { UserContext } from './useUser'
-import { Auth } from 'aws-amplify'
 import { useHttp } from './useHttp'
-interface FetchBookmarksResponse {
-  groups: IGroup[]
-}
+import { UserContext } from './useUser'
+
+// TODO: put all interface to api
 
 export interface CreateGroupInput {
   groupTitle?: string
@@ -52,14 +48,11 @@ export const useGroups = () => {
   const [groups, setGroups] = useState<IGroup[] | null>(null)
   const bookmarks = _useBookmarks(groups, setGroups)
   const { user } = useContext(UserContext)
-  // const [fetching, setFetching] = useState(false)
+
   const { fn: fetchGroups, fetching, error } = useHttp(async () => {
-    const { data } = await axios.get<FetchBookmarksResponse>(API_GROUPS_URL)
-
-    setGroups(data.groups)
+    const { groups: fetchedGroups } = await GroupsAPI.fetch(user)
+    setGroups(fetchedGroups)
   })
-
-  console.log({ groups })
 
   const createGroup = async ({ groupTitle, tab }: CreateGroupInput) => {
     if (!user) return
@@ -79,13 +72,13 @@ export const useGroups = () => {
         bookmark: { title: tab.title!, url: tab.url!, img: tab.favIconUrl }
       })
     }
-    const { newGroup } = await GroupsAPI.createGroup(body)
+    const { newGroup } = await GroupsAPI.createGroup(body, user)
     setGroups([newGroup, ...(groups ? groups : [])])
   }
 
   const updateGroup = async (index: number, input: any) => {
     if (!groups) return
-    await GroupsAPI.updateGroup(groups[index]._id, input)
+    await GroupsAPI.updateGroup(groups[index]._id, input, user)
 
     const updated = update(groups, {
       [index]: { $merge: input }
@@ -95,7 +88,7 @@ export const useGroups = () => {
 
   const deleteGroup = async (index: number) => {
     if (!groups) return
-    await GroupsAPI.deleteGroup(groups[index]._id)
+    await GroupsAPI.deleteGroup(groups[index]._id, user)
     const updated = update(groups, { $splice: [[index, 1]] })
     setGroups(updated)
   }
@@ -119,7 +112,16 @@ const _useBookmarks = (
   groups: IGroup[] | null,
   setGroups: React.Dispatch<React.SetStateAction<IGroup[] | null>>
 ) => {
+  const { user } = useContext(UserContext)
   // TODO: ues group index and merge these functions.
+
+  const createBookmark = async (
+    targetGroup: string,
+    input: CreateBookmarkInput
+  ) => {
+    return bookmarksAPI.create(targetGroup, input, user)
+  }
+
   const pushBookmark = (args: Omit<ReorderBookmarksArgs, 'currentIndex'>) => {
     setGroups(_groups => {
       if (!_groups) return _groups
@@ -153,7 +155,11 @@ const _useBookmarks = (
   const updateBookmark = async (args: UpdateBookmarkArgs) => {
     const { id, input, groupIndex, bookmarkIndex } = args
     if (!groups) return
-    const { bookmark: updatedBookmark } = await bookmarksAPI.update(id, input)
+    const { bookmark: updatedBookmark } = await bookmarksAPI.update(
+      id,
+      input,
+      user
+    )
     const updated = update(groups, {
       [groupIndex]: {
         bookmarks: { [bookmarkIndex]: { $merge: updatedBookmark } }
@@ -162,11 +168,17 @@ const _useBookmarks = (
     setGroups(updated)
   }
 
+  const removeBookmark = async (id: IBookmark['_id']) => {
+    return bookmarksAPI.remove(id, user)
+  }
+
   return {
     pushBookmark,
     pullBookmark,
     reorderBookmarks,
-    updateBookmark
+    updateBookmark,
+    createBookmark,
+    removeBookmark
   }
 }
 
