@@ -23,6 +23,6 @@
     "types": ["chrome"],
     "incremental": true
   },
-  "include": ["src/", "../../chrome-extension/src/app/"],
+  "include": ["src/"],
   "exclude": ["**/node_modules/**"]
 }
