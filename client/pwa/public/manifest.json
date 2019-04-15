@@ -1,0 +1,23 @@
+{
+  "short_name": "Bookmarks",
+  "name": "Bookmarks",
+  "icons": [
+    {
+      "src": "book.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "share_target": {
+    "action": "index.html",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}
