@@ -1,12 +1,19 @@
 import React from 'react'
-import { showName, add } from 'shared/src'
+import { showName, add } from 'shared'
 // import { Typography } from '@material-ui/core'
-import { Typography } from '@material-ui/core'
+import Typography from '@material-ui/core/Typography'
+import ListItemText from '@material-ui/core/ListItemText'
+import Something from 'shared/components/Something'
+// import Another from 'shared/Another'
+
+// import ListItemText from '@material-ui/core/ListItemText'
 
 const App: React.FC = () => {
   console.log(showName())
   return (
     <Typography variant="h2">
+      <Something />
+      {/* <Another /> */}
       App! {add(1, 2)} {showName()}
     </Typography>
   )
