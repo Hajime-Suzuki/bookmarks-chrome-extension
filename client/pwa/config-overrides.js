@@ -1,9 +1,8 @@
-const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin')
+const rewireYarnWorkspaces = require('react-app-rewire-yarn-workspaces')
+const rewireAliases = require('react-app-rewire-aliases')
+const { paths } = require('react-app-rewired')
+const path = require('path')
 
 module.exports = function override(config, env) {
-  config.resolve.plugins = config.resolve.plugins.filter(
-    plugin => !(plugin instanceof ModuleScopePlugin)
-  )
-
-  return config
+  return rewireYarnWorkspaces(config, env)
 }

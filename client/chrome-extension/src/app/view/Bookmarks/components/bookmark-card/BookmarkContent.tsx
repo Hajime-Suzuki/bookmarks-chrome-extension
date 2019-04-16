@@ -25,7 +25,7 @@ const StyledTooltip = styled(Tooltip)`` // TODO: set font size
 const Content = ({ bookmark }: Pick<BookmarkCardProps, 'bookmark'>) => {
   const { img, title } = bookmark
   return (
-    <StyledTooltip title={title} enterDelay={400} className="aishetn">
+    <StyledTooltip title={title} enterDelay={400}>
       <List className="card-content-list">
         <ListItem button={false}>
           <ListItemAvatar>

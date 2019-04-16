@@ -14,13 +14,14 @@ import {
 } from '../../hooks-contexts/useModal'
 import { OpenedTabContext } from '../../hooks-contexts/useOpenedTabs'
 import { theme } from '../../styles/theme'
-import { IBookmark, IGroup } from '../../types'
+
 import BookmarkCard from './components/bookmark-card'
 import BookmarkEditModal from './components/BookmarkEditModal'
 import Group from './components/group/Group'
 import { UserContext } from '../../hooks-contexts/useUser'
 import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery'
 import Grid from '@material-ui/core/Grid'
+import { IBookmark, IGroup } from '../../types'
 
 const useGridSize = () => {
   const isSmUp = useMediaQuery(theme.breakpoints.up('sm'))
