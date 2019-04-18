@@ -1,0 +1,11 @@
+{
+  "name": "@bookmarks/shared",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^16.8.6"
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.13"
+  }
+}

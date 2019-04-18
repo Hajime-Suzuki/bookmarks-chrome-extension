@@ -5,12 +5,19 @@ import { useHttp } from './useHttp'
 
 const useUser = () => {
   const [user, setUser] = useState<CognitoUser | null>(null)
-  const { fn: getUser, fetching, error } = useHttp(async () => {
-    const currentUser: CognitoUser = await Auth.currentAuthenticatedUser()
-    return setUser(currentUser)
+  const [fetching, setFetching] = useState(true)
+
+  const { fn: getUser, error } = useHttp(async () => {
+    try {
+      const currentUser: CognitoUser = await Auth.currentAuthenticatedUser()
+      setUser(currentUser)
+      setFetching(false)
+    } catch (error) {
+      setFetching(false)
+    }
   })
 
-  console.log({ user })
+  const logOut = async () => await Auth.signOut()
 
   useEffect(() => {
     getUser()
@@ -19,6 +26,7 @@ const useUser = () => {
   return {
     fetching,
     user,
+    logOut,
     setUser,
     error
   }

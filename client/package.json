@@ -1,0 +1,11 @@
+{
+  "name": "client",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "chrome-extension",
+    "pwa",
+    "shared"
+  ],
+  "license": "MIT"
+}

@@ -3,10 +3,13 @@ import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { Form, Formik } from 'formik'
-import React from 'react'
+import React, { FC } from 'react'
 import { useSignUpOrSignIn } from '../../hooks-contexts/useSignUpOrSignIn'
 
-const LoginOrSignUp = () => {
+interface Props {
+  onLogin?: () => void
+}
+const LoginOrSignUp: FC<Props> = ({ onLogin }) => {
   const { handleSubmit, isSignUp, toggleSignUp, error } = useSignUpOrSignIn()
   const initialValues = {
     email: '',
@@ -14,7 +17,13 @@ const LoginOrSignUp = () => {
   }
   return (
     <div>
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={async (e: any) => {
+          await handleSubmit(e)
+          if (onLogin) onLogin()
+        }}
+      >
         {({ values, handleChange }) => {
           return (
             <Form>
