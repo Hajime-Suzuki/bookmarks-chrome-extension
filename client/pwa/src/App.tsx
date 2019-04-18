@@ -1,73 +1,26 @@
-import React, { FC, useContext, useEffect } from 'react'
-import { showName, add } from '@bookmarks/shared'
-// import { Typography } from '@material-ui/core'
-import Typography from '@material-ui/core/Typography'
-import ListItemText from '@material-ui/core/ListItemText'
-import Something from '@bookmarks/shared/components/Something'
-import {
-  UserContextProvider,
-  UserContext
-} from '@bookmarks/extension/src/app/hooks-contexts/useUser'
-import {
-  BrowserRouter,
-  Route,
-  RouteComponentProps,
-  Redirect,
-  RouteProps,
-  Link
-} from 'react-router-dom'
+import { UserContextProvider } from '@bookmarks/extension/src/app/hooks-contexts/useUser'
+import { GroupsProvider } from '@bookmarks/extension/src/app/hooks-contexts/useGroups'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import React, { FC } from 'react'
+import { BrowserRouter } from 'react-router-dom'
+import Routes from './Routes'
+import styled from 'styled-components'
+import { MuiThemeProvider } from '@material-ui/core/styles'
+import { theme } from '@bookmarks/extension/src/app/styles/theme'
 
-import LoginOrSignUp from '@bookmarks/extension/src/app/view/Login'
-
-const AuthRoute: FC<any> = props => {
-  const { component: Component, ...restProps } = props
-  const { user, fetching } = useContext(UserContext)
-
-  console.log(fetching, !!user)
-
-  if (fetching) return null
-
-  return (
-    <Route
-      {...restProps}
-      render={routeProps =>
-        user ? <Component {...routeProps} /> : <Redirect to="/login" />
-      }
-    />
-  )
-}
-
-const Routes = () => {
-  return (
-    <>
-      <Route exact path="/" component={() => <div>Top!</div>} />
-      <Route
-        exact
-        path="/login"
-        component={(props: RouteComponentProps) => (
-          <LoginOrSignUp
-            onLogin={() => {
-              props.history.push('/bookmarks')
-            }}
-          />
-        )}
-      />
-      <AuthRoute
-        exact
-        path="/bookmarks"
-        component={() => <div>Bookmarks</div>}
-      />
-    </>
-  )
-}
 const App: FC<{}> = () => {
   return (
-    <BrowserRouter>
-      <UserContextProvider>
-        <Routes />
-        <Link to="/bookmarks">bookmarks</Link>
-      </UserContextProvider>
-    </BrowserRouter>
+    <MuiThemeProvider theme={theme}>
+      <BrowserRouter>
+        <UserContextProvider>
+          <GroupsProvider>
+            <CssBaseline />
+
+            <Routes />
+          </GroupsProvider>
+        </UserContextProvider>
+      </BrowserRouter>
+    </MuiThemeProvider>
   )
 }
 

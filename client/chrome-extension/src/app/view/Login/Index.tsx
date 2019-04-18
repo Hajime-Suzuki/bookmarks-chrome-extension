@@ -9,6 +9,7 @@ import { useSignUpOrSignIn } from '../../hooks-contexts/useSignUpOrSignIn'
 interface Props {
   onLogin?: () => void
 }
+
 const LoginOrSignUp: FC<Props> = ({ onLogin }) => {
   const { handleSubmit, isSignUp, toggleSignUp, error } = useSignUpOrSignIn()
   const initialValues = {
@@ -16,67 +17,68 @@ const LoginOrSignUp: FC<Props> = ({ onLogin }) => {
     password: ''
   }
   return (
-    <div>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={async (e: any) => {
-          await handleSubmit(e)
-          if (onLogin) onLogin()
-        }}
-      >
-        {({ values, handleChange }) => {
-          return (
-            <Form>
-              <Typography variant="title" align="center">
-                {isSignUp ? 'Sign up' : 'Sign in'}
-              </Typography>
-              <Grid
-                container
-                direction="column"
-                alignItems="center"
-                spacing={24}
-              >
-                <Grid item>
-                  <TextField
-                    label="Email"
-                    name="email"
-                    value={values.email}
-                    onChange={handleChange}
-                  />
-                </Grid>
-                <Grid item>
-                  <TextField
-                    label="Password"
-                    type="password"
-                    name="password"
-                    value={values.password}
-                    onChange={handleChange}
-                  />
-                </Grid>
-                {error && (
-                  <Grid item>
-                    <Typography>{error}</Typography>
-                  </Grid>
-                )}
-                <Grid item>
-                  <Button variant="outlined" type="submit">
-                    Submit
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Typography
-                    style={{ cursor: 'pointer' }}
-                    onClick={toggleSignUp}
-                  >
-                    {isSignUp ? 'or sign in' : 'or sign up'}
-                  </Typography>
-                </Grid>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={async (e: any) => {
+        await handleSubmit(e)
+        if (onLogin) onLogin()
+      }}
+    >
+      {({ values, handleChange }) => {
+        return (
+          <Form>
+            <Grid
+              container
+              direction="column"
+              alignItems="center"
+              justify="center"
+              spacing={24}
+            >
+              <Grid item>
+                <Typography variant="title" align="center">
+                  {isSignUp ? 'Sign up' : 'Sign in'}
+                </Typography>
               </Grid>
-            </Form>
-          )
-        }}
-      </Formik>
-    </div>
+              <Grid item>
+                <TextField
+                  label="Email"
+                  name="email"
+                  value={values.email}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  label="Password"
+                  type="password"
+                  name="password"
+                  value={values.password}
+                  onChange={handleChange}
+                />
+              </Grid>
+              {error && (
+                <Grid item>
+                  <Typography>{error}</Typography>
+                </Grid>
+              )}
+              <Grid item>
+                <Button variant="outlined" type="submit">
+                  Submit
+                </Button>
+              </Grid>
+              <Grid item>
+                <Typography
+                  style={{ cursor: 'pointer' }}
+                  onClick={toggleSignUp}
+                >
+                  {isSignUp ? 'or sign in' : 'or sign up'}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Form>
+        )
+      }}
+    </Formik>
   )
 }
 
