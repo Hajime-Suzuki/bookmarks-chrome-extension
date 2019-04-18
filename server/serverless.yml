@@ -24,6 +24,7 @@ functions:
       - http:
           path: bookmarks
           method: get
+          cors: true
 
   createBookmarks:
     name: '${self:service}-create-bookmark'
@@ -32,6 +33,7 @@ functions:
       - http:
           path: bookmarks
           method: post
+          cors: true
 
   updateBookmarks:
     name: '${self:service}-update-bookmark'
@@ -40,6 +42,7 @@ functions:
       - http:
           path: bookmarks/{id}
           method: put
+          cors: true
 
   deleteBookmarks:
     name: '${self:service}-delete-bookmark'
@@ -48,6 +51,7 @@ functions:
       - http:
           path: bookmarks/{id}
           method: delete
+          cors: true
 
   getGroupsWithBookmarks:
     name: '${self:service}-get-groups-with-bookmarks'
@@ -56,6 +60,7 @@ functions:
       - http:
           path: groups
           method: get
+          cors: true
 
   createGroup:
     name: '${self:service}-create-group'
@@ -64,6 +69,7 @@ functions:
       - http:
           path: groups
           method: post
+          cors: true
 
   updateGroup:
     name: '${self:service}-update-group'
@@ -72,6 +78,7 @@ functions:
       - http:
           path: groups/{id}
           method: put
+          cors: true
 
   reorderBookmarks:
     name: '${self:service}-reorder-bookmarks'
@@ -80,6 +87,7 @@ functions:
       - http:
           path: groups/reorder-bookmarks
           method: put
+          cors: true
 
   deleteGroup:
     name: '${self:service}-delete-group'
@@ -88,3 +96,4 @@ functions:
       - http:
           path: groups/{id}
           method: delete
+          cors: true
