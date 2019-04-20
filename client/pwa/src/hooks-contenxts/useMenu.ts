@@ -24,11 +24,16 @@ export const useMenu = () => {
     closeMenu()
   }
 
+  const deselectItem = () => {
+    setSelectedItem({ id: null, index: null })
+  }
+
   return {
     selectedItem,
     anchor,
     open,
     selectItem,
+    deselectItem,
     openMenu,
     closeMenu
   }

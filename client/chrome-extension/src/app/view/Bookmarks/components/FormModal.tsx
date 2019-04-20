@@ -15,6 +15,7 @@ interface FormDialogProps<TValues = any> {
   onSubmit: (values: TValues) => any
   closeModal: () => any
   error?: string
+  saveOnlyDirty?: boolean
 }
 const FormModal: FC<FormDialogProps> = props => {
   const {
@@ -23,7 +24,8 @@ const FormModal: FC<FormDialogProps> = props => {
     dialogTitle,
     initialValues,
     onSubmit,
-    error
+    error,
+    saveOnlyDirty = true
   } = props
   return (
     <Dialog open={isOpen} onClose={closeModal} maxWidth="md">
@@ -63,7 +65,7 @@ const FormModal: FC<FormDialogProps> = props => {
                   color="primary"
                   variant="outlined"
                   type="submit"
-                  disabled={!dirty || isSubmitting}
+                  disabled={(saveOnlyDirty && !dirty) || isSubmitting}
                 >
                   Save
                 </Button>

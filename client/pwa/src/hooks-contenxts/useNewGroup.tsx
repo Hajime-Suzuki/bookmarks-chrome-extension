@@ -1,17 +1,20 @@
-import React, { useState, FC, createContext } from 'react'
+import React, { useState, FC, createContext, useMemo } from 'react'
+import { format } from 'date-fns'
 
 const useNewGroup = () => {
   const [open, setOpen] = useState(false)
-  const [groupName, setGroupName] = useState('')
+  const newGroup = useMemo(() => format(new Date(), 'yyyy MM dd'), [])
+  const [groupName, setGroupName] = useState(newGroup)
   const closeModal = () => setOpen(false)
   const openModal = () => setOpen(true)
-
+  const removeGroupName = () => setGroupName('')
   return {
     open,
     groupName,
     closeModal,
     openModal,
-    setGroupName
+    setGroupName,
+    removeGroupName
   }
 }
 
