@@ -10,7 +10,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import Avatar from '@material-ui/core/Avatar'
 import ListItemText from '@material-ui/core/ListItemText'
 
-const TwoLineEllipsis = styled(Typography)`
+const TwoLineEllipsis: any = styled(Typography)`
   && {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -20,9 +20,9 @@ const TwoLineEllipsis = styled(Typography)`
   }
 `
 
-const StyledTooltip = styled(Tooltip)`` // TODO: set font size
+const StyledTooltip: any = styled(Tooltip)`` // TODO: set font size
 
-const Content = ({ bookmark }: Pick<BookmarkCardProps, 'bookmark'>) => {
+export const Content = ({ bookmark }: Pick<BookmarkCardProps, 'bookmark'>) => {
   const { img, title } = bookmark
   return (
     <StyledTooltip title={title} enterDelay={400}>

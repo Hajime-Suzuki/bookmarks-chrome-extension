@@ -27,7 +27,7 @@ const Group: FC<GroupProps> = props => {
   )
 }
 
-const GroupTitle: FC<GroupProps> = ({ group, index, style }) => {
+const GroupTitle: FC<GroupProps & {style: any}> = ({ group, index, style }) => {
   const [showEditButton, setShowButton] = useState(false)
   const [isConfirmModalOpen, setOpenConfirm] = useState(false)
   const { openModal: openEditModal } = useContext(EditGroupModalContext)
@@ -83,7 +83,7 @@ interface ButtonProps {
   margin_left?: string
 }
 
-const StyledIconButton = styled(IconButton)`
+const StyledIconButton: any = styled(IconButton)`
   && {
     vertical-align: middle;
     opacity: ${({ show }: ButtonProps) => show};
