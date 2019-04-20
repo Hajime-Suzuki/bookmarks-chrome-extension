@@ -46,6 +46,7 @@ const updatedGroups = (groups: IGroup[], targetIndex: number, params: any) =>
 
 export const useGroups = () => {
   const [groups, setGroups] = useState<IGroup[] | null>(null)
+
   const bookmarks = _useBookmarks(groups, setGroups)
   const { user } = useContext(UserContext)
 
