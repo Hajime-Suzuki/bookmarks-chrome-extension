@@ -1,13 +1,9 @@
 import { GroupContext } from '@bookmarks/extension/src/app/hooks-contexts/useGroups'
 import { Content } from '@bookmarks/extension/src/app/view/Bookmarks/components/bookmark-card/BookmarkContent'
-
+import Link from '@material-ui/core/Link'
 import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import React, { Fragment, useContext } from 'react'
-import Link from '@material-ui/core/Link'
-import Divider from '@material-ui/core/Divider'
 
 const Groups = () => {
   const { groups } = useContext(GroupContext)
@@ -22,6 +18,7 @@ const Groups = () => {
               <ListSubheader style={{ backgroundColor: '#FAFAFA' }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   {group.title}
+
                   <div
                     style={{
                       height: '1px',
