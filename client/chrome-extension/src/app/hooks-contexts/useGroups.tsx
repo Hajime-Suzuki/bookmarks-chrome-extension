@@ -13,12 +13,13 @@ import { IBookmark, IGroup, Tab } from '../types'
 import { UpdateBookmarkInput } from './useBookmarks'
 import { useHttp } from './useHttp'
 import { UserContext } from './useUser'
+import { CognitoUser } from '@aws-amplify/auth'
 
 // TODO: put all interface to api
 
 export interface CreateGroupInput {
   groupTitle?: string
-  tab?: Tab
+  tab?: Pick<Tab, 'title' | 'url' | 'favIconUrl'>
 }
 
 interface ReorderBookmarksArgs {
@@ -44,11 +45,10 @@ const updatedGroups = (groups: IGroup[], targetIndex: number, params: any) =>
     }
   })
 
-export const useGroups = () => {
+export const useGroups = (user: CognitoUser | null) => {
   const [groups, setGroups] = useState<IGroup[] | null>(null)
 
-  const bookmarks = _useBookmarks(groups, setGroups)
-  const { user } = useContext(UserContext)
+  const bookmarks = _useBookmarks(user, groups, setGroups)
 
   const { fn: fetchGroups, fetching, error } = useHttp(async () => {
     const { groups: fetchedGroups } = await GroupsAPI.fetch(user)
@@ -110,11 +110,10 @@ export const useGroups = () => {
 }
 
 const _useBookmarks = (
+  user: CognitoUser | null,
   groups: IGroup[] | null,
   setGroups: React.Dispatch<React.SetStateAction<IGroup[] | null>>
 ) => {
-  const { user } = useContext(UserContext)
-
   const createBookmark = async (
     targetGroup: string,
     input: CreateBookmarkInput
@@ -188,7 +187,8 @@ export type GroupContext = ReturnType<typeof useGroups>
 export const GroupContext = createContext({} as GroupContext)
 
 export const GroupsProvider: FC = props => {
-  const groups = useGroups()
+  const { user } = useContext(UserContext)
+  const groups = useGroups(user)
   return (
     <GroupContext.Provider value={groups}>
       {props.children}

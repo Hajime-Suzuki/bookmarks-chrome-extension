@@ -1,109 +1,70 @@
 import { GroupContext } from '@bookmarks/extension/src/app/hooks-contexts/useGroups'
-import { IGroup } from '@bookmarks/extension/src/app/types'
-import FormModal from '@bookmarks/extension/src/app/view/Bookmarks/components/FormModal'
 import Button from '@material-ui/core/Button'
-import Icon from '@material-ui/core/Icon'
-import IconButton from '@material-ui/core/IconButton'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
-import Typography from '@material-ui/core/Typography'
-import { format } from 'date-fns'
 import { parse } from 'query-string'
-import React, { useContext, useMemo } from 'react'
+import React, { useContext } from 'react'
+import styled from 'styled-components'
 import useReactRouter from 'use-react-router'
-import {
-  SelectedMenuContext,
-  SelectedMenuProvider
-} from '../../hooks-contenxts/SelectedMenuContext'
+import { SelectedMenuProvider } from '../../hooks-contenxts/SelectedMenuContext'
 import {
   NewGroupContext,
   NewGroupProvider
 } from '../../hooks-contenxts/useNewGroup'
+import GroupSelect from './GroupSelect'
+export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const getFaviconUrl = (url?: string) => {
+  if (!url) return null
+  const [protocol, , host] = url.split('/')
+  const baseUrl = `${protocol}//${host}`
+  return baseUrl + '/favicon.ico'
+}
 
 const Share = () => {
-  const routeProps = useReactRouter()
-  const { groups, fetching } = useContext(GroupContext)
+  const { location, history } = useReactRouter()
+  const { groups, fetching, createGroup: _createGroup } = useContext(
+    GroupContext
+  )
+  const { groupName } = useContext(NewGroupContext)
 
-  const params = parse(routeProps.location.search) as {
+  const params = parse(location.search) as {
     title: string
     text: string
+  }
+
+  const favIconUrl = getFaviconUrl(params.text)
+
+  const createGroup = async () => {
+    await _createGroup({
+      groupTitle: groupName,
+      tab: {
+        title: params.title,
+        url: params.text,
+        ...(favIconUrl && { favIconUrl })
+      }
+    })
+    history.replace('/')
   }
 
   if (fetching || !groups) return <div>fetching</div>
 
   return (
-    <>
+    <Wrapper>
+      <div>{params.title}</div>
+      {params.text}
       <GroupSelect groups={groups} />
-    </>
-  )
-}
 
-const GroupSelect = ({ groups }: { groups: IGroup[] }) => {
-  const {
-    selectItem,
-    openMenu,
-    anchor,
-    closeMenu,
-    selectedItem: { index }
-  } = useContext(SelectedMenuContext)
-  const { openModal, groupName, removeGroupName } = useContext(NewGroupContext)
-
-  const groupTitle = index !== null ? groups[index].title : ''
-  return (
-    <>
-      <Typography variant="subtitle1">Group</Typography>
-      <Typography>{groupName}</Typography>
-      <Typography>{groupTitle}</Typography>
-
-      <IconButton onClick={openModal}>
-        {groupName && <Icon className="fas fa-pen" fontSize="small" />}
-        {!groupName && <Icon className="fas fa-plus-circle" fontSize="small" />}
-      </IconButton>
-      <Button onClick={openMenu} variant="outlined">
-        Select
+      <Button
+        style={{ marginTop: '2em' }}
+        onClick={createGroup}
+        variant="contained"
+        color="primary"
+      >
+        Save
       </Button>
-      <Menu anchorEl={anchor} open={!!anchor} onClose={closeMenu}>
-        {groups.map((g, i) => {
-          return (
-            <MenuItem
-              key={g._id}
-              onClick={() => {
-                removeGroupName()
-                selectItem({ id: g._id, index: i })
-              }}
-              disabled={index !== null && index === i}
-            >
-              {g.title}
-            </MenuItem>
-          )
-        })}
-      </Menu>
-      <NewGroupModal />
-    </>
-  )
-}
-
-const NewGroupModal = () => {
-  const { open, closeModal, setGroupName, groupName } = useContext(
-    NewGroupContext
-  )
-  const { deselectItem } = useContext(SelectedMenuContext)
-
-  const initialValues = { name: '' }
-
-  return (
-    <FormModal
-      initialValues={groupName ? { name: groupName } : initialValues}
-      isOpen={open}
-      dialogTitle="Create Group"
-      closeModal={closeModal}
-      saveOnlyDirty={false}
-      onSubmit={(values: typeof initialValues) => {
-        setGroupName(values.name)
-        deselectItem()
-        closeModal()
-      }}
-    />
+    </Wrapper>
   )
 }
 
