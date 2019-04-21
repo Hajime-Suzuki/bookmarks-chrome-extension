@@ -1,10 +1,14 @@
+import { BookmarkContext } from '@bookmarks/extension/src/app/hooks-contexts/useBookmarks'
 import { GroupContext } from '@bookmarks/extension/src/app/hooks-contexts/useGroups'
 import Button from '@material-ui/core/Button'
 import { parse } from 'query-string'
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import useReactRouter from 'use-react-router'
-import { SelectedMenuProvider } from '../../hooks-contenxts/SelectedMenuContext'
+import {
+  SelectedMenuContext,
+  SelectedMenuProvider
+} from '../../hooks-contenxts/SelectedMenuContext'
 import {
   NewGroupContext,
   NewGroupProvider
@@ -22,31 +26,58 @@ const getFaviconUrl = (url?: string) => {
   return baseUrl + '/favicon.ico'
 }
 
-const Share = () => {
-  const { location, history } = useReactRouter()
-  const { groups, fetching, createGroup: _createGroup } = useContext(
+interface ItemInfo {
+  title: string
+  text: string
+}
+
+const useCreateGroup = (params: ItemInfo) => {
+  const { history } = useReactRouter()
+  const { createBookmark } = useContext(BookmarkContext)
+  const { selectedItem: selectedGroup } = useContext(SelectedMenuContext)
+  const { groupName } = useContext(NewGroupContext)
+  const { groups, createGroup: _createGroup, pushBookmark } = useContext(
     GroupContext
   )
-  const { groupName } = useContext(NewGroupContext)
-
-  const params = parse(location.search) as {
-    title: string
-    text: string
-  }
 
   const favIconUrl = getFaviconUrl(params.text)
 
   const createGroup = async () => {
-    await _createGroup({
-      groupTitle: groupName,
-      tab: {
-        title: params.title,
-        url: params.text,
-        ...(favIconUrl && { favIconUrl })
-      }
-    })
+    const bookmark = {
+      title: params.title,
+      url: params.text,
+      ...(favIconUrl && { favIconUrl })
+    }
+    if (selectedGroup.id) {
+      const res = await createBookmark(selectedGroup.id, bookmark)
+
+      const targetIndex =
+        groups && selectedGroup.index
+          ? groups[selectedGroup.index].bookmarks.length
+          : 0
+      pushBookmark({ groupId: selectedGroup.id, targetIndex, bookmark: res })
+    }
+    if (groupName) {
+      await _createGroup({ groupTitle: groupName, tab: bookmark })
+    }
+    if (selectedGroup.id && groupName) {
+      throw new Error('asihtena')
+    }
     history.replace('/')
   }
+
+  return {
+    createGroup
+  }
+}
+
+const Share = () => {
+  const { location } = useReactRouter()
+  const { groups, fetching } = useContext(GroupContext)
+
+  const params = (parse(location.search) as any) as ItemInfo
+
+  const { createGroup } = useCreateGroup(params)
 
   if (fetching || !groups) return <div>fetching</div>
 
