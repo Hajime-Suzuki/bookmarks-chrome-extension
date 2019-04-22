@@ -2,7 +2,7 @@ import { BookmarkContext } from '@bookmarks/extension/src/app/hooks-contexts/use
 import { GroupContext } from '@bookmarks/extension/src/app/hooks-contexts/useGroups'
 import Button from '@material-ui/core/Button'
 import { parse } from 'query-string'
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import useReactRouter from 'use-react-router'
 import {
@@ -14,6 +14,7 @@ import {
   NewGroupProvider
 } from '../../hooks-contenxts/useNewGroup'
 import GroupSelect from './GroupSelect'
+import BookmarkTitle from './BookmarkTitle'
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -31,7 +32,7 @@ interface ItemInfo {
   text: string
 }
 
-const useCreateGroup = (params: ItemInfo) => {
+const useCreateGroup = (params: ItemInfo, bookmarkTitle: string) => {
   const { history } = useReactRouter()
   const { createBookmark } = useContext(BookmarkContext)
   const { selectedItem: selectedGroup } = useContext(SelectedMenuContext)
@@ -44,7 +45,7 @@ const useCreateGroup = (params: ItemInfo) => {
 
   const createGroup = async () => {
     const bookmark = {
-      title: params.title,
+      title: bookmarkTitle === '' ? params.title : bookmarkTitle,
       url: params.text,
       ...(favIconUrl && { favIconUrl })
     }
@@ -77,16 +78,21 @@ const Share = () => {
 
   const params = (parse(location.search) as any) as ItemInfo
 
-  const { createGroup } = useCreateGroup(params)
+  const [bookmarkTitle, setBookmarkTitle] = useState(params.title)
+  const handleBookmarkTitleChange = (e: any) =>
+    setBookmarkTitle(e.currentTarget.value)
+
+  const { createGroup } = useCreateGroup(params, bookmarkTitle)
 
   if (fetching || !groups) return <div>fetching</div>
 
   return (
     <Wrapper>
-      <div>{params.title}</div>
-      {params.text}
       <GroupSelect groups={groups} />
-
+      <BookmarkTitle
+        title={bookmarkTitle}
+        handleBookmarkTitleChange={handleBookmarkTitleChange}
+      />
       <Button
         style={{ marginTop: '2em' }}
         onClick={createGroup}

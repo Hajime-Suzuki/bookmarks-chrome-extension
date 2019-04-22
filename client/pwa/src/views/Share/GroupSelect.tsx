@@ -2,16 +2,14 @@ import { IGroup } from '@bookmarks/extension/src/app/types'
 import React, { useContext } from 'react'
 import { SelectedMenuContext } from '../../hooks-contenxts/SelectedMenuContext'
 import { NewGroupContext } from '../../hooks-contenxts/useNewGroup'
-import {
-  Typography,
-  IconButton,
-  Icon,
-  Button,
-  Menu,
-  MenuItem
-} from '@material-ui/core'
+
 import FormModal from '@bookmarks/extension/src/app/view/Bookmarks/components/FormModal'
 import { Wrapper } from '.'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
 
 const GroupSelect = ({ groups }: { groups: IGroup[] }) => {
   const {
@@ -21,7 +19,12 @@ const GroupSelect = ({ groups }: { groups: IGroup[] }) => {
     closeMenu,
     selectedItem: { index }
   } = useContext(SelectedMenuContext)
-  const { openModal, groupName, removeGroupName } = useContext(NewGroupContext)
+  const {
+    openModal,
+    groupName: newGroupName,
+    removeGroupName,
+    setGroupName
+  } = useContext(NewGroupContext)
 
   const groupTitle = index !== null ? groups[index].title : ''
   return (
@@ -30,19 +33,26 @@ const GroupSelect = ({ groups }: { groups: IGroup[] }) => {
         Group
       </Typography>
       <Typography variant="h6" align="center">
-        {groupName}
-      </Typography>
-      <Typography variant="h6" align="center">
         {groupTitle}
       </Typography>
 
-      <IconButton onClick={openModal}>
-        {groupName && <Icon className="fas fa-pen" fontSize="small" />}
-        {!groupName && <Icon className="fas fa-plus-circle" fontSize="small" />}
-      </IconButton>
-      <Button onClick={openMenu} variant="outlined">
-        Select
-      </Button>
+      {newGroupName && (
+        <TextField
+          onChange={e => setGroupName(e.currentTarget.value)}
+          value={newGroupName || ''}
+        />
+      )}
+      <div style={{ marginTop: '2em' }} />
+      {newGroupName && (
+        <Button onClick={openMenu} variant="outlined">
+          Select Group
+        </Button>
+      )}
+      {!newGroupName && (
+        <Button onClick={openModal} variant="outlined">
+          Create Group
+        </Button>
+      )}
       <Menu anchorEl={anchor} open={!!anchor} onClose={closeMenu}>
         {groups.map((g, i) => {
           return (
