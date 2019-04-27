@@ -1,5 +1,5 @@
-import { BookmarkContext } from '@bookmarks/extension/src/app/hooks-contexts/useBookmarks'
-import { GroupContext } from '@bookmarks/extension/src/app/hooks-contexts/useGroups'
+import { BookmarkContext } from '@bookmarks/extension/src/app/contexts/useBookmarks'
+import { GroupContext } from '@bookmarks/extension/src/app/contexts/useGroups'
 import Button from '@material-ui/core/Button'
 import { parse } from 'query-string'
 import React, { useContext, useState } from 'react'

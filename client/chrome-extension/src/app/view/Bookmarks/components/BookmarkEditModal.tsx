@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react'
 import { BookmarksProps } from '..'
-import { GroupContext } from '../../../hooks-contexts/useGroups'
-import { EditBookmarkModalContext } from '../../../hooks-contexts/useEditModal'
+import { GroupContext } from '../../../contexts/Groups'
+import { EditBookmarkModalContext } from '../../../contexts/EditModal'
 import FormModal from './FormModal'
 
 const BookmarkEditModal: FC<BookmarksProps> = ({ groupId, groupIndex }) => {

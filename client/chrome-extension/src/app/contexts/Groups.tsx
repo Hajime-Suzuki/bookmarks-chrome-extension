@@ -1,4 +1,4 @@
-import { Omit } from '@material-ui/core'
+import { CognitoUser } from '@aws-amplify/auth'
 import update from 'immutability-helper'
 import React, {
   createContext,
@@ -7,13 +7,11 @@ import React, {
   useEffect,
   useState
 } from 'react'
-import { bookmarksAPI, CreateBookmarkInput } from '../api/bookmarks'
 import { GroupsAPI } from '../api/groups'
-import { IBookmark, IGroup, Tab } from '../types'
-import { useHttp } from './useHttp'
-import { UserContext } from './useUser'
-import { CognitoUser } from '@aws-amplify/auth'
-import { useBookmarks } from './useBookmarks'
+import { useBookmarks } from '../hooks/useBookmarks'
+import { useHttp } from '../hooks/useHttp'
+import { IGroup, Tab } from '../types'
+import { UserContext } from './User'
 
 // TODO: put all interface to api
 

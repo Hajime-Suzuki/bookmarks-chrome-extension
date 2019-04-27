@@ -1,6 +1,6 @@
-import React, { createContext, FC, useState, useContext } from 'react'
-import { IBookmark, IGroup } from '../types'
 import { Omit } from '@material-ui/core'
+import React, { createContext, FC, useState } from 'react'
+import { IBookmark, IGroup } from '../types'
 
 type BookmarkWithIndex = IBookmark & { index: number | null }
 type GroupWithIndex = IGroup & { index: number | null }

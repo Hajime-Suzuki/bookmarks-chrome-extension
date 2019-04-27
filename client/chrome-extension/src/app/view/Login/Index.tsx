@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { Form, Formik } from 'formik'
 import React, { FC } from 'react'
-import { useSignUpOrSignIn } from '../../hooks-contexts/useSignUpOrSignIn'
+import { useSignUpOrSignIn } from '../../hooks/useSignUpOrSignIn'
 
 interface Props {
   onLogin?: () => void

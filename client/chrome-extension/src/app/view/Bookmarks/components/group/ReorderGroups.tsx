@@ -11,7 +11,7 @@ import React, { FC, useContext } from 'react'
 import {
   ReorderModalContext,
   ReorderModalProvider
-} from '../../../../hooks-contexts/ReorderBookmarkContext'
+} from '../../../../contexts/ReorderBookmarkContext'
 
 const ReorderGroupButton: FC<{}> = () => {
   const { openModal } = useContext(ReorderModalContext)

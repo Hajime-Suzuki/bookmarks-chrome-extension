@@ -1,7 +1,7 @@
 import { CognitoUser } from '@aws-amplify/auth'
 import { Auth } from 'aws-amplify/'
 import React, { createContext, FC, useEffect, useState } from 'react'
-import { useHttp } from './useHttp'
+import { useHttp } from '../hooks/useHttp'
 
 const useUser = () => {
   const [user, setUser] = useState<CognitoUser | null>(null)

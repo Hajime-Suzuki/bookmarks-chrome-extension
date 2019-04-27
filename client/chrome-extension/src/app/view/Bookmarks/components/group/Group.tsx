@@ -7,10 +7,10 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
 import Icon from '@material-ui/core/Icon'
-import { EditGroupModalContext } from '../../../../hooks-contexts/useEditModal'
+import { EditGroupModalContext } from '../../../../contexts/EditModal'
 import GroupEditModal from '../GroupEditModal'
 import styled from 'styled-components'
-import { GroupContext } from '../../../../hooks-contexts/useGroups'
+import { GroupContext } from '../../../../contexts/Groups'
 import {
   ExpansionPanel,
   ExpansionPanelSummary,

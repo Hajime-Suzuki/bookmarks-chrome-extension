@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { UserContext } from './useUser'
+import { UserContext } from '../contexts/User'
 import Amplify, { Auth } from 'aws-amplify'
 import { useHttp } from './useHttp'
 

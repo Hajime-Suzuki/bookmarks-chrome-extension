@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
-import { UserContextProvider } from './hooks-contexts/useUser'
+import { UserContextProvider } from './contexts/User'
 
 ReactDOM.render(
   <UserContextProvider>
