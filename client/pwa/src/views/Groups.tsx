@@ -1,4 +1,4 @@
-import { GroupContext } from '@bookmarks/extension/src/app/contexts/useGroups'
+import { GroupContext } from '@bookmarks/extension/src/app/contexts/Groups'
 import { Content } from '@bookmarks/extension/src/app/view/Bookmarks/components/bookmark-card/BookmarkContent'
 import Link from '@material-ui/core/Link'
 import List from '@material-ui/core/List'

@@ -1,4 +1,4 @@
-import { UserContext } from '@bookmarks/extension/src/app/contexts/useUser'
+import { UserContext } from '@bookmarks/extension/src/app/contexts/User'
 import React, { FC, useContext } from 'react'
 import { Redirect, Route, RouteComponentProps } from 'react-router'
 import Groups from './views/Groups'

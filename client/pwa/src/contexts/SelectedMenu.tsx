@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { createContext, FC, useState } from 'react'
 
 type ClickEvent = React.MouseEvent<HTMLElement, MouseEvent>
 
@@ -37,4 +37,16 @@ export const useMenu = () => {
     openMenu,
     closeMenu
   }
+}
+
+export const SelectedMenuContext = createContext({} as ReturnType<
+  typeof useMenu
+>)
+export const SelectedMenuProvider: FC<{}> = ({ children }) => {
+  const value = useMenu()
+  return (
+    <SelectedMenuContext.Provider value={value}>
+      {children}
+    </SelectedMenuContext.Provider>
+  )
 }

@@ -1,20 +1,18 @@
-import { BookmarkContext } from '@bookmarks/extension/src/app/contexts/useBookmarks'
-import { GroupContext } from '@bookmarks/extension/src/app/contexts/useGroups'
+import { GroupContext } from '@bookmarks/extension/src/app/contexts/Groups'
 import Button from '@material-ui/core/Button'
 import { parse } from 'query-string'
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import useReactRouter from 'use-react-router'
+import GroupSelect from './GroupSelect'
+import BookmarkTitle from './BookmarkTitle'
+import { BookmarkContext } from '../../contexts/Bookmarks'
 import {
   SelectedMenuContext,
   SelectedMenuProvider
-} from '../../hooks-contenxts/SelectedMenuContext'
-import {
-  NewGroupContext,
-  NewGroupProvider
-} from '../../hooks-contenxts/useNewGroup'
-import GroupSelect from './GroupSelect'
-import BookmarkTitle from './BookmarkTitle'
+} from '../../contexts/SelectedMenu'
+import { NewGroupContext, NewGroupProvider } from '../../contexts/NewGroup'
+
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -56,7 +54,12 @@ const useCreateGroup = (params: ItemInfo, bookmarkTitle: string) => {
         groups && selectedGroup.index
           ? groups[selectedGroup.index].bookmarks.length
           : 0
-      pushBookmark({ groupId: selectedGroup.id, targetIndex, bookmark: res })
+      pushBookmark({
+        groupId: selectedGroup.id,
+        groupIndex: selectedGroup.index || 0,
+        targetBookmarkIndex: targetIndex,
+        bookmark: res
+      })
     }
     if (groupName) {
       await _createGroup({ groupTitle: groupName, tab: bookmark })
