@@ -9,11 +9,11 @@ import {
   tabDropTarget,
   TabDropTargetProps
 } from '../../dnd-settings/tab-drop-target'
-import { GroupContext } from '../../hooks-contexts/useGroups'
 import {
   EditBookmarkModalProvider,
   EditGroupModalContextProvider
-} from '../../hooks-contexts/useModal'
+} from '../../hooks-contexts/useEditModal'
+import { GroupContext } from '../../hooks-contexts/useGroups'
 import { OpenedTabContext } from '../../hooks-contexts/useOpenedTabs'
 import { UserContext } from '../../hooks-contexts/useUser'
 import { theme } from '../../styles/theme'
@@ -21,6 +21,7 @@ import { IBookmark, IGroup } from '../../types'
 import BookmarkCard from './components/bookmark-card'
 import BookmarkEditModal from './components/BookmarkEditModal'
 import Group from './components/group/Group'
+import ReorderGroups from './components/group/ReorderGroups'
 
 const useGridSize = () => {
   const isSmUp = useMediaQuery(theme.breakpoints.up('sm'))
@@ -117,10 +118,12 @@ const Groups = () => {
   const { closeTab } = useContext(OpenedTabContext)
   const GRID_SIZE = useGridSize()
   const { groups } = groupContext
+
   if (!groups) return <div>Loading...</div>
   return (
     <EditGroupModalContextProvider>
       <EditBookmarkModalProvider>
+        <ReorderGroups />
         {groups &&
           groups.map((group, i) => {
             return (
@@ -138,7 +141,7 @@ const Groups = () => {
                     groupIndex={i}
                     closeTab={closeTab}
                     gridSize={GRID_SIZE}
-                    open={i % 2 === 0}
+                    // open={i % 2 === 0}
                     {...groupContext}
                   />
                 </Group>

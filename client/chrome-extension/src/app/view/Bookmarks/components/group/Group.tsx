@@ -7,14 +7,15 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
 import Icon from '@material-ui/core/Icon'
-import { EditGroupModalContext } from '../../../../hooks-contexts/useModal'
+import { EditGroupModalContext } from '../../../../hooks-contexts/useEditModal'
 import GroupEditModal from '../GroupEditModal'
 import styled from 'styled-components'
 import { GroupContext } from '../../../../hooks-contexts/useGroups'
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
-  ExpansionPanelDetails
+  ExpansionPanelDetails,
+  Divider
 } from '@material-ui/core'
 
 export interface GroupProps {
@@ -23,6 +24,7 @@ export interface GroupProps {
 }
 const Group: FC<GroupProps> = props => {
   const { children, index } = props
+  const open = index % 2 === 0
   return (
     <>
       {/* <ExpansionPanel expanded={index % 2 === 0}> */}
@@ -31,9 +33,11 @@ const Group: FC<GroupProps> = props => {
       {/* </ExpansionPanelSummary> */}
 
       {/* <ExpansionPanelDetails> */}
-      <div>{children}</div>
+      {children}
+      {/* {open && <div>{children}</div>} */}
       {/* </ExpansionPanelDetails> */}
       {/* // </ExpansionPanel> */}
+      {/* <Divider /> */}
       <GroupEditModal groupId={props.group._id} index={props.index} />
     </>
   )

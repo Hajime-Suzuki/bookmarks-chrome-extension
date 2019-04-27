@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react'
 import { UpdateGroupInput } from '../../../api/groups'
 import { GroupContext } from '../../../hooks-contexts/useGroups'
-import { EditGroupModalContext } from '../../../hooks-contexts/useModal'
+import { EditGroupModalContext } from '../../../hooks-contexts/useEditModal'
 import { IGroup } from '../../../types'
 import FormModal from './FormModal'
 

@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react'
 import { BookmarkCardProps } from '.'
 import { GroupContext } from '../../../../hooks-contexts/useGroups'
-import { EditBookmarkModalContext } from '../../../../hooks-contexts/useModal'
+import { EditBookmarkModalContext } from '../../../../hooks-contexts/useEditModal'
 import { theme } from '../../../../styles/theme'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'

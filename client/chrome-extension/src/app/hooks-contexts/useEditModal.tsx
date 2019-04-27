@@ -12,7 +12,7 @@ export interface EditModal<T> {
   closeModal: () => void
 }
 
-const useModal = <T extends IBookmark | IGroup>() => {
+const useModalEditModal = <T extends IBookmark | IGroup>() => {
   type TState = T extends IBookmark ? BookmarkWithIndex : GroupWithIndex
   const [isOpen, setOpen] = useState(false)
   const [selectedItem, select] = useState<TState | null>(null)
@@ -40,7 +40,7 @@ export const EditBookmarkModalContext = createContext({} as EditModal<
 >)
 
 export const EditBookmarkModalProvider: FC<{}> = ({ children }) => {
-  const value = useModal<IBookmark>()
+  const value = useModalEditModal<IBookmark>()
   return (
     <EditBookmarkModalContext.Provider value={value}>
       {children}
@@ -51,7 +51,7 @@ export const EditBookmarkModalProvider: FC<{}> = ({ children }) => {
 export const EditGroupModalContext = createContext({} as EditModal<IGroup>)
 
 export const EditGroupModalContextProvider: FC<{}> = ({ children }) => {
-  const value = useModal<IGroup>()
+  const value = useModalEditModal<IGroup>()
   return (
     <EditGroupModalContext.Provider value={value}>
       {children}
