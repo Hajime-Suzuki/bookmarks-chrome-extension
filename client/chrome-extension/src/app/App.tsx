@@ -1,26 +1,26 @@
-import Grid from '@material-ui/core/Grid'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import Grid from '@material-ui/core/Grid'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery'
-import React, { useContext, FC } from 'react'
+import React, { FC, useContext } from 'react'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import styled from 'styled-components'
-import { BookmarksProvider } from './hooks-contexts/useBookmarks'
+
 import { GroupsProvider } from './hooks-contexts/useGroups'
 import { OpenedTabProvider } from './hooks-contexts/useOpenedTabs'
-import { UserContext, UserContextProvider } from './hooks-contexts/useUser'
+import { UserContext } from './hooks-contexts/useUser'
 import { theme } from './styles/theme'
 import Bookmarks from './view/Bookmarks'
 import LoginOrSignUp from './view/Login'
 import OpenedTabs from './view/Tabs/OpenendTabs'
 
-const BookmarkWrapper = styled(Grid)``
+const BookmarkWrapper: any = styled(Grid)``
 
 interface Props {
   desktop: string
 }
-const TabWrapper = styled(Grid)<Props>`
+const TabWrapper: any = styled(Grid)<Props>`
   padding: ${({ desktop }) =>
     desktop ? '0px' : `${theme.spacing.unit * 2}px`};
 `
@@ -30,9 +30,7 @@ const ContextProviders: FC<{}> = ({ children }) => {
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
       <GroupsProvider>
-        <BookmarksProvider>
-          <OpenedTabProvider>{children}</OpenedTabProvider>
-        </BookmarksProvider>
+        <OpenedTabProvider>{children}</OpenedTabProvider>
       </GroupsProvider>
     </MuiThemeProvider>
   )
