@@ -1,4 +1,6 @@
-import React, { FC, useContext, useCallback, useMemo } from 'react'
+import Grid from '@material-ui/core/Grid'
+import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery'
+import React, { FC, useContext } from 'react'
 import {
   bookmarkDropTarget,
   BookmarkDropTargetProps
@@ -13,15 +15,12 @@ import {
   EditGroupModalContextProvider
 } from '../../hooks-contexts/useModal'
 import { OpenedTabContext } from '../../hooks-contexts/useOpenedTabs'
+import { UserContext } from '../../hooks-contexts/useUser'
 import { theme } from '../../styles/theme'
-
+import { IBookmark, IGroup } from '../../types'
 import BookmarkCard from './components/bookmark-card'
 import BookmarkEditModal from './components/BookmarkEditModal'
 import Group from './components/group/Group'
-import { UserContext } from '../../hooks-contexts/useUser'
-import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery'
-import Grid from '@material-ui/core/Grid'
-import { IBookmark, IGroup } from '../../types'
 
 const useGridSize = () => {
   const isSmUp = useMediaQuery(theme.breakpoints.up('sm'))
@@ -52,7 +51,12 @@ export const Bookmarks: FC<BookmarksProps> = ({
       {bookmarks.map((bm, i) => {
         return (
           <Grid key={bm._id} item xs={12} sm={6} md={4} lg={3}>
-            <BookmarkCard bookmark={bm} index={i} user={user} />
+            <BookmarkCard
+              bookmark={bm}
+              index={i}
+              user={user}
+              groupIndex={groupIndex}
+            />
           </Grid>
         )
       })}

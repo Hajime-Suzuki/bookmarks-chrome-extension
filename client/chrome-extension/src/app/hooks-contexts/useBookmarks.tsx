@@ -13,11 +13,11 @@ type UpdateBookmarkInput = Omit<Partial<IBookmark>, 'tags'> & {
 }
 
 interface ReorderBookmarksArgs {
-  groupId?: IGroup['_id']
-  currentIndex: number
-  targetIndex: number
-  bookmark: IBookmark
+  groupId: IGroup['_id']
   groupIndex: number
+  currentBookmarkIndex: number
+  targetBookmarkIndex: number
+  bookmark: IBookmark
 }
 
 interface UpdateBookmarkArgs {
@@ -50,31 +50,42 @@ export const useBookmarks = (
 
   ///// TODO: ues group index and merge these functions.
   const pushBookmark = (
-    args: Required<Omit<ReorderBookmarksArgs, 'currentIndex'>>
+    args: Omit<ReorderBookmarksArgs, 'currentBookmarkIndex'>
   ) => {
     setGroups(_groups => {
       if (!_groups) return _groups
-      const { groupId, targetIndex, bookmark, groupIndex } = args
-      const params = [[targetIndex, 0, { ...bookmark, group: groupId }]]
+      const { groupId, targetBookmarkIndex, bookmark, groupIndex } = args
+      const params = [[targetBookmarkIndex, 0, { ...bookmark, group: groupId }]]
       return updatedGroups(_groups, groupIndex, params)
     })
   }
 
   const pullBookmark = (
-    args: Omit<ReorderBookmarksArgs, 'currentIndex' | 'bookmark'>
+    args: Omit<
+      ReorderBookmarksArgs,
+      'currentBookmarkIndex' | 'bookmark' | 'groupId'
+    >
   ) => {
     setGroups(_groups => {
       if (!_groups) return _groups
-      const { targetIndex, groupIndex } = args
-      const params = [[targetIndex, 1]]
+      const { targetBookmarkIndex, groupIndex } = args
+      const params = [[targetBookmarkIndex, 1]]
       return updatedGroups(_groups, groupIndex, params)
     })
   }
 
-  const reorderBookmarks = (args: ReorderBookmarksArgs) => {
+  const reorderBookmarks = (args: Omit<ReorderBookmarksArgs, 'groupId'>) => {
     if (!groups) return
-    const { currentIndex, targetIndex, bookmark, groupIndex } = args
-    const params = [[currentIndex, 1], [targetIndex, 0, bookmark]]
+    const {
+      currentBookmarkIndex,
+      targetBookmarkIndex,
+      bookmark,
+      groupIndex
+    } = args
+    const params = [
+      [currentBookmarkIndex, 1],
+      [targetBookmarkIndex, 0, bookmark]
+    ]
     setGroups(updatedGroups(groups, groupIndex, params))
   }
   /////

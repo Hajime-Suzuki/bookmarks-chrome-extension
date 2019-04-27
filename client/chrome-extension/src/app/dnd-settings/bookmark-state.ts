@@ -1,11 +1,11 @@
 class DnDBookmarkState {
-  currentIndex: number | null = null
+  currentBookmarkIndex: number | null = null
   currentGroup: string | null = null
   originGroupIndex: number | null = null
   updating: boolean = false
 
-  setCurrentIndex(newIndex: number) {
-    this.currentIndex = newIndex
+  setCurrentBookmarkIndex(newIndex: number) {
+    this.currentBookmarkIndex = newIndex
   }
   setCurrentGroup(newGroup: string) {
     this.currentGroup = newGroup
@@ -20,7 +20,7 @@ class DnDBookmarkState {
   }
 
   reset() {
-    this.currentIndex = null
+    this.currentBookmarkIndex = null
     this.currentGroup = null
     this.originGroupIndex = null
     this.updating = false

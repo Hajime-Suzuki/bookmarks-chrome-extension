@@ -78,8 +78,8 @@ const initialize = (
   props: DnDContainerWrapperProps,
   draggedItem: BeginDragReturnType
 ) => {
-  if (state.currentIndex === null) {
-    state.setCurrentIndex(draggedItem.index)
+  if (state.currentBookmarkIndex === null) {
+    state.setCurrentBookmarkIndex(draggedItem.index)
   }
   if (!state.currentGroup) {
     state.setCurrentGroup(props.groupId)
@@ -103,30 +103,31 @@ const bookmarkDropSource: DropTargetSpec<
     const targetIndex = getIndex(props, monitor, component, draggedItem)
 
     const groupChanged = state.currentGroup !== hoveredGroup
-    const movedWithinGroup = targetIndex !== state.currentIndex && !groupChanged
+    const movedWithinGroup =
+      targetIndex !== state.currentBookmarkIndex && !groupChanged
 
     if (movedWithinGroup) {
       if (targetIndex > props.bookmarks.length - 1) return
       props.reorderBookmarks({
         groupIndex: props.groupIndex,
-        currentIndex: state.currentIndex!,
-        targetIndex,
+        currentBookmarkIndex: state.currentBookmarkIndex!,
+        targetBookmarkIndex: targetIndex,
         bookmark: draggedItem.bookmark
       })
-      state.setCurrentIndex(targetIndex)
+      state.setCurrentBookmarkIndex(targetIndex)
     } else if (groupChanged) {
-      const previousIndex = state.currentIndex!
-      state.setCurrentIndex(targetIndex)
+      const previousIndex = state.currentBookmarkIndex!
+      state.setCurrentBookmarkIndex(targetIndex)
 
       props.pushBookmark({
         groupId: state.currentGroup!,
         groupIndex: props.groupIndex,
-        targetIndex,
+        targetBookmarkIndex: targetIndex,
         bookmark: draggedItem.bookmark
       })
 
       props.pullBookmark({
-        targetIndex: previousIndex,
+        targetBookmarkIndex: previousIndex,
         groupIndex: state.originGroupIndex! // pull bookmark from the group it belongs to
       })
 

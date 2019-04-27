@@ -7,7 +7,11 @@ import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import Icon from '@material-ui/core/Icon'
 
-const BottomSection: FC<BookmarkCardProps> = ({ bookmark, index }) => {
+const BottomSection: FC<BookmarkCardProps> = ({
+  bookmark,
+  index,
+  groupIndex
+}) => {
   const { pullBookmark, removeBookmark } = useContext(GroupContext)
 
   const { openModal } = useContext(EditBookmarkModalContext)
@@ -18,7 +22,7 @@ const BottomSection: FC<BookmarkCardProps> = ({ bookmark, index }) => {
       <IconButton
         onClick={async () => {
           await removeBookmark(_id)
-          pullBookmark({ groupId: bookmark.group, targetIndex: index })
+          pullBookmark({ targetBookmarkIndex: index, groupIndex })
         }}
       >
         <Icon fontSize="small" className="fas fa-minus-circle" />

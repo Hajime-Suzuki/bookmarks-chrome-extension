@@ -29,7 +29,7 @@ const tabDropSpec: DropTargetSpec<DnDContainerWrapperProps> = {
       props.pushBookmark({
         groupId: targetGroup,
         groupIndex: props.groupIndex,
-        targetIndex: lastPosition,
+        targetBookmarkIndex: lastPosition,
         bookmark: res
       })
       props.closeTab(item.tab.id!)

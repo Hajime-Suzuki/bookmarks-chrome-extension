@@ -11,5 +11,6 @@ export const API_GROUPS_URL = `${BASE_URL}/groups`
 
 export enum DnDTypes {
   tabs = 'tabs',
-  bookmarks = 'bookmarks'
+  bookmarks = 'bookmarks',
+  groups = 'groups'
 }

@@ -19,6 +19,7 @@ import CardActions from '@material-ui/core/CardActions'
 export interface BookmarkCardProps {
   bookmark: IBookmark
   index: number
+  groupIndex: number
 }
 
 const BookmarkCard: FC<BookmarkCardProps> = props => {
@@ -49,7 +50,7 @@ const BookmarkCard: FC<BookmarkCardProps> = props => {
  */
 
 class BookmarkCardContainer extends React.Component<
-  BookmarkDragSourceProps & BookmarkCardProps & { user: CognitoUser | null }
+  BookmarkDragSourceProps & WrapperProps
 > {
   render() {
     const { connectDragSource, isDragging, ...rest } = this.props
@@ -62,4 +63,6 @@ class BookmarkCardContainer extends React.Component<
   }
 }
 
-export default bookmarkDragSource(BookmarkCardContainer)
+const C = bookmarkDragSource(BookmarkCardContainer)
+type WrapperProps = BookmarkCardProps & { user: CognitoUser | null }
+export default (props: WrapperProps) => <C {...props} />
