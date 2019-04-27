@@ -22,7 +22,7 @@ export interface CreateGroupInput {
   tab?: Pick<Tab, 'title' | 'url' | 'favIconUrl'>
 }
 
-export const useGroups = (user: CognitoUser | null) => {
+const useGroups = (user: CognitoUser | null) => {
   const [groups, setGroups] = useState<IGroup[] | null>(null)
 
   const bookmarks = useBookmarks(user, groups, setGroups)

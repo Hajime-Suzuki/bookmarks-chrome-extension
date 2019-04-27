@@ -93,6 +93,7 @@ const bookmarkDropSource: DropTargetSpec<
   DnDContainerWrapperProps & GridSize
 > = {
   hover: (props, monitor, component) => {
+    // console.log(props.open)
     if (!component) return
 
     const draggedItem = monitor.getItem() as BeginDragReturnType
@@ -116,8 +117,10 @@ const bookmarkDropSource: DropTargetSpec<
       })
       state.setCurrentBookmarkIndex(targetIndex)
     } else if (groupChanged) {
-      const previousIndex = state.currentBookmarkIndex!
+      const originBookmarkIndex = state.currentBookmarkIndex!
+
       state.setCurrentBookmarkIndex(targetIndex)
+      state.setCurrentGroup(hoveredGroup)
 
       props.pushBookmark({
         groupId: state.currentGroup!,
@@ -127,7 +130,7 @@ const bookmarkDropSource: DropTargetSpec<
       })
 
       props.pullBookmark({
-        targetBookmarkIndex: previousIndex,
+        targetBookmarkIndex: originBookmarkIndex,
         groupIndex: state.originGroupIndex! // pull bookmark from the group it belongs to
       })
 

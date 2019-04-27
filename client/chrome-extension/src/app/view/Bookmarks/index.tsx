@@ -138,6 +138,7 @@ const Groups = () => {
                     groupIndex={i}
                     closeTab={closeTab}
                     gridSize={GRID_SIZE}
+                    open={i % 2 === 0}
                     {...groupContext}
                   />
                 </Group>

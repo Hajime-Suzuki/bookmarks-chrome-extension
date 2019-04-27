@@ -11,23 +11,39 @@ import { EditGroupModalContext } from '../../../../hooks-contexts/useModal'
 import GroupEditModal from '../GroupEditModal'
 import styled from 'styled-components'
 import { GroupContext } from '../../../../hooks-contexts/useGroups'
+import {
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails
+} from '@material-ui/core'
 
 export interface GroupProps {
   group: IGroup
   index: number
 }
 const Group: FC<GroupProps> = props => {
-  const { children } = props
+  const { children, index } = props
   return (
     <>
+      {/* <ExpansionPanel expanded={index % 2 === 0}> */}
+      {/* <ExpansionPanelSummary> */}
       <GroupTitle {...props} style={{ marginBottom: 10 }} />
+      {/* </ExpansionPanelSummary> */}
+
+      {/* <ExpansionPanelDetails> */}
       <div>{children}</div>
+      {/* </ExpansionPanelDetails> */}
+      {/* // </ExpansionPanel> */}
       <GroupEditModal groupId={props.group._id} index={props.index} />
     </>
   )
 }
 
-const GroupTitle: FC<GroupProps & {style: any}> = ({ group, index, style }) => {
+const GroupTitle: FC<GroupProps & { style: any }> = ({
+  group,
+  index,
+  style
+}) => {
   const [showEditButton, setShowButton] = useState(false)
   const [isConfirmModalOpen, setOpenConfirm] = useState(false)
   const { openModal: openEditModal } = useContext(EditGroupModalContext)
