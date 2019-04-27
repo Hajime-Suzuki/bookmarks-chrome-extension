@@ -10,10 +10,10 @@ import React, {
 import { bookmarksAPI, CreateBookmarkInput } from '../api/bookmarks'
 import { GroupsAPI } from '../api/groups'
 import { IBookmark, IGroup, Tab } from '../types'
-import { UpdateBookmarkInput } from './useBookmarks'
 import { useHttp } from './useHttp'
 import { UserContext } from './useUser'
 import { CognitoUser } from '@aws-amplify/auth'
+import { useBookmarks } from './useBookmarks'
 
 // TODO: put all interface to api
 
@@ -22,33 +22,10 @@ export interface CreateGroupInput {
   tab?: Pick<Tab, 'title' | 'url' | 'favIconUrl'>
 }
 
-interface ReorderBookmarksArgs {
-  groupId: IGroup['_id']
-  currentIndex: number
-  targetIndex: number
-  bookmark: IBookmark
-}
-
-interface UpdateBookmarkArgs {
-  id: IBookmark['_id']
-  groupIndex: number
-  bookmarkIndex: number
-  input: UpdateBookmarkInput
-}
-
-const updatedGroups = (groups: IGroup[], targetIndex: number, params: any) =>
-  update(groups, {
-    [targetIndex]: {
-      bookmarks: {
-        $splice: params
-      }
-    }
-  })
-
 export const useGroups = (user: CognitoUser | null) => {
   const [groups, setGroups] = useState<IGroup[] | null>(null)
 
-  const bookmarks = _useBookmarks(user, groups, setGroups)
+  const bookmarks = useBookmarks(user, groups, setGroups)
 
   const { fn: fetchGroups, fetching, error } = useHttp(async () => {
     const { groups: fetchedGroups } = await GroupsAPI.fetch(user)
@@ -106,80 +83,6 @@ export const useGroups = (user: CognitoUser | null) => {
     updateGroup,
     deleteGroup,
     ...bookmarks
-  }
-}
-
-const _useBookmarks = (
-  user: CognitoUser | null,
-  groups: IGroup[] | null,
-  setGroups: React.Dispatch<React.SetStateAction<IGroup[] | null>>
-) => {
-  const createBookmark = async (
-    targetGroup: string,
-    input: CreateBookmarkInput
-  ) => {
-    return bookmarksAPI.create(targetGroup, input, user)
-  }
-
-  ///// TODO: ues group index and merge these functions.
-  const pushBookmark = (args: Omit<ReorderBookmarksArgs, 'currentIndex'>) => {
-    setGroups(_groups => {
-      if (!_groups) return _groups
-      const { groupId, targetIndex, bookmark } = args
-      const targetGroupIndex = _groups.findIndex(g => g._id === groupId)
-      const params = [[targetIndex, 0, { ...bookmark, group: groupId }]]
-      return updatedGroups(_groups, targetGroupIndex, params)
-    })
-  }
-
-  const pullBookmark = (
-    args: Omit<ReorderBookmarksArgs, 'currentIndex' | 'bookmark'>
-  ) => {
-    setGroups(_groups => {
-      if (!_groups) return _groups
-      const { groupId, targetIndex } = args
-      const targetGroupIndex = _groups.findIndex(g => g._id === groupId)
-      const params = [[targetIndex, 1]]
-      return updatedGroups(_groups, targetGroupIndex, params)
-    })
-  }
-
-  const reorderBookmarks = (args: ReorderBookmarksArgs) => {
-    if (!groups) return
-    const { groupId, currentIndex, targetIndex, bookmark } = args
-    const targetGroupIndex = groups.findIndex(g => g._id === groupId)
-    const params = [[currentIndex, 1], [targetIndex, 0, bookmark]]
-    setGroups(updatedGroups(groups, targetGroupIndex, params))
-  }
-  /////
-
-  const updateBookmark = async (args: UpdateBookmarkArgs) => {
-    const { id, input, groupIndex, bookmarkIndex } = args
-    if (!groups) return
-    const { bookmark: updatedBookmark } = await bookmarksAPI.update(
-      id,
-      input,
-      user
-    )
-    const updated = update(groups, {
-      [groupIndex]: {
-        bookmarks: { [bookmarkIndex]: { $merge: updatedBookmark } }
-      }
-    })
-    setGroups(updated)
-  }
-
-  const removeBookmark = async (id: IBookmark['_id']) => {
-    return bookmarksAPI.remove(id, user)
-  }
-
-  return {
-    pushBookmark,
-    pullBookmark,
-    reorderBookmarks,
-    updateBookmark,
-    createBookmark,
-    removeBookmark
   }
 }
 

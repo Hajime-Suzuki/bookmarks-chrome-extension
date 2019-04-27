@@ -1,14 +1,13 @@
 import {
+  DropTarget,
   DropTargetConnector,
   DropTargetMonitor,
-  DropTarget,
   DropTargetSpec
 } from 'react-dnd'
-import { Tab } from '../types'
 import { DnDTypes } from '../../constants'
+import { Tab } from '../types'
 import { DnDContainerWrapperProps } from '../view/Bookmarks'
 import { TabListProps } from '../view/Tabs/OpenendTabs'
-import { bookmarksAPI } from '../api/bookmarks'
 
 const tabDropSpec: DropTargetSpec<DnDContainerWrapperProps> = {
   drop: (props, monitor, component) => {
@@ -18,7 +17,6 @@ const tabDropSpec: DropTargetSpec<DnDContainerWrapperProps> = {
     if (!url || !title) return console.warn('url and title are required')
 
     const targetGroup = props.groupId
-
       // tslint:disable-next-line:align
     ; (async () => {
       const res = await props.createBookmark(targetGroup, {
@@ -26,9 +24,11 @@ const tabDropSpec: DropTargetSpec<DnDContainerWrapperProps> = {
         url,
         img: favIconUrl
       })
+
       const lastPosition = props.bookmarks.length
       props.pushBookmark({
         groupId: targetGroup,
+        groupIndex: props.groupIndex,
         targetIndex: lastPosition,
         bookmark: res
       })

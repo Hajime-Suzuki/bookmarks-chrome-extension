@@ -74,6 +74,21 @@ const getIndex = (
   return targetIndex
 }
 
+const initialize = (
+  props: DnDContainerWrapperProps,
+  draggedItem: BeginDragReturnType
+) => {
+  if (state.currentIndex === null) {
+    state.setCurrentIndex(draggedItem.index)
+  }
+  if (!state.currentGroup) {
+    state.setCurrentGroup(props.groupId)
+  }
+  if (state.originGroupIndex === null) {
+    state.setOriginGroupIndex(props.groupIndex)
+  }
+}
+
 const bookmarkDropSource: DropTargetSpec<
   DnDContainerWrapperProps & GridSize
 > = {
@@ -83,14 +98,7 @@ const bookmarkDropSource: DropTargetSpec<
     const draggedItem = monitor.getItem() as BeginDragReturnType
     const hoveredGroup = props.groupId
 
-    // initialize when drag start
-    if (state.currentIndex === null) {
-      state.setCurrentIndex(draggedItem.index)
-    }
-    if (!state.currentGroup) {
-      state.setCurrentGroup(hoveredGroup)
-    }
-    // --- initialize
+    initialize(props, draggedItem)
 
     const targetIndex = getIndex(props, monitor, component, draggedItem)
 
@@ -98,33 +106,31 @@ const bookmarkDropSource: DropTargetSpec<
     const movedWithinGroup = targetIndex !== state.currentIndex && !groupChanged
 
     if (movedWithinGroup) {
-      // console.log('movedWithinGroup')
       if (targetIndex > props.bookmarks.length - 1) return
       props.reorderBookmarks({
-        groupId: state.currentGroup!,
+        groupIndex: props.groupIndex,
         currentIndex: state.currentIndex!,
         targetIndex,
         bookmark: draggedItem.bookmark
       })
       state.setCurrentIndex(targetIndex)
     } else if (groupChanged) {
-      // console.log('group changed')
-      const previousGroup = state.currentGroup!
-      state.setCurrentGroup(hoveredGroup)
-      const currentGroup = state.currentGroup!
-
       const previousIndex = state.currentIndex!
       state.setCurrentIndex(targetIndex)
 
       props.pushBookmark({
-        groupId: currentGroup,
+        groupId: state.currentGroup!,
+        groupIndex: props.groupIndex,
         targetIndex,
         bookmark: draggedItem.bookmark
       })
+
       props.pullBookmark({
-        groupId: previousGroup,
-        targetIndex: previousIndex
+        targetIndex: previousIndex,
+        groupIndex: state.originGroupIndex! // pull bookmark from the group it belongs to
       })
+
+      state.setOriginGroupIndex(props.groupIndex)
     }
   },
   drop: () => {
