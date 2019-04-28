@@ -42,34 +42,37 @@ export interface BookmarksProps {
   groupIndex: number
 }
 
-export const Bookmarks: FC<BookmarksProps> = ({
-  bookmarks,
-  groupId,
-  groupIndex
-}) => {
-  const { user } = useContext(UserContext)
-  return (
-    <Grid container spacing={24} justify="flex-start">
-      {bookmarks.map((bm, i) => {
-        return (
-          <Grid key={bm._id} item xs={12} sm={6} md={4} lg={3}>
-            <BookmarkCard
-              bookmark={bm}
-              index={i}
-              user={user}
-              groupIndex={groupIndex}
-            />
-          </Grid>
-        )
-      })}
-      <BookmarkEditModal
-        groupId={groupId}
-        bookmarks={bookmarks}
-        groupIndex={groupIndex}
-      />
-    </Grid>
-  )
-}
+export const Bookmarks: FC<BookmarksProps> = React.memo(
+  ({
+    bookmarks,
+    groupId,
+    groupIndex
+  }) => {
+    const { user } = useContext(UserContext)
+    return (
+      <Grid container spacing={24} justify="flex-start">
+        {bookmarks.map((bm, i) => {
+          return (
+            <Grid key={bm._id} item xs={12} sm={6} md={4} lg={3}>
+              <BookmarkCard
+                bookmark={bm}
+                index={i}
+                user={user}
+                groupIndex={groupIndex}
+              />
+            </Grid>
+          )
+        })}
+        <BookmarkEditModal
+          groupId={groupId}
+          bookmarks={bookmarks}
+          groupIndex={groupIndex}
+        />
+      </Grid>
+    )
+  }
+
+)
 
 /**
  * @description:

@@ -23,7 +23,7 @@ const TwoLineEllipsis: any = styled(Typography)`
 const StyledTooltip: any = styled(Tooltip)`` // TODO: set font size
 
 export const Content = ({ bookmark }: Pick<BookmarkCardProps, 'bookmark'>) => {
-  const { img, title } = bookmark
+  const { img, title, _id } = bookmark
   return (
     <StyledTooltip title={title} enterDelay={400}>
       <List className="card-content-list">
@@ -34,6 +34,7 @@ export const Content = ({ bookmark }: Pick<BookmarkCardProps, 'bookmark'>) => {
           <ListItemText
             primary={
               <TwoLineEllipsis variant="subheading" gutterBottom>
+                {/* {_id} */}
                 {title}
               </TwoLineEllipsis>
             }

@@ -8,6 +8,8 @@ import { DnDTypes } from '../../constants'
 
 const dragSource: DragSourceSpec<any, any> = {
   beginDrag: (props, monitor) => {
+    console.log('drag')
+
     return {
       group: 1234
     }
