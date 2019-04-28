@@ -5,13 +5,24 @@ import {
   DragSourceSpec
 } from 'react-dnd'
 import { DnDTypes } from '../../constants'
+import { GroupListItemWrapperProps } from '../view/Bookmarks/components/group/ReorderGroups'
+import { Omit } from 'react-router'
+import { findDOMNode } from 'react-dom'
 
-const dragSource: DragSourceSpec<any, any> = {
-  beginDrag: (props, monitor) => {
+type Props = Omit<GroupListItemWrapperProps, 'connectGroupDragSource'>
+
+export interface GroupBeginDragType {
+  groupIndex: number
+  size: ClientRect | DOMRect
+}
+
+const dragSource: DragSourceSpec<Props, GroupBeginDragType> = {
+  beginDrag: (props, monitor, component) => {
     console.log('drag')
-
     return {
-      group: 1234
+      // groupId: props.group._id,
+      groupIndex: props.groupIndex,
+      size: (findDOMNode(component) as Element).getBoundingClientRect()
     }
   }
 }
@@ -22,17 +33,6 @@ const collect = (connect: DragSourceConnector, monitor: DragSourceMonitor) => ({
 
 export type GroupDragSourceProps = ReturnType<typeof collect>
 
-export const groupDragSource = (component: any) =>
-  DragSource(DnDTypes.groups, dragSource, collect)(component)
-
-// const GroupWrapper = groupDragSource(props => {
-//   const { connectGroupDragSource, children } = props
-//   class C extends React.Component<any> {
-//     render() {
-//       return connectGroupDragSource(
-//         <div>Test ashtiaynshietonaihsentieaht {children}</div>
-//       )
-//     }
-//   }
-//   return <C />
-// })
+export const groupDragSource = (
+  component: React.ComponentType<GroupListItemWrapperProps>
+) => DragSource(DnDTypes.groups, dragSource, collect)(component)

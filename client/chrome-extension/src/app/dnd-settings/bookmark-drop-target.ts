@@ -42,7 +42,7 @@ const getXIndex = (
   return XIndex <= gridSize - 1 ? XIndex : gridSize - 1
 }
 
-const getYIndex = (targetOffsetY: number, cardHeight: number) => {
+export const getYIndex = (targetOffsetY: number, cardHeight: number) => {
   const YIndex = Math.floor(targetOffsetY / cardHeight) - 1
   return Math.max(0, YIndex)
 }
@@ -121,6 +121,7 @@ const bookmarkDropSource: DropTargetSpec<
 
       state.setCurrentBookmarkIndex(targetIndex)
       state.setCurrentGroup(hoveredGroup)
+      state.setUpdating(true)
 
       props.pushBookmark({
         groupId: state.currentGroup!,
@@ -135,6 +136,7 @@ const bookmarkDropSource: DropTargetSpec<
       })
 
       state.setOriginGroupIndex(props.groupIndex)
+      state.setUpdating(false)
     }
   },
   drop: () => {

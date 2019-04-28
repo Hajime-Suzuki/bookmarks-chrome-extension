@@ -36,8 +36,9 @@ const ReorderGroupButton: FC<{}> = () => {
 
 export interface GroupListProps {
   group: IGroup
+  groupIndex: number
 }
-const GroupList: FC<GroupListProps> = ({ group }) => {
+const GroupListItem: FC<GroupListProps> = ({ group }) => {
   return (
     <ListItem>
       <ListItemText>{group.title}</ListItemText>
@@ -45,27 +46,42 @@ const GroupList: FC<GroupListProps> = ({ group }) => {
   )
 }
 
-type Props = GroupDragSourceProps & GroupDropTargetProps & GroupListProps
+export type GroupListItemWrapperProps = GroupDragSourceProps & GroupListProps
 
-const GroupListWrapper: FC<GroupListProps> = groupDropTarget(
-  groupDragSource(
-    class extends React.Component<Props> {
-      render() {
-        const {
-          connectGroupDragSource,
-          connectGroupDropTarget,
-          group
-        } = this.props
-        return connectGroupDropTarget(
-          connectGroupDragSource(
-            <div key={group._id}>
-              <GroupList group={group} />
-            </div>
-          )
-        )
-      }
+const GroupListItemWrapper: FC<GroupListProps> = groupDragSource(
+  class extends React.Component<GroupListItemWrapperProps> {
+    render() {
+      const { connectGroupDragSource, ...rest } = this.props
+      return connectGroupDragSource(
+        <div>
+          <GroupListItem {...rest} />
+        </div>
+      )
     }
-  )
+  }
+)
+
+export type GroupListWrapperProps = GroupDropTargetProps & { groups: IGroup[] }
+
+const GroupListWrapper: FC<any> = groupDropTarget(
+  class extends React.Component<GroupListWrapperProps> {
+    render() {
+      const { connectGroupDropTarget, groups } = this.props
+      return connectGroupDropTarget(
+        <div>
+          {groups.map((group, i) => {
+            return (
+              <GroupListItemWrapper
+                key={group._id}
+                group={group}
+                groupIndex={i}
+              />
+            )
+          })}
+        </div>
+      )
+    }
+  }
 )
 
 const ReorderGroupsModal: FC<{}> = () => {
@@ -81,9 +97,7 @@ const ReorderGroupsModal: FC<{}> = () => {
           Reorder Groups
         </DialogTitle>
         <DialogContent style={{ minWidth: 300 }}>
-          {groups.map(group => {
-            return <GroupListWrapper group={group} key={group._id} />
-          })}
+          <GroupListWrapper groups={groups} />
         </DialogContent>
         <DialogActions>
           <Button onClick={closeModal}>Close</Button>
