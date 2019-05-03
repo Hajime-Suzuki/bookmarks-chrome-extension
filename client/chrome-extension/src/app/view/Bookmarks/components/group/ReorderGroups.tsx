@@ -24,6 +24,7 @@ import {
   groupDropTarget,
   GroupDropTargetProps
 } from '../../../../dnd-settings/group-drop-target'
+import { Omit } from 'react-dnd/lib/cjs/interfaces'
 
 const ReorderGroupButton: FC<{}> = () => {
   const { openModal } = useContext(ReorderModalContext)
@@ -61,9 +62,13 @@ const GroupListItemWrapper: FC<GroupListProps> = groupDragSource(
   }
 )
 
-export type GroupListWrapperProps = GroupDropTargetProps & { groups: IGroup[] }
+export type GroupListWrapperProps = GroupDropTargetProps & {
+  groups: IGroup[]
+} & Pick<GroupContext, 'reorderGroups'>
 
-const GroupListWrapper: FC<any> = groupDropTarget(
+const GroupListWrapper: FC<
+  Omit<GroupListWrapperProps, keyof GroupDropTargetProps>
+> = groupDropTarget(
   class extends React.Component<GroupListWrapperProps> {
     render() {
       const { connectGroupDropTarget, groups } = this.props
@@ -86,7 +91,7 @@ const GroupListWrapper: FC<any> = groupDropTarget(
 
 const ReorderGroupsModal: FC<{}> = () => {
   const { open, closeModal } = useContext(ReorderModalContext)
-  const { groups } = useContext(GroupContext)
+  const { groups, reorderGroups } = useContext(GroupContext)
 
   if (!groups) return null
 
@@ -97,7 +102,7 @@ const ReorderGroupsModal: FC<{}> = () => {
           Reorder Groups
         </DialogTitle>
         <DialogContent style={{ minWidth: 300 }}>
-          <GroupListWrapper groups={groups} />
+          <GroupListWrapper groups={groups} reorderGroups={reorderGroups} />
         </DialogContent>
         <DialogActions>
           <Button onClick={closeModal}>Close</Button>

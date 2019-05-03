@@ -20,6 +20,11 @@ export interface CreateGroupInput {
   tab?: Pick<Tab, 'title' | 'url' | 'favIconUrl'>
 }
 
+interface ReorderArgs {
+  targetIndex: number
+  originIndex: number
+}
+
 const useGroups = (user: CognitoUser | null) => {
   const [groups, setGroups] = useState<IGroup[] | null>(null)
 
@@ -69,6 +74,15 @@ const useGroups = (user: CognitoUser | null) => {
     setGroups(updated)
   }
 
+  const reorderGroups = ({ targetIndex, originIndex }: ReorderArgs) => {
+    if (!groups) return
+    const originGroup = groups[originIndex]
+    const updated = update(groups, {
+      $splice: [[originIndex, 1], [targetIndex, 0, originGroup]]
+    })
+    setGroups(updated)
+  }
+
   useEffect(() => {
     if (user) fetchGroups()
   }, [user])
@@ -80,6 +94,7 @@ const useGroups = (user: CognitoUser | null) => {
     createGroup,
     updateGroup,
     deleteGroup,
+    reorderGroups,
     ...bookmarks
   }
 }

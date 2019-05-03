@@ -26,7 +26,7 @@ const getIndex = (
   const { y: targetOffsetY } = monitor.getClientOffset()!
 
   const YIndex = getYIndex(
-    targetOffsetY - dropAreaOffsetTop + draggedItem.size.height / 2,
+    targetOffsetY - dropAreaOffsetTop + draggedItem.size.height,
     draggedItem.size.height
   )
 
@@ -35,7 +35,7 @@ const getIndex = (
 }
 
 const initialize = (draggedItem: GroupBeginDragType) => {
-  if (!state.currentGroupIndex === null) {
+  if (state.currentGroupIndex === null) {
     state.setCurrentGroupIndex(draggedItem.groupIndex)
   }
 }
@@ -46,14 +46,29 @@ const dropTarget: DropTargetSpec<Props> = {
     const draggedItem = monitor.getItem() as GroupBeginDragType
     initialize(draggedItem)
     const index = getIndex(props, monitor, component, draggedItem)
-    const isMoved =
-      index !== state.currentGroupIndex && index !== draggedItem.groupIndex
+    const isMoved = index !== state.currentGroupIndex
+
     if (!isMoved) return
-    state.setCurrentGroupIndex(index)
     console.log('moved')
+
+    // console.table({
+    //   'draggedItem.groupIndex': draggedItem.groupIndex,
+    //   index,
+    //   'state.currentGroupIndex': state.currentGroupIndex
+    // })
+
+    props.reorderGroups({
+      targetIndex: index,
+      originIndex: state.currentGroupIndex!
+    })
+
+    state.setCurrentGroupIndex(index)
   },
   drop: (props, monitor, component) => {
+    state.reset()
     console.log('drop')
+    console.log(state.currentGroupIndex)
+    console.log('======')
   }
 }
 

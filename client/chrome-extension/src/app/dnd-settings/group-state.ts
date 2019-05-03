@@ -1,6 +1,5 @@
 class DnDGroupState {
   currentGroupIndex: number | null = null
-  originGroupIndex: number | null = null
   updating: boolean = false
 
   setCurrentGroupIndex(newIndex: number) {
@@ -12,7 +11,7 @@ class DnDGroupState {
   }
 
   reset() {
-    this.originGroupIndex = null
+    this.currentGroupIndex = null
     this.updating = false
   }
 }

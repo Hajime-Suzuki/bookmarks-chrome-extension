@@ -18,7 +18,7 @@ export interface GroupBeginDragType {
 
 const dragSource: DragSourceSpec<Props, GroupBeginDragType> = {
   beginDrag: (props, monitor, component) => {
-    console.log('drag')
+    console.log('drag', { props })
     return {
       // groupId: props.group._id,
       groupIndex: props.groupIndex,

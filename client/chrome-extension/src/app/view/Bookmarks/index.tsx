@@ -43,11 +43,7 @@ export interface BookmarksProps {
 }
 
 export const Bookmarks: FC<BookmarksProps> = React.memo(
-  ({
-    bookmarks,
-    groupId,
-    groupIndex
-  }) => {
+  ({ bookmarks, groupId, groupIndex }) => {
     const { user } = useContext(UserContext)
     return (
       <Grid container spacing={24} justify="flex-start">
@@ -71,7 +67,6 @@ export const Bookmarks: FC<BookmarksProps> = React.memo(
       </Grid>
     )
   }
-
 )
 
 /**
