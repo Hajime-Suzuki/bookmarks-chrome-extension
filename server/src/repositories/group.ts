@@ -1,10 +1,11 @@
 import { format } from 'date-fns'
 import * as createError from 'http-errors'
+import { TableNames } from '../constants'
+import { Bookmark, IBookmark } from '../models/Bookmark'
 import { Group, IGroup } from '../models/Group'
 import { CreateGroupInput } from '../routes/groups/create-group'
-import { IBookmark, Bookmark } from '../models/Bookmark'
 
-import { TableNames } from '../constants'
+const createGroup = async (input: CreateGroupInput) => Group.create(input)
 
 const findWithBookmarks = async () => {
   return Group.find({}).populate({
@@ -24,10 +25,11 @@ interface FindOrCreateArgs {
 const findByIdOrCreate = async ({ id, data }: FindOrCreateArgs) => {
   // when id specified, find. Otherwise create.
   if (!id && data) {
-    const newGroup = await GroupRepository.create({
+    const newGroup = await createGroup({
       title: data.title || format(new Date(), 'yyyy MMM dd HH mm ss'),
       user: data.user
     })
+
     return newGroup
   } else if (id && !data) {
     const existingGroup = await GroupRepository.findById(id)
@@ -40,8 +42,6 @@ const findByIdOrCreate = async ({ id, data }: FindOrCreateArgs) => {
     )
   }
 }
-
-const create = async (input: CreateGroupInput) => Group.create(input)
 
 interface UpdateInput extends Partial<IGroup> {
   $push?: {
@@ -82,7 +82,6 @@ export const GroupRepository = {
   findWithBookmarks,
   findById,
   findByIdOrCreate,
-  create,
   update,
   remove
 }

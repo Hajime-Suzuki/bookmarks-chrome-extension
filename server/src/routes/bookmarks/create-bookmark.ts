@@ -1,17 +1,17 @@
 import {
   IsArray,
+  IsMongoId,
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsUrl,
-  IsMongoId
+  IsUrl
 } from 'class-validator'
 import { validateInput } from '../../helpers/validator'
 import { handleLambda, LambdaHandler } from '../../middleware/handle-lambda'
 import { IBookmark } from '../../models/Bookmark'
+import { IGroup } from '../../models/Group'
 import { BookmarkRepository } from '../../repositories/bookmarks'
 import { GroupRepository } from '../../repositories/group'
-import { IGroup } from '../../models/Group'
 
 /**
  * @description: When create a new bookmark, it must be belong to a group. Either drop a tab into a group, or collect all tabs currently opened and put them in one group.

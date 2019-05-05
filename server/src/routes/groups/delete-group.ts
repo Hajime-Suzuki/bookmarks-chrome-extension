@@ -1,11 +1,20 @@
-import { LambdaHandler, handleLambda } from '../../middleware/handle-lambda'
-import { GroupRepository } from '../../repositories/group'
+import * as createError from 'http-errors'
+import { handleLambda, LambdaHandler } from '../../middleware/handle-lambda'
 import { IGroup } from '../../models/Group'
+import { GroupRepository } from '../../repositories/group'
+import { UserRepository } from '../../repositories/users'
 
 const deleteGroup: LambdaHandler<{}, { id: IGroup['_id'] }> = async ({
-  pathParameters
+  pathParameters,
+  userId
 }) => {
-  await GroupRepository.remove(pathParameters.id)
+  if (!userId) throw createError(401, 'login to proceed')
+  const { id: groupId } = pathParameters
+  await GroupRepository.remove(groupId)
+  await UserRepository.update({
+    userId,
+    params: { $pull: { groups: groupId } }
+  })
   return {
     success: true
   }

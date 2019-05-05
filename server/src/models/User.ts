@@ -3,12 +3,13 @@ import { TableNames } from '../constants'
 import { IGroup } from './Group'
 
 export interface IUser {
-  _id: string // ObjectId
+  userId: string // coming from Cognito
   createdAt: Date
   groups: IGroup[]
 }
 
 const UserSchema = new Schema<IUser>({
+  userId: { type: String },
   groups: [{ type: Schema.Types.ObjectId, ref: TableNames.groups }],
   createdAt: { type: Date, default: () => Date.now() }
 })

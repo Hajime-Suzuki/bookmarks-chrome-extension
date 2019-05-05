@@ -6,6 +6,7 @@ import { IGroup } from '../../models/Group'
 import { BookmarkRepository } from '../../repositories/bookmarks'
 import { GroupRepository } from '../../repositories/group'
 import { CreateBookmarkInput } from '../bookmarks/create-bookmark'
+import { UserRepository } from '../../repositories/users'
 
 export class CreateGroupInput {
   @IsOptional()
@@ -20,16 +21,23 @@ export class CreateGroupInput {
   user: string
 }
 
+/**
+ * @description: user can create either just a group or a group with bookmarks.
+ *
+ */
+
 const createGroup: LambdaHandler<CreateGroupInput> = async ({ body }) => {
   console.log('=== create-group ===')
-  // TODO: change this one only to make groups.
   await validateInput(body, CreateGroupInput)
   if (!body.title && !body.bookmark) {
     createError(400, 'either title or bookmark is required')
   }
 
+  // create group
   const newGroup = await GroupRepository.findByIdOrCreate({ data: body })
 
+  // create bookmark
+  // TODO: remove this statement. Maybe allow user to only create group without a bookmark.
   if (body.bookmark) {
     const input = {
       ...body.bookmark,
@@ -41,6 +49,11 @@ const createGroup: LambdaHandler<CreateGroupInput> = async ({ body }) => {
     const updatedGroup = await GroupRepository.update(newGroup._id, {
       bookmarks: [newBookmark._id]
     })
+
+    // update user
+    const user = await UserRepository.findByIdOrCreate({ id: body.user })
+    user.groups.unshift(newGroup._id)
+    await user.save()
 
     const mergedGroup = { ...updatedGroup.toObject(), bookmarks: [newBookmark] }
     return { group: mergedGroup }
