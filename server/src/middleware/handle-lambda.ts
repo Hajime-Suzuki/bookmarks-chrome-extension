@@ -11,8 +11,9 @@ interface Event<
   body: TBody
   pathParameters: TPathParams
   queryStringParameters: TQueryParams
+  userId?: string
   headers: {
-    authentication: string
+    authorization: string
   }
 }
 type Context = any
@@ -87,8 +88,8 @@ export const handleLambda = <
 
   const transformedEvent = await transformEvent(event)
 
-  const userId = event.headers.authentication
-    ? await authChecker(event.headers.authentication)
+  const userId = event.headers.authorization
+    ? await authChecker(event.headers.authorization)
     : null
 
   try {
@@ -108,9 +109,8 @@ export const handleLambda = <
     }
   } catch (e) {
     console.log(e)
-
     return {
-      statusCode: e.status,
+      statusCode: e.status || 500,
       body: JSON.stringify({
         message: e.message
       })
