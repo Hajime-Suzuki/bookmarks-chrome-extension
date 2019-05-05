@@ -1,5 +1,5 @@
 import { Document, model, Model, models, Schema } from 'mongoose'
-import { TableName } from '../constants'
+import { TableNames } from '../constants'
 
 /**
  * @description While a group must be unique, multiple category can be added to a bookmark.
@@ -20,7 +20,7 @@ const BookmarkSchema = new Schema<IBookmark>({
   title: { type: String, required: true },
   url: { type: String, required: true },
   img: String,
-  group: { type: Schema.Types.ObjectId, ref: TableName.groups },
+  group: { type: Schema.Types.ObjectId, ref: TableNames.groups },
   tags: {
     type: [String]
   },
@@ -29,5 +29,5 @@ const BookmarkSchema = new Schema<IBookmark>({
 })
 
 export const Bookmark: Model<IBookmark & Document> =
-  models[TableName.bookmarks] ||
-  model<IBookmark & Document>(TableName.bookmarks, BookmarkSchema)
+  models[TableNames.bookmarks] ||
+  model<IBookmark & Document>(TableNames.bookmarks, BookmarkSchema)

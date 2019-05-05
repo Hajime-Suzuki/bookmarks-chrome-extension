@@ -1,4 +1,5 @@
-export enum TableName {
+export enum TableNames {
   bookmarks = 'bookmarks',
-  groups = 'groups'
+  groups = 'groups',
+  users = 'users'
 }

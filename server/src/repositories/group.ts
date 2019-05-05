@@ -4,12 +4,13 @@ import { Group, IGroup } from '../models/Group'
 import { CreateGroupInput } from '../routes/groups/create-group'
 import { IBookmark, Bookmark } from '../models/Bookmark'
 
-import { TableName } from '../constants'
+import { TableNames } from '../constants'
 
 const findWithBookmarks = async () => {
-  return Group.find({})
-    .populate({ path: TableName.bookmarks, model: Bookmark })
-    .sort({ createdAt: -1 })
+  return Group.find({}).populate({
+    path: TableNames.bookmarks,
+    model: Bookmark
+  })
 }
 
 const findById = async (id: IGroup['_id']) => {
