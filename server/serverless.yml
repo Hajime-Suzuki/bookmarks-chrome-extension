@@ -80,6 +80,15 @@ functions:
           method: put
           cors: true
 
+  reorderGroups:
+    name: '${self:service}-reorder-groups'
+    handler: src/routes/groups/reorder-groups.handler
+    events:
+      - http:
+          path: groups/{id}/reorder
+          method: put
+          cors: true
+
   reorderBookmarks:
     name: '${self:service}-reorder-bookmarks'
     handler: src/routes/groups/reorder-bookmarks.handler
