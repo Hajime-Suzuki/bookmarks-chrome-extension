@@ -80,6 +80,10 @@ const deleteGroup = async (id: IGroup['_id'], user: CognitoUser | null) => {
   await axios.delete(`${API_GROUPS_URL}/${id}`, getHeaders(user))
 }
 
+// const reorderGroups = (id:IGroup[])=>{
+//   axios.put()
+// }
+
 export const GroupsAPI = {
   fetch,
   createGroup,

@@ -1,7 +1,5 @@
 import { IGroup } from '@bookmarks/extension/src/app/types'
 import React, { useContext } from 'react'
-import { SelectedMenuContext } from '../../hooks-contenxts/SelectedMenuContext'
-import { NewGroupContext } from '../../hooks-contenxts/useNewGroup'
 
 import FormModal from '@bookmarks/extension/src/app/view/Bookmarks/components/FormModal'
 import { Wrapper } from '.'
@@ -10,6 +8,8 @@ import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import { SelectedMenuContext } from '../../contexts/SelectedMenu'
+import { NewGroupContext } from '../../contexts/NewGroup'
 
 const GroupSelect = ({ groups }: { groups: IGroup[] }) => {
   const {

@@ -30,7 +30,7 @@ const getIndex = (
     draggedItem.size.height
   )
 
-  const targetIndex = Math.min(YIndex, props.groups.length)
+  const targetIndex = Math.min(YIndex, props.groups.length - 1)
   return targetIndex
 }
 
@@ -50,7 +50,6 @@ const dropTarget: DropTargetSpec<Props> = {
 
     if (!isMoved) return
     console.log('moved')
-
     // console.table({
     //   'draggedItem.groupIndex': draggedItem.groupIndex,
     //   index,
@@ -67,8 +66,6 @@ const dropTarget: DropTargetSpec<Props> = {
   drop: (props, monitor, component) => {
     state.reset()
     console.log('drop')
-    console.log(state.currentGroupIndex)
-    console.log('======')
   }
 }
 
