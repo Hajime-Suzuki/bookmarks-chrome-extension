@@ -1,4 +1,5 @@
 import { IsInt, IsNotEmpty, IsString } from 'class-validator'
+import { AuthCheckerOption } from '../../constants'
 import { validateInput } from '../../helpers/validator'
 import { handleLambda, LambdaHandler } from '../../middleware/handle-lambda'
 import { IGroup } from '../../models/Group'
@@ -20,4 +21,4 @@ const reorderGroups: LambdaHandler<ReorderGroupsInput> = async ({
   await validateInput(body, ReorderGroupsInput)
   return UserRepository.reorderGroups({ userId: userId!, ...body })
 }
-export const handler = handleLambda(reorderGroups, { auth: true })
+export const handler = handleLambda(reorderGroups, AuthCheckerOption)

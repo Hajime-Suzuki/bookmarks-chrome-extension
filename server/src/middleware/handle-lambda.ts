@@ -14,7 +14,7 @@ interface Event<
   queryStringParameters: TQueryParams
   userId?: string
   headers: {
-    authorization: string
+    Authorization: string
   }
 }
 type Context = any
@@ -92,8 +92,8 @@ export const handleLambda = <
 
   const transformedEvent = await transformEvent(event)
 
-  const userId = event.headers.authorization
-    ? await authChecker(event.headers.authorization)
+  const userId = event.headers.Authorization
+    ? await authChecker(event.headers.Authorization)
     : null
 
   try {

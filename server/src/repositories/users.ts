@@ -1,6 +1,6 @@
 import { User, IUser } from '../models/User'
 import { IGroup, Group } from '../models/Group'
-import createError from 'http-errors'
+import * as createError from 'http-errors'
 import { TableNames } from '../constants'
 import { Bookmark } from '../models/Bookmark'
 import { ReorderGroupsInput } from '../routes/groups/reorder-groups'

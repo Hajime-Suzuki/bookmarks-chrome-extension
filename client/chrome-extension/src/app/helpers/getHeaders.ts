@@ -4,7 +4,7 @@ export const getHeaders = (user: CognitoUser | null) => {
   return {
     headers: {
       ...(user && {
-        authorization: user
+        Authorization: user
           .getSignInUserSession()!
           .getAccessToken()
           .getJwtToken()
