@@ -2,6 +2,7 @@ import { connectDB } from '../db/connection'
 import { IBookmark } from '../models/Bookmark'
 import { Omit } from '../helpers/types'
 import { authChecker } from './auth-checker'
+import * as createError from 'http-errors'
 
 interface Event<
   TBody = Partial<IBookmark>,
@@ -76,7 +77,10 @@ export const handleLambda = <
   TPathParams = null,
   TQueryParams = null
 >(
-  fn: LambdaHandler<TBody, TPathParams, TQueryParams>
+  fn: LambdaHandler<TBody, TPathParams, TQueryParams>,
+  options?: {
+    auth: boolean
+  }
 ) => async (
   event: Event<TBody, TPathParams, TQueryParams>,
   context: Context,
@@ -93,6 +97,10 @@ export const handleLambda = <
     : null
 
   try {
+    if (options && options.auth && !userId) {
+      throw createError(401, 'you need to login')
+    }
+
     const res = await fn(
       { ...transformedEvent, userId } as any,
       context,
