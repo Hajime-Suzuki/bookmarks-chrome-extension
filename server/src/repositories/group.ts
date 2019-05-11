@@ -1,10 +1,8 @@
 import { format } from 'date-fns'
 import * as createError from 'http-errors'
-import { TableNames } from '../constants'
-import { Bookmark, IBookmark } from '../models/Bookmark'
+import { IBookmark } from '../models/Bookmark'
 import { Group, IGroup } from '../models/Group'
 import { CreateGroupInput } from '../routes/groups/create-group'
-import { User } from '../models/User'
 
 const createGroup = async (input: CreateGroupInput) => Group.create(input)
 

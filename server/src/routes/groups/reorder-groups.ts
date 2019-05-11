@@ -1,15 +1,23 @@
+import { IsInt, IsNotEmpty, IsString } from 'class-validator'
+import { validateInput } from '../../helpers/validator'
 import { handleLambda, LambdaHandler } from '../../middleware/handle-lambda'
-import { ReorderGroupsArgs, UserRepository } from '../../repositories/users'
-import { Omit } from '../../helpers/types'
-import { User } from '../../models/User'
+import { IGroup } from '../../models/Group'
+import { UserRepository } from '../../repositories/users'
 
-const tempUserId = '7deb8b12-410e-4c17-be7b-951adc3fb470'
+export class ReorderGroupsInput {
+  @IsString()
+  @IsNotEmpty()
+  originId: IGroup['_id']
 
-const getGroups: LambdaHandler<Omit<ReorderGroupsArgs, 'userId'>> = async ({
+  @IsInt()
+  targetIndex: number
+}
+
+const reorderGroups: LambdaHandler<ReorderGroupsInput> = async ({
   userId,
   body
 }) => {
-  // TODO: add validation
-  return UserRepository.reorderGroups({ userId: tempUserId, ...body })
+  await validateInput(body, ReorderGroupsInput)
+  return UserRepository.reorderGroups({ userId: userId!, ...body })
 }
-export const handler = handleLambda(getGroups, { auth: false })
+export const handler = handleLambda(reorderGroups, { auth: true })

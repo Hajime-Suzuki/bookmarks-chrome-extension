@@ -3,6 +3,7 @@ import { IGroup, Group } from '../models/Group'
 import createError from 'http-errors'
 import { TableNames } from '../constants'
 import { Bookmark } from '../models/Bookmark'
+import { ReorderGroupsInput } from '../routes/groups/reorder-groups'
 
 type Id = IUser['userId']
 
@@ -41,27 +42,20 @@ interface UpdateArgs {
 const update = async ({ userId, params }: UpdateArgs) =>
   User.findOneAndUpdate({ userId }, params)
 
-export interface ReorderGroupsArgs {
-  originId: IGroup['_id']
-  targetIndex: number
-  userId: IUser['userId']
-}
 const reorderGroups = async ({
   originId,
   targetIndex,
   userId
-}: ReorderGroupsArgs) => {
+}: ReorderGroupsInput & { userId: string }) => {
   const user = await User.findOne({ userId })
   if (!user) return createError(404, 'user not found')
 
-  const params = { $pull: { groups: originId } }
-  const updated = await user.update(params)
-
-  const params2 = {
+  const pullParams = { $pull: { groups: originId } }
+  const pushParams = {
     $push: { groups: { $each: [originId], $position: targetIndex } }
   }
-
-  const updated2 = await user.update(params2)
+  await user.update(pullParams)
+  await user.update(pushParams)
 
   return true
 }

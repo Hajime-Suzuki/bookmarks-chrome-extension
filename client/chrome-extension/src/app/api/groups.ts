@@ -67,11 +67,12 @@ export interface UpdateGroupInput {
 }
 
 const updateGroup = async (
+  id: IGroup['_id'],
   args: UpdateGroupInput,
   user: CognitoUser | null
 ) => {
   return await axios
-    .put<GroupResponse>(`${API_GROUPS_URL}`, args, getHeaders(user))
+    .put<GroupResponse>(`${API_GROUPS_URL}/${id}`, args, getHeaders(user))
     .then(({ data }) => data)
 }
 
