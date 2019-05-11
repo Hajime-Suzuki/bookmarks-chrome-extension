@@ -29,7 +29,7 @@ const findByIdOrCreate = async ({ id }: CreateUserArgs) => {
   return existingUser
 }
 
-interface Args {
+interface UpdateArgs {
   userId: Id
   params: {
     $pull: {
@@ -38,7 +38,37 @@ interface Args {
   }
 }
 
-const update = async ({ userId, params }: Args) =>
+const update = async ({ userId, params }: UpdateArgs) =>
   User.findOneAndUpdate({ userId }, params)
 
-export const UserRepository = { findByIdOrCreate, findGroups, update }
+export interface ReorderGroupsArgs {
+  originId: IGroup['_id']
+  targetIndex: number
+  userId: IUser['userId']
+}
+const reorderGroups = async ({
+  originId,
+  targetIndex,
+  userId
+}: ReorderGroupsArgs) => {
+  const user = await User.findOne({ userId })
+  if (!user) return createError(404, 'user not found')
+
+  const params = { $pull: { groups: originId } }
+  const updated = await user.update(params)
+
+  const params2 = {
+    $push: { groups: { $each: [originId], $position: targetIndex } }
+  }
+
+  const updated2 = await user.update(params2)
+
+  return true
+}
+
+export const UserRepository = {
+  findByIdOrCreate,
+  findGroups,
+  reorderGroups,
+  update
+}

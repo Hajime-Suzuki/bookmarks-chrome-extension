@@ -1,0 +1,3 @@
+- Reorder Bookmarks
+- clean up unused functions
+- write tests

@@ -17,15 +17,6 @@ custom:
     port: 4000
 
 functions:
-  getBookmarks:
-    name: '${self:service}-get-bookmarks'
-    handler: src/routes/bookmarks/get-bookmarks.handler
-    events:
-      - http:
-          path: bookmarks
-          method: get
-          cors: true
-
   createBookmarks:
     name: '${self:service}-create-bookmark'
     handler: src/routes/bookmarks/create-bookmark.handler
@@ -85,7 +76,7 @@ functions:
     handler: src/routes/groups/reorder-groups.handler
     events:
       - http:
-          path: groups/{id}/reorder
+          path: groups/reorder-groups
           method: put
           cors: true
 
