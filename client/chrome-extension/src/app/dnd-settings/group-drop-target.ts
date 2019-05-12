@@ -38,6 +38,9 @@ const initialize = (draggedItem: GroupBeginDragType) => {
   if (state.currentGroupIndex === null) {
     state.setCurrentGroupIndex(draggedItem.groupIndex)
   }
+  if (state.originGroupIndex === null) {
+    state.setOriginGroupIndex(draggedItem.groupIndex)
+  }
 }
 
 const dropTarget: DropTargetSpec<Props> = {

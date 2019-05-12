@@ -27,6 +27,7 @@ const dragSource: DragSourceSpec<Props, GroupBeginDragType> = {
     }
   },
   endDrag: async (props, monitor, component) => {
+    if (props.groupIndex === state.originGroupIndex) return
     await state.placeReorder(props.group)
     state.reset()
   }
