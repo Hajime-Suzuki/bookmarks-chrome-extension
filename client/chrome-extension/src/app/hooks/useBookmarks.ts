@@ -37,7 +37,6 @@ const updatedGroups = (groups: IGroup[], targetIndex: number, params: any) =>
   })
 
 export const useBookmarks = (
-  user: CognitoUser | null,
   groups: IGroup[] | null,
   setGroups: React.Dispatch<React.SetStateAction<IGroup[] | null>>
 ) => {
@@ -45,7 +44,7 @@ export const useBookmarks = (
     targetGroup: string,
     input: CreateBookmarkInput
   ) => {
-    return bookmarksAPI.create(targetGroup, input, user)
+    return bookmarksAPI.create(targetGroup, input)
   }
 
   ///// TODO: ues group index and merge these functions.
@@ -93,11 +92,7 @@ export const useBookmarks = (
   const updateBookmark = async (args: UpdateBookmarkArgs) => {
     const { id, input, groupIndex, bookmarkIndex } = args
     if (!groups) return
-    const { bookmark: updatedBookmark } = await bookmarksAPI.update(
-      id,
-      input,
-      user
-    )
+    const { bookmark: updatedBookmark } = await bookmarksAPI.update(id, input)
     const updated = update(groups, {
       [groupIndex]: {
         bookmarks: { [bookmarkIndex]: { $merge: updatedBookmark } }
@@ -107,7 +102,7 @@ export const useBookmarks = (
   }
 
   const removeBookmark = async (id: IBookmark['_id']) => {
-    return bookmarksAPI.remove(id, user)
+    return bookmarksAPI.remove(id)
   }
 
   return {

@@ -1,17 +1,10 @@
-import { CognitoUser } from '@aws-amplify/auth'
 import update from 'immutability-helper'
-import React, {
-  createContext,
-  FC,
-  useContext,
-  useEffect,
-  useState
-} from 'react'
+import React, { createContext, FC, useEffect, useState } from 'react'
 import { GroupsAPI } from '../api/groups'
+import { getUser } from '../helpers/getUser'
 import { useBookmarks } from '../hooks/useBookmarks'
 import { useHttp } from '../hooks/useHttp'
 import { IGroup, Tab } from '../types'
-import { UserContext } from './User'
 
 interface CreateGroupInput {
   groupTitle?: string
@@ -23,17 +16,18 @@ interface ReorderArgs {
   originIndex: number
 }
 
-const useGroups = (user: CognitoUser | null) => {
+const useGroups = () => {
   const [groups, setGroups] = useState<IGroup[] | null>(null)
 
-  const bookmarks = useBookmarks(user, groups, setGroups)
+  const bookmarks = useBookmarks(groups, setGroups)
 
   const { fn: fetchGroups, fetching, error } = useHttp(async () => {
-    const { groups: fetchedGroups } = await GroupsAPI.fetch(user)
+    const { groups: fetchedGroups } = await GroupsAPI.fetch()
     setGroups(fetchedGroups)
   })
 
   const createGroup = async ({ groupTitle, tab }: CreateGroupInput) => {
+    const user = await getUser()
     if (!user) return
 
     if (!groupTitle && !tab) {
@@ -51,13 +45,13 @@ const useGroups = (user: CognitoUser | null) => {
         bookmark: { title: tab.title!, url: tab.url!, img: tab.favIconUrl }
       })
     }
-    const { newGroup } = await GroupsAPI.createGroup(body, user)
+    const { newGroup } = await GroupsAPI.createGroup(body)
     setGroups([newGroup, ...(groups ? groups : [])])
   }
 
   const updateGroup = async (index: number, input: any) => {
     if (!groups) return
-    await GroupsAPI.updateGroup(groups[index]._id, input, user)
+    await GroupsAPI.updateGroup(groups[index]._id, input)
 
     const updated = update(groups, {
       [index]: { $merge: input }
@@ -67,7 +61,7 @@ const useGroups = (user: CognitoUser | null) => {
 
   const deleteGroup = async (index: number) => {
     if (!groups) return
-    await GroupsAPI.deleteGroup(groups[index]._id, user)
+    await GroupsAPI.deleteGroup(groups[index]._id)
     const updated = update(groups, { $splice: [[index, 1]] })
     setGroups(updated)
   }
@@ -82,8 +76,8 @@ const useGroups = (user: CognitoUser | null) => {
   }
 
   useEffect(() => {
-    if (user) fetchGroups()
-  }, [user])
+    fetchGroups()
+  }, [])
 
   return {
     groups,
@@ -101,8 +95,7 @@ export type GroupContext = ReturnType<typeof useGroups>
 export const GroupContext = createContext({} as GroupContext)
 
 export const GroupsProvider: FC = props => {
-  const { user } = useContext(UserContext)
-  const groups = useGroups(user)
+  const groups = useGroups()
   return (
     <GroupContext.Provider value={groups}>
       {props.children}

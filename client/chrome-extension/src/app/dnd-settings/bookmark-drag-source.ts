@@ -16,7 +16,6 @@ interface OwnProps {
 }
 
 export interface BeginDragReturnType {
-  // id: IBookmark['_id']
   bookmark: IBookmark
   index: number
   size: ClientRect | DOMRect
@@ -29,7 +28,6 @@ const dragSource: DragSourceSpec<
   beginDrag: (props, _, component) => {
     state.reset()
     return {
-      // id: props.bookmark._id,
       bookmark: props.bookmark,
       index: props.index,
       size: (findDOMNode(component) as Element).getBoundingClientRect()

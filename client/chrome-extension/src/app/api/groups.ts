@@ -8,7 +8,7 @@ interface FetchBookmarksResponse {
   groups: IGroup[]
 }
 
-const fetch = async (user: CognitoUser | null) => {
+const fetch = async () => {
   const { data } = await axios.get<FetchBookmarksResponse>(
     API_GROUPS_URL,
     await getHeaders()
@@ -34,10 +34,7 @@ interface GroupResponse {
   group: IGroup
 }
 
-const createGroup = async (
-  input: CreateGroupInput,
-  user: CognitoUser | null
-) => {
+const createGroup = async (input: CreateGroupInput) => {
   const { group } = await axios
     .post<GroupResponse>(API_GROUPS_URL, input, await getHeaders())
     .then(({ data }) => data)
@@ -63,17 +60,13 @@ export interface UpdateGroupInput {
   title: IGroup['title']
 }
 
-const updateGroup = async (
-  id: IGroup['_id'],
-  args: UpdateGroupInput,
-  user: CognitoUser | null
-) => {
+const updateGroup = async (id: IGroup['_id'], args: UpdateGroupInput) => {
   return await axios
     .put<GroupResponse>(`${API_GROUPS_URL}/${id}`, args, await getHeaders())
     .then(({ data }) => data)
 }
 
-const deleteGroup = async (id: IGroup['_id'], user: CognitoUser | null) => {
+const deleteGroup = async (id: IGroup['_id']) => {
   await axios.delete(`${API_GROUPS_URL}/${id}`, await getHeaders())
 }
 
