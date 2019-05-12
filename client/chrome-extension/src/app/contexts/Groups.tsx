@@ -13,9 +13,7 @@ import { useHttp } from '../hooks/useHttp'
 import { IGroup, Tab } from '../types'
 import { UserContext } from './User'
 
-// TODO: put all interface to api
-
-export interface CreateGroupInput {
+interface CreateGroupInput {
   groupTitle?: string
   tab?: Pick<Tab, 'title' | 'url' | 'favIconUrl'>
 }

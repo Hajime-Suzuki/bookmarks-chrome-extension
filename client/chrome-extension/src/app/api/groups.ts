@@ -8,7 +8,18 @@ interface FetchBookmarksResponse {
   groups: IGroup[]
 }
 
-export interface CreateGroupInput {
+const fetch = async (user: CognitoUser | null) => {
+  const { data } = await axios.get<FetchBookmarksResponse>(
+    API_GROUPS_URL,
+    await getHeaders()
+  )
+
+  return {
+    groups: data.groups
+  }
+}
+
+interface CreateGroupInput {
   title?: string
   user: string
   bookmark?: {
@@ -23,23 +34,12 @@ interface GroupResponse {
   group: IGroup
 }
 
-const fetch = async (user: CognitoUser | null) => {
-  const { data } = await axios.get<FetchBookmarksResponse>(
-    API_GROUPS_URL,
-    getHeaders(user)
-  )
-
-  return {
-    groups: data.groups
-  }
-}
-
 const createGroup = async (
   input: CreateGroupInput,
   user: CognitoUser | null
 ) => {
   const { group } = await axios
-    .post<GroupResponse>(API_GROUPS_URL, input, getHeaders(user))
+    .post<GroupResponse>(API_GROUPS_URL, input, await getHeaders())
     .then(({ data }) => data)
   return { newGroup: group }
 }
@@ -58,7 +58,7 @@ const reorderBookmarks = async (
   await axios.put<GroupResponse>(
     `${API_GROUPS_URL}/reorder-bookmarks`,
     args,
-    getHeaders(user)
+    await getHeaders()
   )
 }
 
@@ -72,22 +72,28 @@ const updateGroup = async (
   user: CognitoUser | null
 ) => {
   return await axios
-    .put<GroupResponse>(`${API_GROUPS_URL}/${id}`, args, getHeaders(user))
+    .put<GroupResponse>(`${API_GROUPS_URL}/${id}`, args, await getHeaders())
     .then(({ data }) => data)
 }
 
 const deleteGroup = async (id: IGroup['_id'], user: CognitoUser | null) => {
-  await axios.delete(`${API_GROUPS_URL}/${id}`, getHeaders(user))
+  await axios.delete(`${API_GROUPS_URL}/${id}`, await getHeaders())
 }
 
-// const reorderGroups = (id:IGroup[])=>{
-//   axios.put()
-// }
+interface ReorderGroupsInput {
+  originId: IGroup['_id']
+  targetIndex: number
+}
+const reorderGroups = async (input: ReorderGroupsInput) => {
+  console.log(input)
+  await axios.put(`${API_GROUPS_URL}/reorder-groups`, input, await getHeaders())
+}
 
 export const GroupsAPI = {
   fetch,
   createGroup,
   updateGroup,
   deleteGroup,
-  reorderBookmarks
+  reorderBookmarks,
+  reorderGroups
 }

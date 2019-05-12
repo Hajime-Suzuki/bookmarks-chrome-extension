@@ -62,10 +62,6 @@ const dropTarget: DropTargetSpec<Props> = {
     })
 
     state.setCurrentGroupIndex(index)
-  },
-  drop: (props, monitor, component) => {
-    state.reset()
-    console.log('drop')
   }
 }
 

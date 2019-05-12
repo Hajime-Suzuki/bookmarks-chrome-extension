@@ -8,6 +8,7 @@ import { DnDTypes } from '../../constants'
 import { GroupListItemWrapperProps } from '../view/Bookmarks/components/group/ReorderGroups'
 import { Omit } from 'react-router'
 import { findDOMNode } from 'react-dom'
+import { dndGroupState as state } from './group-state'
 
 type Props = Omit<GroupListItemWrapperProps, 'connectGroupDragSource'>
 
@@ -24,6 +25,10 @@ const dragSource: DragSourceSpec<Props, GroupBeginDragType> = {
       groupIndex: props.groupIndex,
       size: (findDOMNode(component) as Element).getBoundingClientRect()
     }
+  },
+  endDrag: async (props, monitor, component) => {
+    await state.placeReorder(props.group)
+    state.reset()
   }
 }
 
