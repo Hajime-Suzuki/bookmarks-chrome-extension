@@ -97,7 +97,7 @@ const ReorderGroupsModal: FC<{}> = () => {
 
   return (
     <>
-      <Dialog open={true} onClose={closeModal} maxWidth="md">
+      <Dialog open={open} onClose={closeModal} maxWidth="md">
         <DialogTitle style={{ textAlign: 'center' }}>
           Reorder Groups
         </DialogTitle>

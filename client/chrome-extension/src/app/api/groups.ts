@@ -1,7 +1,5 @@
-import { CognitoUser } from '@aws-amplify/auth'
-import axios from 'axios'
+import { deleteApi, getApi, postApi, putApi } from '.'
 import { API_GROUPS_URL } from '../../constants'
-import { getHeaders } from '../helpers/getHeaders'
 import { IBookmark, IGroup } from '../types'
 
 interface FetchBookmarksResponse {
@@ -9,10 +7,7 @@ interface FetchBookmarksResponse {
 }
 
 const fetch = async () => {
-  const { data } = await axios.get<FetchBookmarksResponse>(
-    API_GROUPS_URL,
-    await getHeaders()
-  )
+  const { data } = await getApi<FetchBookmarksResponse>(API_GROUPS_URL)
 
   return {
     groups: data.groups
@@ -35,10 +30,8 @@ interface GroupResponse {
 }
 
 const createGroup = async (input: CreateGroupInput) => {
-  const { group } = await axios
-    .post<GroupResponse>(API_GROUPS_URL, input, await getHeaders())
-    .then(({ data }) => data)
-  return { newGroup: group }
+  const { data } = await postApi<GroupResponse>(API_GROUPS_URL, input)
+  return { newGroup: data.group }
 }
 
 interface ReorderBookmarkInput {
@@ -48,35 +41,27 @@ interface ReorderBookmarkInput {
   to: IGroup['_id']
 }
 
-const reorderBookmarks = async (args: ReorderBookmarkInput) => {
-  await axios.put<GroupResponse>(
-    `${API_GROUPS_URL}/reorder-bookmarks`,
-    args,
-    await getHeaders()
-  )
-}
+const reorderBookmarks = (args: ReorderBookmarkInput) =>
+  putApi<GroupResponse>(`${API_GROUPS_URL}/reorder-bookmarks`, args)
 
 export interface UpdateGroupInput {
   title: IGroup['title']
 }
 
-const updateGroup = async (id: IGroup['_id'], args: UpdateGroupInput) => {
-  return await axios
-    .put<GroupResponse>(`${API_GROUPS_URL}/${id}`, args, await getHeaders())
-    .then(({ data }) => data)
-}
+const updateGroup = async (id: IGroup['_id'], args: UpdateGroupInput) =>
+  putApi<GroupResponse>(`${API_GROUPS_URL}/${id}`, args)
 
-const deleteGroup = async (id: IGroup['_id']) => {
-  await axios.delete(`${API_GROUPS_URL}/${id}`, await getHeaders())
-}
+const deleteGroup = async (id: IGroup['_id']) =>
+  deleteApi(`${API_GROUPS_URL}/${id}`)
 
 interface ReorderGroupsInput {
   originId: IGroup['_id']
   targetIndex: number
 }
 const reorderGroups = async (input: ReorderGroupsInput) => {
+  console.log('reorder groups')
   console.log(input)
-  await axios.put(`${API_GROUPS_URL}/reorder-groups`, input, await getHeaders())
+  return putApi(`${API_GROUPS_URL}/reorder-groups`, input)
 }
 
 export const GroupsAPI = {

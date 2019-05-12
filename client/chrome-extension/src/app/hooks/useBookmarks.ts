@@ -92,7 +92,11 @@ export const useBookmarks = (
   const updateBookmark = async (args: UpdateBookmarkArgs) => {
     const { id, input, groupIndex, bookmarkIndex } = args
     if (!groups) return
-    const { bookmark: updatedBookmark } = await bookmarksAPI.update(id, input)
+
+    const {
+      data: { bookmark: updatedBookmark }
+    } = await bookmarksAPI.update(id, input)
+
     const updated = update(groups, {
       [groupIndex]: {
         bookmarks: { [bookmarkIndex]: { $merge: updatedBookmark } }
