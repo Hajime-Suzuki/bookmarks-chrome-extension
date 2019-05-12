@@ -94,7 +94,8 @@ const bookmarkDropSource: DropTargetSpec<
 > = {
   hover: (props, monitor, component) => {
     // console.log(props.open)
-    if (!component) return
+
+    if (!component || state.updating) return
 
     const draggedItem = monitor.getItem() as BeginDragReturnType
     const hoveredGroup = props.groupId
@@ -138,9 +139,6 @@ const bookmarkDropSource: DropTargetSpec<
       state.setOriginGroupIndex(props.groupIndex)
       state.setUpdating(false)
     }
-  },
-  drop: () => {
-    console.log('drop')
   }
 }
 

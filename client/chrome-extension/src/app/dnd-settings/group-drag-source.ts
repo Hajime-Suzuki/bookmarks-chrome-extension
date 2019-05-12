@@ -18,22 +18,20 @@ export interface GroupBeginDragType {
 }
 
 const dragSource: DragSourceSpec<Props, GroupBeginDragType> = {
-  beginDrag: (props, monitor, component) => {
-    console.log('drag', { props })
+  beginDrag: (props, _, component) => {
     return {
-      // groupId: props.group._id,
       groupIndex: props.groupIndex,
       size: (findDOMNode(component) as Element).getBoundingClientRect()
     }
   },
-  endDrag: async (props, monitor, component) => {
+  endDrag: async props => {
     if (props.groupIndex === state.originGroupIndex) return
     await state.placeReorder(props.group)
     state.reset()
   }
 }
 
-const collect = (connect: DragSourceConnector, monitor: DragSourceMonitor) => ({
+const collect = (connect: DragSourceConnector, _: DragSourceMonitor) => ({
   connectGroupDragSource: connect.dragSource()
 })
 

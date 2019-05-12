@@ -1,3 +1,13 @@
+import { GroupsAPI } from '../api/groups'
+import { IBookmark } from '../types'
+
+interface ReorderArgs {
+  bookmarkId: IBookmark['_id']
+  position: number
+  from: IBookmark['group']
+  to: IBookmark['group']
+}
+
 class DnDBookmarkState {
   currentBookmarkIndex: number | null = null
   currentGroup: string | null = null
@@ -24,6 +34,12 @@ class DnDBookmarkState {
     this.currentGroup = null
     this.originGroupIndex = null
     this.updating = false
+  }
+
+  async placeReorder({ bookmarkId, position, from, to }: ReorderArgs) {
+    this.setUpdating(true)
+    await GroupsAPI.reorderBookmarks({ bookmarkId, position, from, to })
+    this.setUpdating(false)
   }
 }
 

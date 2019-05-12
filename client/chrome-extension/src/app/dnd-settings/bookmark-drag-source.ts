@@ -1,3 +1,4 @@
+import { CognitoUser } from '@aws-amplify/auth'
 import {
   DragSource,
   DragSourceConnector,
@@ -6,11 +7,9 @@ import {
 } from 'react-dnd'
 import { findDOMNode } from 'react-dom'
 import { DnDTypes } from '../../constants'
-import { GroupsAPI } from '../api/groups'
 import { IBookmark } from '../types'
 import { BookmarkCardProps } from '../view/Bookmarks/components/bookmark-card'
 import { dndBookmarkState as state } from './bookmark-state'
-import { CognitoUser } from '@aws-amplify/auth'
 
 interface OwnProps {
   user: CognitoUser | null
@@ -37,7 +36,7 @@ const dragSource: DragSourceSpec<
     }
   },
   canDrag: () => !state.updating,
-  endDrag: async (props, monitor) => {
+  endDrag: async (_, monitor) => {
     const draggedItem = monitor.getItem() as BeginDragReturnType
     const { currentGroup, currentBookmarkIndex } = state
 
@@ -50,24 +49,16 @@ const dragSource: DragSourceSpec<
     if (isReorderWithinGroup || isReorderCrossGroup) {
       if (!currentGroup || currentBookmarkIndex === null) return
       console.log('reorder')
-      state.setUpdating(true)
-      await GroupsAPI.reorderBookmarks(
-        {
-          bookmarkId: draggedItem.bookmark._id,
-          position: currentBookmarkIndex,
-          from: isReorderWithinGroup
-            ? currentGroup
-            : draggedItem.bookmark.group,
-          to: currentGroup
-        },
-        props.user
-      )
+      await state.placeReorder({
+        bookmarkId: draggedItem.bookmark._id,
+        position: currentBookmarkIndex,
+        from: isReorderWithinGroup ? currentGroup : draggedItem.bookmark.group,
+        to: currentGroup
+      })
     } else {
       console.log('else')
     }
-
     state.reset()
-    return
   }
 }
 

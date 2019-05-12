@@ -45,30 +45,25 @@ const initialize = (draggedItem: GroupBeginDragType) => {
 
 const dropTarget: DropTargetSpec<Props> = {
   hover: (props, monitor, component) => {
-    if (!component) return
+    if (!component || state.updating) return
     const draggedItem = monitor.getItem() as GroupBeginDragType
     initialize(draggedItem)
     const index = getIndex(props, monitor, component, draggedItem)
     const isMoved = index !== state.currentGroupIndex
 
-    if (!isMoved) return
+    if (!isMoved || state.updating) return
     console.log('moved')
-    // console.table({
-    //   'draggedItem.groupIndex': draggedItem.groupIndex,
-    //   index,
-    //   'state.currentGroupIndex': state.currentGroupIndex
-    // })
-
+    state.setUpdating(true)
     props.reorderGroups({
       targetIndex: index,
       originIndex: state.currentGroupIndex!
     })
-
+    state.setUpdating(false)
     state.setCurrentGroupIndex(index)
   }
 }
 
-const collect = (connect: DropTargetConnector, monitor: DropTargetMonitor) => ({
+const collect = (connect: DropTargetConnector, _: DropTargetMonitor) => ({
   connectGroupDropTarget: connect.dropTarget()
 })
 

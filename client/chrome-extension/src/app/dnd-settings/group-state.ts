@@ -16,7 +16,6 @@ class DnDGroupState {
   setUpdating(updating: boolean) {
     this.updating = updating
   }
-
   reset() {
     this.currentGroupIndex = null
     this.updating = false
@@ -24,13 +23,18 @@ class DnDGroupState {
   }
 
   async placeReorder(group: IGroup) {
+    this.setUpdating(true)
+
     if (this.currentGroupIndex === null) {
       return console.warn('current index is not set')
     }
+
     await GroupsAPI.reorderGroups({
       originId: group._id,
       targetIndex: this.currentGroupIndex
     })
+
+    this.setUpdating(false)
   }
 }
 

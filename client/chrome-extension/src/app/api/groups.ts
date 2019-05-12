@@ -51,10 +51,7 @@ interface ReorderBookmarkInput {
   to: IGroup['_id']
 }
 
-const reorderBookmarks = async (
-  args: ReorderBookmarkInput,
-  user: CognitoUser | null
-) => {
+const reorderBookmarks = async (args: ReorderBookmarkInput) => {
   await axios.put<GroupResponse>(
     `${API_GROUPS_URL}/reorder-bookmarks`,
     args,
