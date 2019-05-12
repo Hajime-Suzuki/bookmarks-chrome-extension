@@ -1,13 +1,12 @@
-import { CognitoUser } from '@aws-amplify/auth'
+import { getUser } from './getUser'
 
-export const getHeaders = (user: CognitoUser | null) => {
+export const getHeaders = async () => {
+  const user = await getUser()
+  const session = user.getSignInUserSession()
   return {
     headers: {
-      ...(user && {
-        Authorization: user
-          .getSignInUserSession()!
-          .getAccessToken()
-          .getJwtToken()
+      ...(session && {
+        Authorization: session.getAccessToken().getJwtToken()
       })
     }
   }
