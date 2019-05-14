@@ -1,5 +1,5 @@
 import { deleteApi, getApi, postApi, putApi } from '.'
-import { API_GROUPS_URL } from '../../constants'
+import { API_GROUPS_URL } from '../constants'
 import { IBookmark, IGroup } from '../types'
 
 interface FetchBookmarksResponse {

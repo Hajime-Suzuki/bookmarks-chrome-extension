@@ -6,14 +6,13 @@ import React, { FC, useContext } from 'react'
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import styled from 'styled-components'
-
-import { GroupsProvider } from '@bookmarks/shared/contexts/Groups'
-import { OpenedTabProvider } from '@bookmarks/shared/contexts/OpenedTabs'
-import { UserContext } from '@bookmarks/shared/contexts/User'
 import { theme } from './styles/theme'
 import Bookmarks from './view/Bookmarks'
 import LoginOrSignUp from './view/Login'
 import OpenedTabs from './view/Tabs/OpenendTabs'
+import { GroupsProvider } from './contexts/Groups'
+import { OpenedTabProvider } from './contexts/OpenedTabs'
+import { UserContext } from './contexts/User'
 
 const BookmarkWrapper: any = styled(Grid)``
 

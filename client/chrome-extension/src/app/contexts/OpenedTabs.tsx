@@ -1,6 +1,6 @@
 import React, { createContext, FC, useEffect, useState } from 'react'
 import { APP_NAME } from '../../constants'
-import { Tab } from '@bookmarks/shared/types'
+import { Tab } from '@bookmarks/shared/src/types'
 import {
   OnMessageCallback,
   subscribeMessage,

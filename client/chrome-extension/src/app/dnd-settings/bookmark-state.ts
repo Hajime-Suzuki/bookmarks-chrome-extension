@@ -1,5 +1,5 @@
-import { GroupsAPI } from '@bookmarks/shared/api/groups'
-import { IBookmark } from '../types'
+import { GroupsAPI } from '@bookmarks/shared/src/api/groups'
+import { IBookmark } from '@bookmarks/shared/src/types'
 
 interface ReorderArgs {
   bookmarkId: IBookmark['_id']

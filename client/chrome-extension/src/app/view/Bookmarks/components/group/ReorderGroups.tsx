@@ -11,20 +11,21 @@ import {
 } from '@material-ui/core'
 import React, { FC, useContext } from 'react'
 import {
-  ReorderModalContext,
-  ReorderModalProvider
-} from '@bookmarks/shared/contexts/ReorderBookmarkContext'
-import { GroupContext } from '@bookmarks/shared/contexts/Groups'
-import {
   groupDragSource,
   GroupDragSourceProps
 } from '../../../../dnd-settings/group-drag-source'
-import { IGroup } from '../../../../types'
+
 import {
   groupDropTarget,
   GroupDropTargetProps
 } from '../../../../dnd-settings/group-drop-target'
 import { Omit } from 'react-dnd/lib/cjs/interfaces'
+import {
+  ReorderModalContext,
+  ReorderModalProvider
+} from '../../../../contexts/ReorderBookmarkContext'
+import { IGroup } from '@bookmarks/shared/src/types'
+import { GroupContext } from '../../../../contexts/Groups'
 
 const ReorderGroupButton: FC<{}> = () => {
   const { openModal } = useContext(ReorderModalContext)

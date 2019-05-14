@@ -1,11 +1,9 @@
 import { CognitoUser } from '@aws-amplify/auth'
 import { IGroup, IBookmark } from '../types'
-import {
-  CreateBookmarkInput,
-  bookmarksAPI
-} from '@bookmarks/shared/api/bookmarks'
+
 import { Omit } from '@material-ui/core'
 import update from 'immutability-helper'
+import { CreateBookmarkInput, bookmarksAPI } from '../api/bookmarks'
 
 /**
  * @description:  currently this hook is tied to useGroups

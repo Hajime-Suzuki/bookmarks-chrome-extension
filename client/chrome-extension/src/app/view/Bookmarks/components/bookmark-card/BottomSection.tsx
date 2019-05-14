@@ -1,11 +1,12 @@
 import React, { FC, useContext } from 'react'
 import { BookmarkCardProps } from '.'
-import { GroupContext } from '@bookmarks/shared/contexts/Groups'
-import { EditBookmarkModalContext } from '@bookmarks/shared/contexts/EditModal'
+
 import { theme } from '../../../../styles/theme'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import Icon from '@material-ui/core/Icon'
+import { GroupContext } from '../../../../contexts/Groups'
+import { EditBookmarkModalContext } from '../../../../contexts/EditModal'
 
 const BottomSection: FC<BookmarkCardProps> = ({
   bookmark,

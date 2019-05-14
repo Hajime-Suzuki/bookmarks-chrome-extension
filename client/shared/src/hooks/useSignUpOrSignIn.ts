@@ -1,8 +1,7 @@
 import { useState, useContext } from 'react'
-import { UserContext } from '@bookmarks/shared/contexts/User'
 import Amplify, { Auth } from 'aws-amplify'
 import { useHttp } from './useHttp'
-
+import { UserContext } from '@bookmarks/extension/src/app/contexts/User'
 const config = {
   Auth: {
     identityPoolId: process.env.REACT_APP_COGNITO_IDENTITY_POOL_ID,

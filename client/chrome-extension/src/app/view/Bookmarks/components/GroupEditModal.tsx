@@ -1,9 +1,9 @@
 import React, { FC, useContext } from 'react'
-import { UpdateGroupInput } from '@bookmarks/shared/api/groups'
-import { GroupContext } from '@bookmarks/shared/contexts/Groups'
-import { EditGroupModalContext } from '@bookmarks/shared/contexts/EditModal'
-import { IGroup } from '../../../types'
+import { UpdateGroupInput } from '@bookmarks/shared/src/api/groups'
 import FormModal from './FormModal'
+import { IGroup } from '@bookmarks/shared/src/types'
+import { EditGroupModalContext } from '../../../contexts/EditModal'
+import { GroupContext } from '../../../contexts/Groups'
 
 interface Props {
   groupId: IGroup['_id']

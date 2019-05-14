@@ -1,5 +1,5 @@
 import { TAB_EVENT } from '../../background'
-import { Tab } from '@bookmarks/shared/types'
+import { Tab } from '@bookmarks/shared/src/types'
 
 export interface Message {
   type: TAB_EVENT

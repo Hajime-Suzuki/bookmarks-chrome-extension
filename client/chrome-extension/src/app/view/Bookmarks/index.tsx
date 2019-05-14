@@ -9,20 +9,19 @@ import {
   tabDropTarget,
   TabDropTargetProps
 } from '../../dnd-settings/tab-drop-target'
-
-import { GroupContext } from '@bookmarks/shared/contexts/Groups'
-import { OpenedTabContext } from '@bookmarks/shared/contexts/OpenedTabs'
-import { UserContext } from '@bookmarks/shared/contexts/User'
 import { theme } from '../../styles/theme'
-import { IBookmark, IGroup } from '../../types'
 import BookmarkCard from './components/bookmark-card'
 import BookmarkEditModal from './components/BookmarkEditModal'
 import Group from './components/group/Group'
 import ReorderGroups from './components/group/ReorderGroups'
+import { IBookmark, IGroup } from '@bookmarks/shared/src/types'
+import { UserContext } from '../../contexts/User'
+import { GroupContext } from '../../contexts/Groups'
+import { OpenedTabContext } from '../../contexts/OpenedTabs'
 import {
   EditGroupModalContextProvider,
   EditBookmarkModalProvider
-} from '@bookmarks/shared/contexts/EditModal'
+} from '../../contexts/EditModal'
 
 const useGridSize = () => {
   const isSmUp = useMediaQuery(theme.breakpoints.up('sm'))

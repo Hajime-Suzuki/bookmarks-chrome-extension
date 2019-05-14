@@ -1,5 +1,4 @@
 import React, { FC, useState, useContext, useMemo } from 'react'
-import { IGroup } from '../../../../types'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
@@ -7,16 +6,18 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogActions from '@material-ui/core/DialogActions'
 import Icon from '@material-ui/core/Icon'
-import { EditGroupModalContext } from '@bookmarks/shared/contexts/EditModal'
 import GroupEditModal from '../GroupEditModal'
 import styled from 'styled-components'
-import { GroupContext } from '@bookmarks/shared/contexts/Groups'
+
 import {
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
   Divider
 } from '@material-ui/core'
+import { IGroup } from '@bookmarks/shared/src/types'
+import { EditGroupModalContext } from '../../../../contexts/EditModal'
+import { GroupContext } from '../../../../contexts/Groups'
 
 export interface GroupProps {
   group: IGroup
@@ -27,17 +28,8 @@ const Group: FC<GroupProps> = props => {
   const open = index % 2 === 0
   return (
     <>
-      {/* <ExpansionPanel expanded={index % 2 === 0}> */}
-      {/* <ExpansionPanelSummary> */}
       <GroupTitle {...props} style={{ marginBottom: 10 }} />
-      {/* </ExpansionPanelSummary> */}
-
-      {/* <ExpansionPanelDetails> */}
       {children}
-      {/* {open && <div>{children}</div>} */}
-      {/* </ExpansionPanelDetails> */}
-      {/* // </ExpansionPanel> */}
-      {/* <Divider /> */}
       <GroupEditModal groupId={props.group._id} index={props.index} />
     </>
   )
