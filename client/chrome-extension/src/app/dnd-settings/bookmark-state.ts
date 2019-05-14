@@ -1,4 +1,4 @@
-import { GroupsAPI } from '../api/groups'
+import { GroupsAPI } from '@bookmarks/shared/api/groups'
 import { IBookmark } from '../types'
 
 interface ReorderArgs {

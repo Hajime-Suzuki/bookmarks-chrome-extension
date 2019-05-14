@@ -1,4 +1,4 @@
-import { getHeaders } from '../helpers/getHeaders'
+import { getHeaders } from '../../chrome-extension/src/app/helpers/getHeaders'
 import axios from 'axios'
 
 export const getApi = async <TResponse>(url: string) => {

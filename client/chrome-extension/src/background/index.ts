@@ -11,13 +11,3 @@ chrome.tabs.onUpdated.addListener((tabId, info, tab) => {
 chrome.tabs.onRemoved.addListener((tabId, info) => {
   sendMessage({ type: 'remove', tabId })
 })
-
-// const extensionId = 'dpiianldkcaogigoflenmejmejihamla'
-// function reloadExtension(id) {
-//   chrome.management.setEnabled(id, false, () => {
-//     chrome.management.setEnabled(id, true)
-//   })
-// }
-// chrome.browserAction.onClicked.addListener(tab => {
-//   reloadExtension(extensionId)
-// })

@@ -13,8 +13,8 @@ import React, { FC, useContext } from 'react'
 import {
   ReorderModalContext,
   ReorderModalProvider
-} from '../../../../contexts/ReorderBookmarkContext'
-import { GroupContext } from '../../../../contexts/Groups'
+} from '@bookmarks/shared/contexts/ReorderBookmarkContext'
+import { GroupContext } from '@bookmarks/shared/contexts/Groups'
 import {
   groupDragSource,
   GroupDragSourceProps

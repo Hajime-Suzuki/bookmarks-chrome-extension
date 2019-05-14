@@ -1,5 +1,5 @@
 import { IGroup } from '../types'
-import { GroupsAPI } from '../api/groups'
+import { GroupsAPI } from '@bookmarks/shared/api/groups'
 
 class DnDGroupState {
   currentGroupIndex: number | null = null

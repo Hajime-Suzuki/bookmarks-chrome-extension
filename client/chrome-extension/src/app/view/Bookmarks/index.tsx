@@ -10,9 +10,9 @@ import {
   TabDropTargetProps
 } from '../../dnd-settings/tab-drop-target'
 
-import { GroupContext } from '../../contexts/Groups'
-import { OpenedTabContext } from '../../contexts/OpenedTabs'
-import { UserContext } from '../../contexts/User'
+import { GroupContext } from '@bookmarks/shared/contexts/Groups'
+import { OpenedTabContext } from '@bookmarks/shared/contexts/OpenedTabs'
+import { UserContext } from '@bookmarks/shared/contexts/User'
 import { theme } from '../../styles/theme'
 import { IBookmark, IGroup } from '../../types'
 import BookmarkCard from './components/bookmark-card'
@@ -22,7 +22,7 @@ import ReorderGroups from './components/group/ReorderGroups'
 import {
   EditGroupModalContextProvider,
   EditBookmarkModalProvider
-} from '../../contexts/EditModal'
+} from '@bookmarks/shared/contexts/EditModal'
 
 const useGridSize = () => {
   const isSmUp = useMediaQuery(theme.breakpoints.up('sm'))
