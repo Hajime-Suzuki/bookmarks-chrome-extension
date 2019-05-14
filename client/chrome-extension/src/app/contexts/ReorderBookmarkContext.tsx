@@ -1,4 +1,4 @@
-import { useModal } from '../hooks/useModal'
+import { useModal } from '@bookmarks/shared/hooks/useModal'
 import React, { createContext, FC } from 'react'
 
 const useReorderGroups = () => {

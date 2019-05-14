@@ -13,8 +13,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react",
+    "jsx": "preserve",
     "noImplicitAny": false
   },
-  "include": ["src", "src/app/contexts", "../shared/api"]
+  "include": ["src"]
 }
