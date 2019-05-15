@@ -5,10 +5,10 @@ import {
   DropTargetSpec
 } from 'react-dnd'
 import { findDOMNode } from 'react-dom'
-import { DnDTypes } from '../../constants'
 import { DnDContainerWrapperProps } from '../view/Bookmarks'
 import { BeginDragReturnType } from './bookmark-drag-source'
 import { dndBookmarkState as state } from './bookmark-state'
+import { DnDTypes } from '@bookmarks/shared/src/constants'
 
 /**
  *

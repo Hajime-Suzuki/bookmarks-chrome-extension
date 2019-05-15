@@ -4,10 +4,10 @@ import {
   DropTargetMonitor,
   DropTargetSpec
 } from 'react-dnd'
-import { DnDTypes } from '../../constants'
-import { Tab } from '../types'
 import { DnDContainerWrapperProps } from '../view/Bookmarks'
 import { TabListProps } from '../view/Tabs/OpenendTabs'
+import { DnDTypes } from '@bookmarks/shared/src/constants'
+import { Tab } from '@bookmarks/shared/src/types'
 
 const tabDropSpec: DropTargetSpec<DnDContainerWrapperProps> = {
   drop: (props, monitor, component) => {

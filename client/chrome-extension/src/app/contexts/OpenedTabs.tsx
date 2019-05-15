@@ -1,11 +1,11 @@
 import React, { createContext, FC, useEffect, useState } from 'react'
-import { APP_NAME } from '../../constants'
 import { Tab } from '@bookmarks/shared/src/types'
 import {
   OnMessageCallback,
   subscribeMessage,
   unsubscribe
 } from '../helpers/subscribeTabs'
+import { APP_NAME } from '@bookmarks/shared/src/constants'
 
 const useOpenedTabs = () => {
   const [tabs, setTabs] = useState([] as Tab[])

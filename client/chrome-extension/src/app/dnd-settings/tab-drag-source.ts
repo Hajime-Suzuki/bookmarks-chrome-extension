@@ -4,9 +4,10 @@ import {
   DragSourceMonitor,
   DragSourceSpec
 } from 'react-dnd'
-import { DnDTypes } from '../../constants'
-import { Tab } from '../types'
+
 import { TabListProps } from '../view/Tabs/OpenendTabs'
+import { DnDTypes } from '@bookmarks/shared/src/constants'
+import { Tab } from '@bookmarks/shared/src/types'
 
 const dragSource: DragSourceSpec<TabListProps, { tab: Tab }> = {
   beginDrag: (props, monitor) => {

@@ -6,10 +6,10 @@ import {
   DragSourceSpec
 } from 'react-dnd'
 import { findDOMNode } from 'react-dom'
-import { DnDTypes } from '../../constants'
-import { IBookmark } from '../types'
 import { BookmarkCardProps } from '../view/Bookmarks/components/bookmark-card'
 import { dndBookmarkState as state } from './bookmark-state'
+import { IBookmark } from '@bookmarks/shared/src/types'
+import { DnDTypes } from '@bookmarks/shared/src/constants'
 
 interface OwnProps {
   user: CognitoUser | null
