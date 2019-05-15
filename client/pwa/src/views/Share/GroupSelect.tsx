@@ -1,6 +1,4 @@
-import { IGroup } from '@bookmarks/extension/src/app/types'
 import React, { useContext } from 'react'
-
 import FormModal from '@bookmarks/extension/src/app/view/Bookmarks/components/FormModal'
 import { Wrapper } from '.'
 import Typography from '@material-ui/core/Typography'
@@ -10,6 +8,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { SelectedMenuContext } from '../../contexts/SelectedMenu'
 import { NewGroupContext } from '../../contexts/NewGroup'
+import { IGroup } from '@bookmarks/shared/src/types'
 
 const GroupSelect = ({ groups }: { groups: IGroup[] }) => {
   const {

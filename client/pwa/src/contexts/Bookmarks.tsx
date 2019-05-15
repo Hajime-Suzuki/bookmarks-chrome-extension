@@ -1,17 +1,16 @@
-import {
-  bookmarksAPI,
-  CreateBookmarkInput
-} from '@bookmarks/extension/src/app/api/bookmarks'
-import { IBookmark, IGroup } from '@bookmarks/extension/src/app/types'
 import { Omit } from '@material-ui/core'
 import React, { createContext, FC } from 'react'
+import { IGroup, IBookmark } from '@bookmarks/shared/src/types'
+import {
+  CreateBookmarkInput,
+  bookmarksAPI
+} from '@bookmarks/shared/src/api/bookmarks'
 
 export type UpdateBookmarkInput = Omit<Partial<IBookmark>, 'tags'> & {
   tags?: string
 }
 
 export const useBookmarks = () => {
-  //
   const createBookmark = async (
     groupId: IGroup['_id'],
     input: CreateBookmarkInput
