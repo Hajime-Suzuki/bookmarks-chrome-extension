@@ -1,10 +1,10 @@
 import update from 'immutability-helper'
 import React, { createContext, FC, useEffect, useState } from 'react'
-import { GroupsAPI } from '../api/groups'
-import { getUser } from '../helpers/getUser'
-import { useBookmarks } from '../hooks/useBookmarks'
-import { useHttp } from '../hooks/useHttp'
-import { IGroup, Tab } from '../types'
+import { GroupsAPI } from '@bookmarks/shared/src/api/groups'
+import { getUser } from '@bookmarks/shared/src/helpers/getUser'
+import { useBookmarks } from '@bookmarks/shared/src/hooks/useBookmarks'
+import { useHttp } from '@bookmarks/shared/src/hooks/useHttp'
+import { IGroup, Tab } from '@bookmarks/shared/src/types'
 
 interface CreateGroupInput {
   groupTitle?: string

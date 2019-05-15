@@ -1,29 +1,7 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint:recommended", "tslint-react"],
-  "rules": {
-    "jsx-no-multiline-js": false,
-    "jsx-boolean-value": false,
-    "jsx-curly-spacing": false,
-    "jsx-no-lambda": false,
-    "member-access": false,
-    "interface-name": false,
-    "object-literal-sort-keys": false,
-    "ordered-imports": false,
-    "ban-types": false,
-    "array-type": false,
-    "no-shadowed-variable": true,
-    "no-console": false,
-    "arrow-parens": [true, "ban-single-arg-parens"],
-    "trailing-comma": false,
-    "curly": false,
-    "max-classes-per-file": false,
-    "quotemark": [true, "single", "jsx-double"],
-    "semicolon": [true, "never"],
-    "interface-over-type-literal": true,
-    "variable-name": false,
-    "max-line-length": false
-  },
+  "extends": ["tslint:recommended", "tslint-react", "../shared/tslint.json"],
+  "rules": {},
   "linterOptions": {
     "exclude": ["**/node_modules/**", "server/"]
   }

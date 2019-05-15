@@ -3,7 +3,6 @@ import {
   bookmarkDragSource,
   BookmarkDragSourceProps
 } from '../../../../dnd-settings/bookmark-drag-source'
-import { IBookmark } from '../../../../types'
 import Content from './BookmarkContent'
 import BottomSection from './BottomSection'
 import { CognitoUser } from '@aws-amplify/auth'
@@ -11,6 +10,7 @@ import Card from '@material-ui/core/Card'
 import CardActionArea from '@material-ui/core/CardActionArea'
 import Link from '@material-ui/core/Link'
 import CardActions from '@material-ui/core/CardActions'
+import { IBookmark } from '@bookmarks/shared/src/types'
 
 /**
  * @description: This is parent component of a card. This is also the drag source.

@@ -6,11 +6,11 @@ import {
 } from 'react-dnd'
 import { findDOMNode } from 'react-dom'
 import { Omit } from 'react-router'
-import { DnDTypes } from '../../constants'
 import { GroupListWrapperProps } from '../view/Bookmarks/components/group/ReorderGroups'
 import { getYIndex } from './bookmark-drop-target'
 import { GroupBeginDragType } from './group-drag-source'
 import { dndGroupState as state } from './group-state'
+import { DnDTypes } from '@bookmarks/shared/src/constants'
 
 type Props = Omit<GroupListWrapperProps, 'connectGroupDropTarget'>
 

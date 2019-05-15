@@ -4,11 +4,11 @@ import {
   DragSourceMonitor,
   DragSourceSpec
 } from 'react-dnd'
-import { DnDTypes } from '../../constants'
 import { GroupListItemWrapperProps } from '../view/Bookmarks/components/group/ReorderGroups'
 import { Omit } from 'react-router'
 import { findDOMNode } from 'react-dom'
 import { dndGroupState as state } from './group-state'
+import { DnDTypes } from '@bookmarks/shared/src/constants'
 
 type Props = Omit<GroupListItemWrapperProps, 'connectGroupDragSource'>
 

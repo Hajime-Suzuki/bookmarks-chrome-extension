@@ -1,7 +1,7 @@
 import { Omit } from '@material-ui/core'
 import { deleteApi, postApi, putApi } from '.'
-import { API_BOOKMARK_URL } from '../../constants'
 import { IBookmark, IGroup } from '../types'
+import { API_BOOKMARK_URL } from '../constants'
 
 export interface CreateBookmarkInput {
   title: IBookmark['title']
