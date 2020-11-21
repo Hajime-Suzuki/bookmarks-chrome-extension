@@ -1,20 +1,27 @@
 service: bookmark-chrome-extension
 plugins:
-  - serverless-plugin-typescript
+  - serverless-webpack
   - serverless-offline
 
 provider:
   name: aws
-  runtime: nodejs8.10
+  runtime: nodejs12.x
   stage: dev
   region: eu-central-1
   environment:
     DB_URL: ${file(.secret.yml):DB_URL}
     AWS_COGNITO_USER_POOL_ID: ${file(.secret.yml):AWS_COGNITO_USER_POOL_ID}
-
+package:
+  individually: true
 custom:
   serverless-offline:
     port: 4000
+
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules:
+      forceExclude:
+        - aws-sdk
 
 functions:
   createBookmarks:

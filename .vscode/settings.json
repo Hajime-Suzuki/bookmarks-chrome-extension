@@ -13,7 +13,6 @@
     "textLink.foreground": "#7CB342",
     "progressBar.background": "#7CB342",
     "pickerGroup.foreground": "#7CB342",
-    "tab.activeBorder": "#7CB342",
     "notificationLink.foreground": "#7CB342",
     "editorWidget.resizeBorder": "#7CB342",
     "editorWidget.border": "#7CB342",
@@ -29,6 +28,27 @@
     "titleBar.inactiveForeground": "#15202b99",
     "statusBar.background": "#dbc7d8",
     "statusBarItem.hoverBackground": "#c7a8c2",
-    "statusBar.foreground": "#15202b"
-  }
+    "statusBar.foreground": "#15202b",
+    "activityBar.activeBackground": "#efe6ee",
+    "activityBar.activeBorder": "#a2a877",
+    "activityBar.background": "#efe6ee",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#a2a877",
+    "activityBarBadge.foreground": "#15202b"
+  },
+  "peacock.color": "#dbc7d8",
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": false,
+    "**/.hg": false,
+    "**/CVS": false,
+    "**/.DS_Store": true,
+    ".git": false,
+    "**/node_modules": false,
+    "**/node_modules/": false,
+    "**/node_modules/**": true,
+    "**/yarn.lock": false
+  },
+  "explorerExclude.backup": null
 }
