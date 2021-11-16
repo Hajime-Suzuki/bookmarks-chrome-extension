@@ -17,7 +17,7 @@
     "@types/http-errors": "^1.6.1",
     "@types/jsonwebtoken": "^8.3.2",
     "@types/mongoose": "^5.3.22",
-    "aws-sdk": "^2.422.0",
+    "aws-sdk": "^2.814.0",
     "fork-ts-checker-webpack-plugin": "^6.0.3",
     "serverless": "^1.39.1",
     "serverless-offline": "^4.9.1",
